@@ -1,0 +1,29 @@
+﻿@model JWMaps.ViewModel.HouseholderViewModel
+
+@{
+    ViewBag.Title = "ListHouseholders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>List of householders</h2>
+
+<table id="householders" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var householder in Model.Householders)
+        {
+            <tr>
+                <td>@householder.Name</td>
+                <td>@householder.Address</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
