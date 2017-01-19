@@ -9,31 +9,28 @@ using JWMaps.ViewModel;
 namespace JWMaps.Controllers
 {
     public class HouseholdersController : Controller
-    {
+    {        
         // GET: Householder
         public ActionResult Index()
         {
-            var householders = new List<Householder>
+            return View("ListHouseholders");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Save(Householder householder)
+        {
+            return View();
+        }
+
+        public ActionResult New()
+        {
+            var householderViewModel = new HouseholderViewModel
             {
-                new Householder
-                {
-                    Name = "Juan gonzalez",
-                    Address = "Avenida Boa viagem, 455"
-                },
-
-                new Householder
-                {
-                    Name = "María Lopez",
-                    Address = "Avenida 17 de agosto, 1056"
-                }
+                Householder = new Householder(),
+                Publishers = new List<Publisher>()
             };
-
-            var houseHolderViewModel = new HouseholderViewModel
-            {
-                Householders = householders
-            };
-
-            return View("ListHouseholders", houseHolderViewModel);
+            return View("HouseholdersForm", householderViewModel);
         }
     }
 }
