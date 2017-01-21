@@ -202,6 +202,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701212138457_InitialModel.cs" />
+    <Compile Include="Migrations\201701212138457_InitialModel.Designer.cs">
+      <DependentUpon>201701212138457_InitialModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701212158496_InitialModel1.cs" />
+    <Compile Include="Migrations\201701212158496_InitialModel1.Designer.cs">
+      <DependentUpon>201701212158496_InitialModel1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Householder.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -272,6 +281,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Householders\ListHouseholders.cshtml" />
     <Content Include="Views\Householders\HouseholdersForm.cshtml" />
+    <Content Include="Views\Shared\_NavBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -283,6 +293,14 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201701212138457_InitialModel.resx">
+      <DependentUpon>201701212138457_InitialModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701212158496_InitialModel1.resx">
+      <DependentUpon>201701212158496_InitialModel1.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
