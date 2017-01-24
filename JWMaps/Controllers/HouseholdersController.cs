@@ -51,7 +51,7 @@ namespace JWMaps.Controllers
                 var householderViewModel = new HouseholderViewModel
                 {
                     Householder = householder,
-                    Publishers = _context.Publishers.ToList()
+                    Publishers = _context.Publishers
                 };
 
                 return View("HouseholdersForm", householderViewModel);
@@ -81,7 +81,7 @@ namespace JWMaps.Controllers
             var householderViewModel = new HouseholderViewModel
             {
                 Householder = new Householder(),
-                Publishers = new List<Publisher>()
+                Publishers = _context.Publishers
             };
             return View("HouseholdersForm", householderViewModel);
         }
