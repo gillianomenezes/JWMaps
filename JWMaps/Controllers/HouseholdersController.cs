@@ -83,6 +83,18 @@ namespace JWMaps.Controllers
                 Householder = new Householder(),
                 Publishers = _context.Publishers
             };
+
+            return View("HouseholdersForm", householderViewModel);
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var householderViewModel = new HouseholderViewModel
+            {
+                Householder = _context.Householders.Single(h => h.Id == id),
+                Publishers = _context.Publishers
+            };
+
             return View("HouseholdersForm", householderViewModel);
         }
     }
