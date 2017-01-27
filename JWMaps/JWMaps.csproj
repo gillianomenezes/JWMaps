@@ -211,12 +211,17 @@
     <Compile Include="Migrations\201701212158496_InitialModel1.Designer.cs">
       <DependentUpon>201701212158496_InitialModel1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701271312545_AddTerritoryMap.cs" />
+    <Compile Include="Migrations\201701271312545_AddTerritoryMap.Designer.cs">
+      <DependentUpon>201701271312545_AddTerritoryMap.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Householder.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Publisher.cs" />
+    <Compile Include="Models\TerritoryMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModel\HouseholderViewModel.cs" />
@@ -304,6 +309,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701212158496_InitialModel1.resx">
       <DependentUpon>201701212158496_InitialModel1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701271312545_AddTerritoryMap.resx">
+      <DependentUpon>201701271312545_AddTerritoryMap.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

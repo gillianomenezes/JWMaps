@@ -71,9 +71,18 @@ namespace JWMaps.Controllers
                 householderdb.City = householder.City;
             }
 
+            if (householder.PublisherId == 0)
+                InsertHouseholderInTerritoryMap(householder);
+
+
             _context.SaveChanges();
             
             return RedirectToAction("Index","Householders");
+        }
+
+        private void InsertHouseholderInTerritoryMap(Householder householder)
+        {
+
         }
 
         public ActionResult New()

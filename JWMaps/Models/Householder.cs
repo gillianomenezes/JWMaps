@@ -30,5 +30,7 @@ namespace JWMaps.Models
         public string Phone { get; set; }
         
         public int? PublisherId { get; set; }
+
+        public int TerritoryMapId { get; set; }
     }
 }
