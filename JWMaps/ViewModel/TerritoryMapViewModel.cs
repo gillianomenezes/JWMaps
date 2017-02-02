@@ -10,5 +10,7 @@ namespace JWMaps.ViewModel
     {
         public TerritoryMap TerritoryMap { get; set; }
         public IEnumerable<string> Neighbourhoods { get; set; }
+        public IEnumerable<Householder> Householders { get; set; }
+        public string selectedNeighbourhood { get; set; }
     }
 }

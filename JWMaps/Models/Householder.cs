@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace JWMaps.Models
 {
@@ -36,6 +37,8 @@ namespace JWMaps.Models
         public bool Confirmed { get; set; }
 
         public Category Category { get; set; }
+
+        public DateTime LasTimeIncludedInTerritoryMap { get; set; }
     }
 
     public enum Category { House, Business };

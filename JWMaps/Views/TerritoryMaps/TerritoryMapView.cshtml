@@ -1,0 +1,35 @@
+﻿@model List<JWMaps.Models.Householder>
+
+@{
+    ViewBag.Title = "TerritoryMapView";
+}
+
+<h2>TerritoryMapView</h2>
+
+<table id="householders" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var householder in Model)
+        {
+            <tr>
+                <td>@Html.ActionLink(householder.Name, "Edit", "Householders", new { id = householder.Id }, null)</td>
+                <td>@householder.Address</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#householders").DataTable();
+        });
+    </script>
+}
+
