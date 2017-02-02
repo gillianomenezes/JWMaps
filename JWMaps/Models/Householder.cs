@@ -32,5 +32,11 @@ namespace JWMaps.Models
         public int? PublisherId { get; set; }
 
         public int TerritoryMapId { get; set; }
+
+        public bool Confirmed { get; set; }
+
+        public Category Category { get; set; }
     }
+
+    public enum Category { House, Business };
 }

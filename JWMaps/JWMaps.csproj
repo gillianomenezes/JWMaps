@@ -200,6 +200,7 @@
     <Compile Include="Controllers\HouseholdersController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PublishersController.cs" />
+    <Compile Include="Controllers\TerritoryMapsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -215,6 +216,14 @@
     <Compile Include="Migrations\201701271312545_AddTerritoryMap.Designer.cs">
       <DependentUpon>201701271312545_AddTerritoryMap.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701280158221_AddTerritoryMap1.cs" />
+    <Compile Include="Migrations\201701280158221_AddTerritoryMap1.Designer.cs">
+      <DependentUpon>201701280158221_AddTerritoryMap1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702021101227_UpdateHouseholderModel.cs" />
+    <Compile Include="Migrations\201702021101227_UpdateHouseholderModel.Designer.cs">
+      <DependentUpon>201702021101227_UpdateHouseholderModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Householder.cs" />
@@ -226,6 +235,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModel\HouseholderViewModel.cs" />
     <Compile Include="ViewModel\PublisherViewModel.cs" />
+    <Compile Include="ViewModel\TerritoryMapViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-lumen.css" />
@@ -291,6 +301,11 @@
     <Content Include="Views\Shared\_NavBar.cshtml" />
     <Content Include="Views\Publishers\PublishersForm.cshtml" />
     <Content Include="Views\Publishers\ListPublishers.cshtml" />
+    <Content Include="Views\TerritoryMaps\Create.cshtml" />
+    <Content Include="Views\TerritoryMaps\Delete.cshtml" />
+    <Content Include="Views\TerritoryMaps\Details.cshtml" />
+    <Content Include="Views\TerritoryMaps\Edit.cshtml" />
+    <Content Include="Views\TerritoryMaps\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -312,6 +327,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701271312545_AddTerritoryMap.resx">
       <DependentUpon>201701271312545_AddTerritoryMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701280158221_AddTerritoryMap1.resx">
+      <DependentUpon>201701280158221_AddTerritoryMap1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702021101227_UpdateHouseholderModel.resx">
+      <DependentUpon>201702021101227_UpdateHouseholderModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
