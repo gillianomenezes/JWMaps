@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using JWMaps.Models;
 using JWMaps.ViewModel;
+using GoogleMaps.LocationServices;
 
 namespace JWMaps.Controllers
 {
@@ -57,6 +58,12 @@ namespace JWMaps.Controllers
                 return View("HouseholdersForm", householderViewModel);
             }
 
+            var locationService = new GoogleLocationService();
+            var point = locationService.GetLatLongFromAddress(householder.Address + ", " + householder.Neighbourhood + "-" + householder.City);
+            
+            householder.Latitude = point.Latitude;
+            householder.Longitude = point.Longitude;
+
             if (householder.Id == 0)
                 _context.Householders.Add(householder);
             else
@@ -69,6 +76,8 @@ namespace JWMaps.Controllers
                 householderdb.PublisherId = householder.PublisherId;
                 householderdb.Address = householder.Address;
                 householderdb.City = householder.City;
+                householderdb.Latitude = householder.Latitude;
+                householderdb.Longitude = householder.Longitude;
             }
             
             _context.SaveChanges();

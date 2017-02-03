@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using JWMaps.Models;
 using JWMaps.ViewModel;
 using System;
+using GoogleMaps.LocationServices;
 
 namespace JWMaps.Controllers
 {
@@ -83,26 +84,39 @@ namespace JWMaps.Controllers
                                         .OrderBy(h => h.LasTimeIncludedInTerritoryMap).ToList();
 
             //here I have to calculate the distances and put on the list only those who are near
+            var locationService = new GoogleLocationService();
+            //var pointA = locationService.GetLatLongFromAddress(householders[0].Address + ", " + householders[0].Neighbourhood + "-" + householders[0].City);
+            //var pointB = locationService.GetLatLongFromAddress(householders[1].Address + ", " + householders[1].Neighbourhood + "-" + householders[1].City);
 
+            AddressData addrA = new AddressData();
+            addrA.Address = householders[0].Address + ", " + householders[0].Neighbourhood;
+            addrA.City = householders[0].City;
+
+            AddressData addrB = new AddressData();
+            addrB.Address = householders[1].Address + ", " + householders[1].Neighbourhood;
+            addrB.City = householders[1].City;
+
+            var distance = locationService.GetDirections(addrA, addrB).Distance;
+            
             return View("TerritoryMapView", householders);
         }
 
-        private decimal calcDistance(decimal latA, decimal longA, decimal latB, decimal longB)
-        {
-            double theDistance = Math.Sin(Convert.ToDouble(DegreesToRadians(latA))) *
-                    Math.Sin(Convert.ToDouble(DegreesToRadians(latB))) +
-                    Math.Cos(Convert.ToDouble(DegreesToRadians(latA))) *
-                    Math.Cos(Convert.ToDouble(DegreesToRadians(latB))) *
-                    Math.Cos(Convert.ToDouble(DegreesToRadians(longA - longB)));
+        //private decimal calcDistance(decimal latA, decimal longA, decimal latB, decimal longB)
+        //{
+        //    double theDistance = Math.Sin(Convert.ToDouble(DegreesToRadians(latA))) *
+        //            Math.Sin(Convert.ToDouble(DegreesToRadians(latB))) +
+        //            Math.Cos(Convert.ToDouble(DegreesToRadians(latA))) *
+        //            Math.Cos(Convert.ToDouble(DegreesToRadians(latB))) *
+        //            Math.Cos(Convert.ToDouble(DegreesToRadians(longA - longB)));
 
-            return Convert.ToDecimal(DecRadiansToDegrees(Math.Acos(theDistance))) * 69.09M * 1.6093M;
-        }
+        //    return Convert.ToDecimal(DecRadiansToDegrees(Math.Acos(theDistance))) * 69.09M * 1.6093M;
+        //}
 
-        private static decimal DegreesToRadians(decimal degrees)
-        {
-            decimal radians = Convert.ToDecimal(Math.PI / 180) * degrees;
-            return (radians);
-        }
+        //private static decimal DegreesToRadians(decimal degrees)
+        //{
+        //    decimal radians = Convert.ToDecimal(Math.PI / 180) * degrees;
+        //    return (radians);
+        //}
 
         private double DecRadiansToDegrees(double angle)
         {

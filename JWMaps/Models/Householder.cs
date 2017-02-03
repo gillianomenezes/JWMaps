@@ -38,7 +38,11 @@ namespace JWMaps.Models
 
         public Category Category { get; set; }
 
-        public DateTime LasTimeIncludedInTerritoryMap { get; set; }
+        public DateTime? LasTimeIncludedInTerritoryMap { get; set; }
+
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
     }
 
     public enum Category { House, Business };
