@@ -12,5 +12,7 @@ namespace JWMaps.ViewModel
         public IEnumerable<string> Neighbourhoods { get; set; }
         public IEnumerable<Householder> Householders { get; set; }
         public string selectedNeighbourhood { get; set; }
+        public int MaxNumberOfHouseholders { get; set; }
+        public int MaxDistanceAmongHouseholders { get; set; }
     }
 }

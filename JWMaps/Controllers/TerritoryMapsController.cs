@@ -78,7 +78,8 @@ namespace JWMaps.Controllers
         {
             var selectedNeighbourhood = territoryMapVM.selectedNeighbourhood;
 
-            List<Householder> householders = _context.Householders
+            List<Householder> householders = new List<Householder>();
+            List<Householder> householdersdb = _context.Householders
                                         .ToList()
                                         .FindAll(h => h.Neighbourhood.Equals(selectedNeighbourhood))
                                         .OrderBy(h => h.LasTimeIncludedInTerritoryMap).ToList();
@@ -88,39 +89,28 @@ namespace JWMaps.Controllers
             //var pointA = locationService.GetLatLongFromAddress(householders[0].Address + ", " + householders[0].Neighbourhood + "-" + householders[0].City);
             //var pointB = locationService.GetLatLongFromAddress(householders[1].Address + ", " + householders[1].Neighbourhood + "-" + householders[1].City);
 
+            householders.Add(householdersdb.First());
+
             AddressData addrA = new AddressData();
-            addrA.Address = householders[0].Address + ", " + householders[0].Neighbourhood;
-            addrA.City = householders[0].City;
+            addrA.Address = householdersdb[0].Address + ", " + householdersdb[0].Neighbourhood;
+            addrA.City = householdersdb[0].City;
 
-            AddressData addrB = new AddressData();
-            addrB.Address = householders[1].Address + ", " + householders[1].Neighbourhood;
-            addrB.City = householders[1].City;
+            for (int i = 1; i < householdersdb.Count ; i++)
+            {
+                if (householders.Count >= territoryMapVM.MaxNumberOfHouseholders)
+                    break;
 
-            var distance = locationService.GetDirections(addrA, addrB).Distance;
+                AddressData addrB = new AddressData();
+                addrB.Address = householdersdb[i].Address + ", " + householdersdb[i].Neighbourhood;
+                addrB.City = householdersdb[i].City;
+
+                var distance = locationService.GetDirections(addrA, addrB).Distance.Split(' ')[0].Replace('.', ',');
+
+                if (Double.Parse(distance) <= territoryMapVM.MaxDistanceAmongHouseholders)
+                    householders.Add(householdersdb[i]);                
+            }
             
             return View("TerritoryMapView", householders);
-        }
-
-        //private decimal calcDistance(decimal latA, decimal longA, decimal latB, decimal longB)
-        //{
-        //    double theDistance = Math.Sin(Convert.ToDouble(DegreesToRadians(latA))) *
-        //            Math.Sin(Convert.ToDouble(DegreesToRadians(latB))) +
-        //            Math.Cos(Convert.ToDouble(DegreesToRadians(latA))) *
-        //            Math.Cos(Convert.ToDouble(DegreesToRadians(latB))) *
-        //            Math.Cos(Convert.ToDouble(DegreesToRadians(longA - longB)));
-
-        //    return Convert.ToDecimal(DecRadiansToDegrees(Math.Acos(theDistance))) * 69.09M * 1.6093M;
-        //}
-
-        //private static decimal DegreesToRadians(decimal degrees)
-        //{
-        //    decimal radians = Convert.ToDecimal(Math.PI / 180) * degrees;
-        //    return (radians);
-        //}
-
-        private double DecRadiansToDegrees(double angle)
-        {
-            return angle * 180.0 / Math.PI;
         }
 
         // GET: TerritoryMaps/Edit/5
