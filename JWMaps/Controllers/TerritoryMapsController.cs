@@ -83,13 +83,11 @@ namespace JWMaps.Controllers
                                         .ToList()
                                         .FindAll(h => h.Neighbourhood.Equals(selectedNeighbourhood))
                                         .OrderBy(h => h.LasTimeIncludedInTerritoryMap).ToList();
-
-            //here I have to calculate the distances and put on the list only those who are near
+            
             var locationService = new GoogleLocationService();
-            //var pointA = locationService.GetLatLongFromAddress(householders[0].Address + ", " + householders[0].Neighbourhood + "-" + householders[0].City);
-            //var pointB = locationService.GetLatLongFromAddress(householders[1].Address + ", " + householders[1].Neighbourhood + "-" + householders[1].City);
-
+            
             householders.Add(householdersdb.First());
+            householdersdb.First().LasTimeIncludedInTerritoryMap = DateTime.Now;
 
             AddressData addrA = new AddressData();
             addrA.Address = householdersdb[0].Address + ", " + householdersdb[0].Neighbourhood;
@@ -107,8 +105,13 @@ namespace JWMaps.Controllers
                 var distance = locationService.GetDirections(addrA, addrB).Distance.Split(' ')[0].Replace('.', ',');
 
                 if (Double.Parse(distance) <= territoryMapVM.MaxDistanceAmongHouseholders)
-                    householders.Add(householdersdb[i]);                
+                {
+                    householders.Add(householdersdb[i]);
+                    householdersdb[i].LasTimeIncludedInTerritoryMap = DateTime.Now;
+                }  
             }
+
+            _context.SaveChanges();
             
             return View("TerritoryMapView", householders);
         }

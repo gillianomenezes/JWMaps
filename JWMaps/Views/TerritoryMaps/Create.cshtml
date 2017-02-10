@@ -9,7 +9,7 @@
 
 @using (Html.BeginForm("NewTerritoryMap", "TerritoryMaps", FormMethod.Post))
 {
-    <p>@Html.DropDownListFor(t => t.selectedNeighbourhood, new SelectList(Model.Neighbourhoods), "", new { @class = "form-control" })</p>
+    <p>@Html.DropDownListFor(t => t.selectedNeighbourhood, new SelectList(Model.Neighbourhoods.Distinct()), "", new { @class = "form-control" })</p>
     <div class="form-group">
         @Html.LabelFor(t => t.MaxDistanceAmongHouseholders)
         @Html.TextBoxFor(t => t.MaxDistanceAmongHouseholders, new { @class = "form-control" })
