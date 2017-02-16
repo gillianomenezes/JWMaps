@@ -249,6 +249,7 @@
     <Compile Include="Models\TerritoryMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModel\DashboardViewModel.cs" />
     <Compile Include="ViewModel\HouseholderViewModel.cs" />
     <Compile Include="ViewModel\PublisherViewModel.cs" />
     <Compile Include="ViewModel\TerritoryMapViewModel.cs" />
