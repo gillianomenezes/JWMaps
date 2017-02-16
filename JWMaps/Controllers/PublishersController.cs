@@ -52,5 +52,11 @@ namespace JWMaps.Controllers
             var publisher = new Publisher();
             return View("PublishersForm", publisher);
         }
+
+        public ActionResult Edit(int id)
+        {
+            var publisher = _context.Publishers.Single(p => p.Id == id);
+            return View("PublishersForm", publisher);
+        }
     }
 }

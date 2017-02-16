@@ -240,6 +240,10 @@
     <Compile Include="Migrations\201702031957437_SetDateTimeToNullable.Designer.cs">
       <DependentUpon>201702031957437_SetDateTimeToNullable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201702161349004_AddDateAddedForHouseholder.cs" />
+    <Compile Include="Migrations\201702161349004_AddDateAddedForHouseholder.Designer.cs">
+      <DependentUpon>201702161349004_AddDateAddedForHouseholder.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Householder.cs" />
@@ -370,6 +374,8 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="GoogleMaps.LocationServices.readme.txt" />
+    <Content Include="Scripts\bootbox.js" />
+    <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -534,6 +540,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201702031957437_SetDateTimeToNullable.resx">
       <DependentUpon>201702031957437_SetDateTimeToNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702161349004_AddDateAddedForHouseholder.resx">
+      <DependentUpon>201702161349004_AddDateAddedForHouseholder.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
