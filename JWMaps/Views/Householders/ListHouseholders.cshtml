@@ -12,7 +12,8 @@
     <thead>
         <tr>
             <th>Name</th>
-            <th>Address</th>          
+            <th>Address</th>
+            <th>Neighbourhood</th>          
             <th>Delete</th>  
         </tr>
     </thead>
@@ -22,6 +23,7 @@
             <tr>
                 <td>@Html.ActionLink(item.Householder.Name, "Edit", "Householders", new { id = item.Householder.Id }, null)</td>
                 <td>@item.Householder.Address</td>
+                <td>@item.Householder.Neighbourhood</td>
                 <td><button class="btn-link js-delete">deletar</button></td>
             </tr>
         }

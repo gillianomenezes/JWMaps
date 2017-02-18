@@ -4,14 +4,17 @@
 }
 
 <div>
-    <div id="map" class="jumbotron" style="width: 95%; height: 432px" />
-
-    <div>
-        <ul>
-            <li><strong>Total de endereços:</strong> @Model.Householders.Count</li>
-            <li><strong>Total de estudantes:</strong> @Model.Householders.Count(h => h.PublisherId != null)</li>
-        </ul>
-    </div>
+    <p>
+        <div id="map" class="jumbotron" style="width: 95%; height: 432px" />
+    </p>
+    <p>
+        <div>
+            <ul>
+                <li><strong>Total de endereços:</strong> @Model.Householders.Count</li>
+                <li><strong>Total de estudantes:</strong> @Model.Householders.Count(h => h.PublisherId != null)</li>
+            </ul>
+        </div>
+    </p>
 </div>
 
 @section scripts
