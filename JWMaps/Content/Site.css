@@ -37,3 +37,16 @@ textarea {
 {
     color: red;
 }
+#wrapper{    
+    height: 100%;
+}
+
+#map{
+    height: 100%;
+    width: 100%;
+    position: fixed;
+}
+
+#statistics{
+    height:100%;
+}

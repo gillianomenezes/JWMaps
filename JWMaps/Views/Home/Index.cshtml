@@ -3,15 +3,15 @@
     ViewBag.Title = "Home Page";
 }
 
-<div>
-    <div id="map" class="jumbotron" style="width: 95%; height: 432px" />
+<div id="wrapper">
+    <div id="map" class="jumbotron" style="width: 95%; height: 432px" />    
+</div>
 
-    <div>
-        <ul>
-            <li>Total de endereços: @Model.Householders.Count</li>
-            <li>Total de estudantes: @Model.Householders.Count(h => h.PublisherId != null)</li>
-        </ul>
-    </div>
+<div id="statistics">
+    <ul>
+        <li>Total de endereços: @Model.Householders.Count</li>
+        <li>Total de estudantes: @Model.Householders.Count(h => h.PublisherId != null)</li>
+    </ul>
 </div>
 
 @section scripts
