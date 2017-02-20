@@ -12,7 +12,9 @@
     <thead>
         <tr>
             <th>Name</th>
-            <th>Address</th>            
+            <th>Address</th>
+            <th>Neighbourhood</th>          
+            <th>Delete</th>  
         </tr>
     </thead>
     <tbody>
@@ -21,6 +23,8 @@
             <tr>
                 <td>@Html.ActionLink(item.Householder.Name, "Edit", "Householders", new { id = item.Householder.Id }, null)</td>
                 <td>@item.Householder.Address</td>
+                <td>@item.Householder.Neighbourhood</td>
+                <td><button class="btn-link js-delete">deletar</button></td>
             </tr>
         }
     </tbody>
@@ -31,6 +35,16 @@
     <script>
         $(document).ready(function () {
             $("#householders").DataTable();
+
+
+            $("#householders .js-delete").on("click", ".js-delete", function () {
+                var button = $(this);
+
+                bootbox.confirm("Você tem certeza que deseja deletar esse registro?", function (result) {
+                    if (result) {
+                    }
+                });
+            });
         });
     </script>    
 }

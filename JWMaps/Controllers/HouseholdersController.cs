@@ -65,7 +65,10 @@ namespace JWMaps.Controllers
             householder.Longitude = point.Longitude;
 
             if (householder.Id == 0)
+            {
+                householder.DateAdded = DateTime.Now;
                 _context.Householders.Add(householder);
+            }
             else
             {
                 var householderdb = _context.Householders.Single(h => h.Id == householder.Id);
@@ -105,6 +108,16 @@ namespace JWMaps.Controllers
             };
 
             return View("HouseholdersForm", householderViewModel);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var householderInDb = _context.Householders.Single(h => h.Id == id);
+            _context.Householders.Remove(householderInDb);
+
+            _context.SaveChanges();
+
+            return View();
         }
     }
 }

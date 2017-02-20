@@ -43,6 +43,8 @@ namespace JWMaps.Models
         public double Latitude { get; set; }
 
         public double Longitude { get; set; }
+
+        public DateTime DateAdded { get; set; }
     }
 
     public enum Category { House, Business };

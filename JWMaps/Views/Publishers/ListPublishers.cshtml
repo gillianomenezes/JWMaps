@@ -11,13 +11,15 @@
     <thead>
         <tr>
             <th>Nome</th>
+            <th>Deletar</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var publisher in Model)
         {
             <tr>
-                <td>@publisher.Name</td>
+                <td>@Html.ActionLink(publisher.Name, "Edit", "Publishers", new { id = publisher.Id }, null)</td>
+                <td><button class="btn-link js-delete">deletar</button></td>
             </tr>
         }
     </tbody>

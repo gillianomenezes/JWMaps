@@ -44,7 +44,7 @@
     @Html.AntiForgeryToken()
 }
 
-<div id="map_canvas" style="width: 95%; height: 432px" />
+<div id="map_canvas" class="jumbotron" style="width: 95%; height: 432px" />
 
 @section scripts
 {
@@ -58,6 +58,12 @@
         var address = $('#address').val() + ", " + $('#neighbourhood').val() + " - " + $('#city').val();
 
         function initialize() {
+
+            if(@Model.Householder.Id == 0)
+            {
+                $("#map_canvas").remove();
+                return;
+            }
 
             geocoder = new google.maps.Geocoder();
 
@@ -104,8 +110,7 @@
                 });
             }
         }
-    </script>
-    <script>
-        $(document).ready(initialize)
+
+        $(document).ready(initialize);
     </script>
 }
