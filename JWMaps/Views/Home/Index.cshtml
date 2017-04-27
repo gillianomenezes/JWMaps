@@ -3,15 +3,15 @@
     ViewBag.Title = "Home Page";
 }
 
-<div>
+<div id="wrapper">
     <div id="map" class="jumbotron" style="width: 95%; height: 432px" />
+</div>
 
-    <div>
-        <ul>
-            <li><strong>Total de endereços:</strong> @Model.Householders.Count</li>
-            <li><strong>Total de estudantes:</strong> @Model.Householders.Count(h => h.PublisherId != null)</li>
-        </ul>
-    </div>
+<div id="statistics">
+    <ul>
+        <li>Total de endereços: @Model.Householders.Count</li>
+        <li>Total de estudantes: @Model.Householders.Count(h => h.PublisherId != null)</li>
+    </ul>
 </div>
 
 @section scripts
@@ -21,7 +21,7 @@
         $(document).ready(function () {
 
             function initMap() {
-                
+
                 var map = new google.maps.Map(document.getElementById('map'), {
                     zoom: 17
                 });
@@ -32,14 +32,26 @@
                 {
                     <text>
 
-                    var marker = new google.maps.Marker({
-                        position: new google.maps.LatLng(@householder.Latitude.ToString().Replace(',', '.') , @householder.Longitude.ToString().Replace(',', '.')),
-                        map: map
-                        });
+                @if(householder.PublisherId != null)
+                {
+                    <text> var icon = "http://maps.google.com/mapfiles/ms/icons/green.png"; </text>
+                }
+                else
+                {
+                    <text> var icon = "http://maps.google.com/mapfiles/ms/icons/red.png"; </text>
+                }
 
-                    bounds.extend(marker.getPosition());
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(@householder.Latitude.ToString().Replace(',', '.') , @householder.Longitude.ToString().Replace(',', '.')),
+                    map: map, 
+                    title: "name",
+                    icon: icon,
+                    animation: google.maps.Animation.DROP
+                });
 
-                    </text>
+                bounds.extend(marker.getPosition());
+                
+                </text>
                 }
 
                 map.fitBounds(bounds);
