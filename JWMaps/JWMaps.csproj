@@ -383,7 +383,9 @@
     </Content>
     <Content Include="Content\DataTables\css\mixins.scss" />
     <Content Include="Content\DataTables\css\common.scss" />
+    <None Include="Properties\PublishProfiles\fieldservicemaps - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\fieldservicemaps - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\fieldservicemaps - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\fieldservicemaps - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
