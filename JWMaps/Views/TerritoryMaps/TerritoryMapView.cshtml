@@ -1,10 +1,12 @@
-﻿@model List<JWMaps.Models.Householder>
+﻿@model JWMaps.Models.TerritoryMap
 
 @{
     ViewBag.Title = "TerritoryMapView";
 }
 
 <h2>TerritoryMapView</h2>
+
+@{var householders = Model.Householders.ToList(); }
 
 <table id="householders" class="table table-bordered table-hover">
     <thead>
@@ -15,12 +17,12 @@
         </tr>
     </thead>
     <tbody>
-        @for(int i = 0 ; i < Model.Count; i++)
+        @for(int i = 0 ; i < Model.Householders.Count; i++)
         {
             <tr>
                 <td>@(i+1)</td>
-                <td>@Html.ActionLink(Model[i].Name, "Edit", "Householders", new { id = Model[i].Id }, null)</td>
-                <td>@Model[i].Address</td>
+                <td>@Html.ActionLink(householders[i].Name, "Edit", "Householders", new { id = householders[i].Id }, null)</td>
+                <td>@householders[i].Address</td>
             </tr>
         }
     </tbody>
@@ -39,8 +41,8 @@
             function initMap() {
 
                 var householders = $(".addr");
-                var latitude = @Html.Raw(Json.Encode(Model.First().Latitude));
-                var longitude = @Html.Raw(Json.Encode(Model.First().Longitude));
+                var latitude = @Html.Raw(Json.Encode(Model.Householders.First().Latitude));
+                var longitude = @Html.Raw(Json.Encode(Model.Householders.First().Longitude));
 
                 var myLatLng = {lat: latitude, lng: longitude};
 
@@ -53,7 +55,7 @@
                 var labels = '123456789';
                 var labelIndex = 0;
 
-                @foreach(var householder in Model)
+                @foreach(var householder in Model.Householders)
                 {
                     <text>
 

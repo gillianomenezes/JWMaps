@@ -31,15 +31,11 @@ namespace JWMaps.Models
         public string Phone { get; set; }
         
         public int? PublisherId { get; set; }
-
-        public int TerritoryMapId { get; set; }
-
+        
         public bool Confirmed { get; set; }
 
         public Category Category { get; set; }
-
-        public DateTime? LasTimeIncludedInTerritoryMap { get; set; }
-
+        
         public double Latitude { get; set; }
 
         public double Longitude { get; set; }

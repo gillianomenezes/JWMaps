@@ -7,7 +7,7 @@
 
 <h2>Create</h2>
 
-@using (Html.BeginForm("NewTerritoryMap", "TerritoryMaps", FormMethod.Post))
+@using (Html.BeginForm("New", "TerritoryMaps", FormMethod.Post))
 {
     <p>@Html.DropDownListFor(t => t.selectedNeighbourhood, new SelectList(Model.Neighbourhoods.Distinct()), "", new { @class = "form-control" })</p>
     <div class="form-group">

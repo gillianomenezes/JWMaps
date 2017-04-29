@@ -73,56 +73,121 @@ namespace JWMaps.Controllers
             return View(territoryMap);
         }
 
-
-        public ActionResult NewTerritoryMap(TerritoryMapViewModel territoryMapVM)
+        public ActionResult Show(int? id)
         {
-            var selectedNeighbourhood = territoryMapVM.selectedNeighbourhood;
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            List<Householder> householders = new List<Householder>();
-            List<Householder> householdersdb = _context.Householders
-                                        .ToList()
-                                        .FindAll(h => h.Neighbourhood.Equals(selectedNeighbourhood))
-                                        .OrderBy(h => h.LasTimeIncludedInTerritoryMap).ToList();
-            
+            var territoryMap = _context.TerritoryMaps.Single(t => t.Id == id);
+
+            if(territoryMap == null)
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+
+            return View("TerritoryMapView", territoryMap);
+        }
+
+        public ActionResult New(TerritoryMapViewModel territoryMapViewModel)
+        {
+            var householdersNotInMap = new List<Householder>();
+            var householdersdb = _context.Householders
+                                            .ToList()
+                                            .Where(h => h.Neighbourhood.Equals(territoryMapViewModel.selectedNeighbourhood))
+                                            .ToList();
+
+            if (householdersdb.Count == 0)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            List<TerritoryMap> mapsFromToday = _context.TerritoryMaps
+                                                .ToList()
+                                                .Where(t => t.CreationDate.Date == DateTime.Today)
+                                                .ToList();
+
+            List<TerritoryMap> mapsFromTodayAndFromGivenNeighbourhood = new List<TerritoryMap>();
+
+            foreach(var map in mapsFromToday)
+            {
+                if(map.Householders.Count > 0)
+                {
+                    if (map.Householders.First().Neighbourhood.Equals(territoryMapViewModel.selectedNeighbourhood))
+                        mapsFromTodayAndFromGivenNeighbourhood.Add(map);
+                }
+            }
+
+            if (mapsFromTodayAndFromGivenNeighbourhood.Count == 0)
+                householdersNotInMap.AddRange(householdersdb);
+
+
+            foreach (var map in mapsFromTodayAndFromGivenNeighbourhood)
+            {
+                foreach (var householder in householdersdb)
+                {
+                    if (!map.Householders.Contains(householder))
+                        householdersNotInMap.Add(householder);
+                }
+            }
+
+            if (householdersNotInMap.Count == 0)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
             var locationService = new GoogleLocationService();
-            
-            householders.Add(householdersdb.First());
-            householdersdb.First().LasTimeIncludedInTerritoryMap = DateTime.Now;
+            var newTerritoryMap = new TerritoryMap();
+            newTerritoryMap.Householders = new List<Householder>();
 
             AddressData addrA = new AddressData();
-            addrA.Address = householdersdb[0].Address + ", " + householdersdb[0].Neighbourhood;
-            addrA.City = householdersdb[0].City;
+            addrA.Address = householdersNotInMap.First().Address + ", " + householdersNotInMap.First().Neighbourhood;
+            addrA.City = householdersNotInMap.First().City;
 
-            for (int i = 1; i < householdersdb.Count ; i++)
+            for (int i = 1; i < householdersNotInMap.Count; i++)
             {
-                if (householders.Count >= territoryMapVM.MaxNumberOfHouseholders)
-                    break;
+                if (i == (householdersNotInMap.Count - 1) || newTerritoryMap.Householders.Count >= territoryMapViewModel.MaxNumberOfHouseholders)
+                {
+                    _context.TerritoryMaps.Add(newTerritoryMap);
+                    newTerritoryMap = new TerritoryMap();
+                    newTerritoryMap.Householders = new List<Householder>();
+
+                    if(i < (householdersNotInMap.Count - 1))
+                    {
+                        addrA = new AddressData();
+                        addrA.Address = householdersNotInMap.First().Address + ", " + householdersNotInMap.First().Neighbourhood;
+                        addrA.City = householdersNotInMap.First().City;
+                    }
+                }
 
                 AddressData addrB = new AddressData();
-                addrB.Address = householdersdb[i].Address + ", " + householdersdb[i].Neighbourhood;
-                addrB.City = householdersdb[i].City;
+                addrB.Address = householdersNotInMap[i].Address + ", " + householdersNotInMap[i].Neighbourhood;
+                addrB.City = householdersNotInMap[i].City;
 
                 var distance = locationService.GetDirections(addrA, addrB).Distance.Split(' ')[0].Replace('.', ',');
 
-                if (Double.Parse(distance) <= territoryMapVM.MaxDistanceAmongHouseholders)
+                if (Double.Parse(distance) <= territoryMapViewModel.MaxDistanceAmongHouseholders)
                 {
-                    householders.Add(householdersdb[i]);
-                    householdersdb[i].LasTimeIncludedInTerritoryMap = DateTime.Now;
-                }  
+                    newTerritoryMap.Householders.Add(householdersNotInMap[i]);
+                    householdersNotInMap.RemoveAt(i);
+                    newTerritoryMap.CreationDate= DateTime.Now;
+                }
             }
 
             _context.SaveChanges();
-            
-            return View("TerritoryMapView", householders);
+
+            return List();
+        }
+
+        public ActionResult List()
+        {
+            var territoryMapsInDB = _context.TerritoryMaps.ToList().Where(t => t.CreationDate.Date == DateTime.Today).ToList();
+
+            _context.TerritoryMaps.RemoveRange(_context.TerritoryMaps.ToList().Where(t => t.CreationDate.Date == DateTime.Today));
+            _context.SaveChanges();
+
+            return View("ListTerritoryMapView", territoryMapsInDB);
         }
 
         // GET: TerritoryMaps/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             TerritoryMap territoryMap = _context.TerritoryMaps.Find(id);
             if (territoryMap == null)
             {
