@@ -157,10 +157,10 @@ namespace JWMaps.Controllers
                 if (result.Succeeded)
                 {
                     //temp code
-                    //var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
-                    //var roleManager = new RoleManager<IdentityRole>(roleStore);
-                    //await roleManager.CreateAsync(new IdentityRole("CanManageHouseholderData"));
-                    //await UserManager.AddToRoleAsync(user.Id, "CanManageHouseholderData");
+                    var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
+                    var roleManager = new RoleManager<IdentityRole>(roleStore);
+                    await roleManager.CreateAsync(new IdentityRole("CanManageHouseholderData"));
+                    await UserManager.AddToRoleAsync(user.Id, "CanManageHouseholderData");
 
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     

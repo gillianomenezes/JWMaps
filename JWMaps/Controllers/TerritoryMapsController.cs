@@ -88,84 +88,118 @@ namespace JWMaps.Controllers
 
         public ActionResult New(TerritoryMapViewModel territoryMapViewModel)
         {
-            var householdersNotInMap = new List<Householder>();
-            var householdersdb = _context.Householders
+            //var householdersNotInMap = new List<Householder>();
+            var locationService = new GoogleLocationService();
+            var peopleNotInMap = _context.Householders
                                             .ToList()
                                             .Where(h => h.Neighbourhood.Equals(territoryMapViewModel.selectedNeighbourhood))
+                                            .Where(h => h.TerritoryMapId == null)
                                             .ToList();
 
-            if (householdersdb.Count == 0)
+            if (peopleNotInMap.Count == 0)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            List<TerritoryMap> mapsFromToday = _context.TerritoryMaps
-                                                .ToList()
-                                                .Where(t => t.CreationDate.Date == DateTime.Today)
-                                                .ToList();
-
-            List<TerritoryMap> mapsFromTodayAndFromGivenNeighbourhood = new List<TerritoryMap>();
-
-            foreach(var map in mapsFromToday)
+            while(peopleNotInMap.Count > 0)
             {
-                if(map.Householders.Count > 0)
+                TerritoryMap newMap = new TerritoryMap();
+                peopleNotInMap.First().TerritoryMapId = newMap.Id;
+
+                AddressData addrA = new AddressData();
+                addrA.Address = peopleNotInMap.First().Address + ", " + peopleNotInMap.First().Neighbourhood;
+                addrA.City = peopleNotInMap.First().City;
+                
+                int peopleAdded = 0;
+
+                for (int i = 1; i < peopleNotInMap.Count; i++)
                 {
-                    if (map.Householders.First().Neighbourhood.Equals(territoryMapViewModel.selectedNeighbourhood))
-                        mapsFromTodayAndFromGivenNeighbourhood.Add(map);
-                }
-            }
-
-            if (mapsFromTodayAndFromGivenNeighbourhood.Count == 0)
-                householdersNotInMap.AddRange(householdersdb);
-
-
-            foreach (var map in mapsFromTodayAndFromGivenNeighbourhood)
-            {
-                foreach (var householder in householdersdb)
-                {
-                    if (!map.Householders.Contains(householder))
-                        householdersNotInMap.Add(householder);
-                }
-            }
-
-            if (householdersNotInMap.Count == 0)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-
-            var locationService = new GoogleLocationService();
-            var newTerritoryMap = new TerritoryMap();
-            newTerritoryMap.Householders = new List<Householder>();
-
-            AddressData addrA = new AddressData();
-            addrA.Address = householdersNotInMap.First().Address + ", " + householdersNotInMap.First().Neighbourhood;
-            addrA.City = householdersNotInMap.First().City;
-
-            for (int i = 1; i < householdersNotInMap.Count; i++)
-            {
-                if (i == (householdersNotInMap.Count - 1) || newTerritoryMap.Householders.Count >= territoryMapViewModel.MaxNumberOfHouseholders)
-                {
-                    _context.TerritoryMaps.Add(newTerritoryMap);
-                    newTerritoryMap = new TerritoryMap();
-                    newTerritoryMap.Householders = new List<Householder>();
-
-                    if(i < (householdersNotInMap.Count - 1))
+                    if (peopleAdded >= territoryMapViewModel.MaxNumberOfHouseholders)
                     {
-                        addrA = new AddressData();
-                        addrA.Address = householdersNotInMap.First().Address + ", " + householdersNotInMap.First().Neighbourhood;
-                        addrA.City = householdersNotInMap.First().City;
+                        _context.TerritoryMaps.Add(newMap);
+                        break;
+                    }
+
+                    AddressData addrB = new AddressData();
+                    addrB.Address = peopleNotInMap[i].Address + ", " + peopleNotInMap[i].Neighbourhood;
+                    addrB.City = peopleNotInMap[i].City;
+
+                    var distance = locationService.GetDirections(addrA, addrB).Distance.Split(' ')[0].Replace('.', ',');
+
+                    if (Double.Parse(distance) <= territoryMapViewModel.MaxDistanceAmongHouseholders)
+                    {
+                        peopleNotInMap[i].TerritoryMapId = newMap.Id;
                     }
                 }
-
-                AddressData addrB = new AddressData();
-                addrB.Address = householdersNotInMap[i].Address + ", " + householdersNotInMap[i].Neighbourhood;
-                addrB.City = householdersNotInMap[i].City;
-
-                var distance = locationService.GetDirections(addrA, addrB).Distance.Split(' ')[0].Replace('.', ',');
-
-                if (Double.Parse(distance) <= territoryMapViewModel.MaxDistanceAmongHouseholders)
-                {
-                    newTerritoryMap.Householders.Add(householdersNotInMap[i]);
-                    householdersNotInMap.RemoveAt(i);
-                    newTerritoryMap.CreationDate= DateTime.Now;
-                }
             }
+
+            //List<TerritoryMap> mapsFromToday = _context.TerritoryMaps
+            //                                    .ToList()
+            //                                    .Where(t => t.CreationDate.Date == DateTime.Today)
+            //                                    .ToList();
+
+            //List<TerritoryMap> mapsFromTodayAndFromGivenNeighbourhood = new List<TerritoryMap>();
+
+            //foreach(var map in mapsFromToday)
+            //{
+            //    if(map.Householders.Count > 0)
+            //    {
+            //        if (map.Householders.First().Neighbourhood.Equals(territoryMapViewModel.selectedNeighbourhood))
+            //            mapsFromTodayAndFromGivenNeighbourhood.Add(map);
+            //    }
+            //}
+
+            //if (mapsFromTodayAndFromGivenNeighbourhood.Count == 0)
+            //    householdersNotInMap.AddRange(householdersFromSameNeighbourhoodInDB);
+
+
+            //foreach (var map in mapsFromTodayAndFromGivenNeighbourhood)
+            //{
+            //    foreach (var householder in householdersFromSameNeighbourhoodInDB)
+            //    {
+            //        if (!map.Householders.Contains(householder))
+            //            householdersNotInMap.Add(householder);
+            //    }
+            //}
+
+            //if (householdersNotInMap.Count == 0)
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            //var locationService = new GoogleLocationService();
+            //var newTerritoryMap = new TerritoryMap();
+            //newTerritoryMap.Householders = new List<Householder>();
+
+            //AddressData addrA = new AddressData();
+            //addrA.Address = householdersNotInMap.First().Address + ", " + householdersNotInMap.First().Neighbourhood;
+            //addrA.City = householdersNotInMap.First().City;
+
+            //for (int i = 1; i < householdersNotInMap.Count; i++)
+            //{
+            //    if (i == (householdersNotInMap.Count - 1) || newTerritoryMap.Householders.Count >= territoryMapViewModel.MaxNumberOfHouseholders)
+            //    {
+            //        _context.TerritoryMaps.Add(newTerritoryMap);
+            //        newTerritoryMap = new TerritoryMap();
+            //        newTerritoryMap.Householders = new List<Householder>();
+
+            //        if(i < (householdersNotInMap.Count - 1))
+            //        {
+            //            addrA = new AddressData();
+            //            addrA.Address = householdersNotInMap.First().Address + ", " + householdersNotInMap.First().Neighbourhood;
+            //            addrA.City = householdersNotInMap.First().City;
+            //        }
+            //    }
+
+            //    AddressData addrB = new AddressData();
+            //    addrB.Address = householdersNotInMap[i].Address + ", " + householdersNotInMap[i].Neighbourhood;
+            //    addrB.City = householdersNotInMap[i].City;
+
+            //    var distance = locationService.GetDirections(addrA, addrB).Distance.Split(' ')[0].Replace('.', ',');
+
+            //    if (Double.Parse(distance) <= territoryMapViewModel.MaxDistanceAmongHouseholders)
+            //    {
+            //        newTerritoryMap.Householders.Add(householdersNotInMap[i]);
+            //        householdersNotInMap.RemoveAt(i);
+            //        newTerritoryMap.CreationDate= DateTime.Now;
+            //    }
+            //}
 
             _context.SaveChanges();
 
@@ -175,10 +209,7 @@ namespace JWMaps.Controllers
         public ActionResult List()
         {
             var territoryMapsInDB = _context.TerritoryMaps.ToList().Where(t => t.CreationDate.Date == DateTime.Today).ToList();
-
-            _context.TerritoryMaps.RemoveRange(_context.TerritoryMaps.ToList().Where(t => t.CreationDate.Date == DateTime.Today));
-            _context.SaveChanges();
-
+            
             return View("ListTerritoryMapView", territoryMapsInDB);
         }
 

@@ -8,9 +8,12 @@ namespace JWMaps.Models
     public class TerritoryMap
     {
         public int Id { get; set; }
-
         public DateTime CreationDate { get; set; }
+        public DateTime SharedDate { get; set; }
 
-        public virtual ICollection<Householder> Householders { get; set; }
+        public TerritoryMap()
+        {
+            this.CreationDate = DateTime.Now;
+        }
     }
 }
