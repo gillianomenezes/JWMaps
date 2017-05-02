@@ -8,7 +8,7 @@
 <h2>List of Territory Maps</h2>
 
 <p>@Html.ActionLink("New Territory Map", "Create", "TerritoryMaps", null, new { @class = "btn btn-primary" })</p>
-@*<table id="territoryMaps" class="table table-bordered table-hover">
+<table id="territoryMaps" class="table table-bordered table-hover">
     <thead>
         <tr>
             <th>nth</th>
@@ -21,8 +21,8 @@
         {
             <tr>
                 <td>@(i+1)</td>
-                <td>@Html.ActionLink(Model[i].Householders.First().Neighbourhood, "Show", "TerritoryMaps", new { id = Model[i].Id }, null)</td>                
-                <td><button class="btn-link js-delete">deletar</button></td>
+                <td>@Html.ActionLink(Model[i].CreationDate.ToString(), "Show", "TerritoryMaps", new { id = Model[i].Id }, null)</td>                
+                <td><button class="btn-link js-delete" data-terrytorymap-id=@Model[i].Id>deletar</button></td>
             </tr>
         }
     </tbody>
@@ -40,9 +40,17 @@
 
                 bootbox.confirm("Você tem certeza que deseja deletar esse registro?", function (result) {
                     if (result) {
+                        $.ajax({
+                            url: "@Url.Action("DeleteConfirmed", "TerritoryMaps")",
+                            type: 'Delete',
+                            data: { id: button.attr("data-terrytorymap-id")},
+                            success: function () {
+                                button.parents("tr").remove();
+                            }
+                        });
                     }
                 });
             });
         });
     </script>
-}*@
+}

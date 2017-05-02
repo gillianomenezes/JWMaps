@@ -9,7 +9,7 @@ namespace JWMaps.Models
     {
         public int Id { get; set; }
         public DateTime CreationDate { get; set; }
-        public DateTime SharedDate { get; set; }
+        public DateTime? SharedDate { get; set; }
 
         public TerritoryMap()
         {

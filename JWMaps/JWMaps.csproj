@@ -256,6 +256,10 @@
     <Compile Include="Migrations\201704291827319_AddTerritoryMapIdToHouseholderModel.Designer.cs">
       <DependentUpon>201704291827319_AddTerritoryMapIdToHouseholderModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705021438258_ChangeSharedDateInTerritoryMapToNullable.cs" />
+    <Compile Include="Migrations\201705021438258_ChangeSharedDateInTerritoryMapToNullable.Designer.cs">
+      <DependentUpon>201705021438258_ChangeSharedDateInTerritoryMapToNullable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Householder.cs" />
@@ -569,6 +573,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704291827319_AddTerritoryMapIdToHouseholderModel.resx">
       <DependentUpon>201704291827319_AddTerritoryMapIdToHouseholderModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705021438258_ChangeSharedDateInTerritoryMapToNullable.resx">
+      <DependentUpon>201705021438258_ChangeSharedDateInTerritoryMapToNullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
