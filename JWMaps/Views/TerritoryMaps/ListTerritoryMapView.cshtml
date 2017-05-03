@@ -22,7 +22,7 @@
             <tr>
                 <td>@(i+1)</td>
                 <td>@Html.ActionLink(Model[i].CreationDate.ToString(), "Show", "TerritoryMaps", new { id = Model[i].Id }, null)</td>                
-                <td><button class="btn-link js-delete" data-terrytorymap-id=@Model[i].Id>deletar</button></td>
+                <td><button class="btn-link js-delete" data-id=@Model[i].Id>deletar</button></td>
             </tr>
         }
     </tbody>
@@ -34,19 +34,18 @@
         $(document).ready(function () {
             $("#territoryMaps").DataTable();
 
-
-            $("#territoryMaps .js-delete").on("click", ".js-delete", function () {
-                var button = $(this);
+            $(".js-delete").on("click", function () {
+                var tr = $(this).closest('tr');
 
                 bootbox.confirm("Você tem certeza que deseja deletar esse registro?", function (result) {
                     if (result) {
+                        var id = $(this).attr("data-id");
+
                         $.ajax({
-                            url: "@Url.Action("DeleteConfirmed", "TerritoryMaps")",
-                            type: 'Delete',
-                            data: { id: button.attr("data-terrytorymap-id")},
-                            success: function () {
-                                button.parents("tr").remove();
-                            }
+                            url: "/territorymap/delete/",
+                            type: "DELETE",
+                            data: { id: id },
+                            success: tr.remove()
                         });
                     }
                 });

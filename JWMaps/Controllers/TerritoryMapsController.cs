@@ -7,6 +7,7 @@ using JWMaps.Models;
 using JWMaps.ViewModel;
 using System;
 using GoogleMaps.LocationServices;
+using System.Net.Http;
 
 namespace JWMaps.Controllers
 {
@@ -103,25 +104,25 @@ namespace JWMaps.Controllers
             if (peopleNotInMap.Count == 0)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            while(peopleNotInMap.Count > 0)
+            while (peopleNotInMap.Count > 0)
             {
                 TerritoryMap newMap = new TerritoryMap();
 
                 _context.TerritoryMaps.Add(newMap);
                 _context.SaveChanges();
-                
+
                 peopleNotInMap.First().TerritoryMapId = newMap.Id;
                 int peopleAdded = 1;
 
                 AddressData addrA = new AddressData();
                 addrA.Address = peopleNotInMap.First().Address + ", " + peopleNotInMap.First().Neighbourhood;
                 addrA.City = peopleNotInMap.First().City;
-                
-                for(int i=0 ; i < peopleNotInMap.Count; i++)
+
+                for (int i = 0; i < peopleNotInMap.Count; i++)
                 {
                     if (peopleAdded >= territoryMapViewModel.MaxNumberOfHouseholders || (i == peopleNotInMap.Count - 1))
                     {
-                        peopleAdded = 0;                     
+                        peopleAdded = 0;
                         break;
                     }
 
@@ -144,7 +145,7 @@ namespace JWMaps.Controllers
 
                 peopleNotInMap.Remove(peopleNotInMap.First());
             }
-            
+
             _context.SaveChanges();
 
             return List();
@@ -187,20 +188,20 @@ namespace JWMaps.Controllers
             return View(territoryMap);
         }
 
-        // GET: TerritoryMaps/Delete/5
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    TerritoryMap territoryMap = _context.TerritoryMaps.Find(id);
-        //    if (territoryMap == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(territoryMap);
-        //}
+        //GET: TerritoryMaps/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            TerritoryMap territoryMap = _context.TerritoryMaps.Find(id);
+            if (territoryMap == null)
+            {
+                return HttpNotFound();
+            }
+            return View(territoryMap);
+        }
 
         // POST: TerritoryMaps/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -211,6 +212,12 @@ namespace JWMaps.Controllers
             _context.TerritoryMaps.Remove(territoryMap);
             _context.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public HttpResponseMessage Delete(int id)
+        {
+            TerritoryMap territoryMap = _context.TerritoryMaps.Find(id);         
+            return new HttpResponseMessage(HttpStatusCode.NoContent);
         }
 
         protected override void Dispose(bool disposing)
