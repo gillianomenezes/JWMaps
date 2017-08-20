@@ -29,11 +29,10 @@ namespace JWMaps.Models
         [Display(Name = "Telefone")]
         [StringLength(13)]
         public string Phone { get; set; }
+                
+        public bool IsStudying { get; set; }
         
-        public int? PublisherId { get; set; }
-        
-        public bool Confirmed { get; set; }
-
+        [Display(Name = "Que tipo de endereço?")]
         public Category Category { get; set; }
         
         public double Latitude { get; set; }
@@ -41,8 +40,6 @@ namespace JWMaps.Models
         public double Longitude { get; set; }
 
         public DateTime DateAdded { get; set; }
-
-        public int? TerritoryMapId { get; set; }
     }
 
     public enum Category { House, Business };

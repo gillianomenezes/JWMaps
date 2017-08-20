@@ -9,11 +9,10 @@
             @Html.ActionLink("JW Maps", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
         </div>
         <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav">                
                 <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                <li>@Html.ActionLink("Householders", "Index", "Householders")</li>
-                <li>@Html.ActionLink("Territories", "List", "TerritoryMaps")</li>
-                <li>@Html.ActionLink("Publishers", "Index", "Publishers")</li>
+                <li>@Html.ActionLink("Estrangeiros", "Index", "Householders")</li>
+                <li>@Html.ActionLink("Territórios", "List", "TerritoryMaps")</li>                
             </ul>
             @Html.Partial("_LoginPartial")
         </div>

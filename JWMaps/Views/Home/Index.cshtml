@@ -10,7 +10,7 @@
 <div id="statistics">
     <ul>
         <li>Total de endereços: @Model.Householders.Count</li>
-        <li>Total de estudantes: @Model.Householders.Count(h => h.PublisherId != null)</li>
+        <li>Total de estudantes: @Model.Householders.Count(h => h.IsStudying == true)</li>
     </ul>
 </div>
 
@@ -32,9 +32,9 @@
                 {
                     <text>
 
-                @if(householder.PublisherId != null)
+                @if(householder.IsStudying)
                 {
-                    <text> var icon = "http://maps.google.com/mapfiles/ms/icons/green.png"; </text>
+                    <text> var icon = "http://maps.google.com/mapfiles/ms/icons/blue.png"; </text>
                 }
                 else
                 {

@@ -22,7 +22,6 @@ namespace JWMaps.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Householder> Householders { get; set; }
-        public DbSet<Publisher> Publishers { get; set; }
         public DbSet<TerritoryMap> TerritoryMaps { get; set; }
 
         public ApplicationDbContext()

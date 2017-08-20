@@ -25,7 +25,7 @@ namespace JWMaps
                         "~/Scripts/modernizr-*"));
             
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap-lumen.css",
+                      "~/Content/bootstrap-cerulean.css",
                       "~/content/datatables/css/datatables.bootstrap.css",
                       "~/Content/site.css"));
         }

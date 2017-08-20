@@ -34,7 +34,7 @@ namespace JWMaps.Controllers
                 var householderViewModel = new HouseholderViewModel
                 {
                     Householder = householder,
-                    Publishers = _context.Publishers
+                    //Publishers = _context.Publishers
                 };
 
                 householderViewModels.Add(householderViewModel);
@@ -52,7 +52,7 @@ namespace JWMaps.Controllers
                 var householderViewModel = new HouseholderViewModel
                 {
                     Householder = householder,
-                    Publishers = _context.Publishers
+                    //Publishers = _context.Publishers
                 };
 
                 return View("HouseholdersForm", householderViewModel);
@@ -76,7 +76,7 @@ namespace JWMaps.Controllers
                 householderdb.Name = householder.Name;
                 householderdb.Neighbourhood = householder.Neighbourhood;
                 householderdb.Phone = householder.Phone;
-                householderdb.PublisherId = householder.PublisherId;
+                //householderdb.PublisherId = householder.PublisherId;
                 householderdb.Address = householder.Address;
                 householderdb.City = householder.City;
                 householderdb.Latitude = householder.Latitude;
@@ -92,8 +92,8 @@ namespace JWMaps.Controllers
         {
             var householderViewModel = new HouseholderViewModel
             {
-                Householder = new Householder(),
-                Publishers = _context.Publishers
+                Householder = new Householder()
+                //Publishers = _context.Publishers
             };
 
             return View("HouseholdersForm", householderViewModel);
@@ -103,8 +103,8 @@ namespace JWMaps.Controllers
         {
             var householderViewModel = new HouseholderViewModel
             {
-                Householder = _context.Householders.Single(h => h.Id == id),
-                Publishers = _context.Publishers
+                Householder = _context.Householders.Single(h => h.Id == id)
+                //Publishers = _context.Publishers
             };
 
             return View("HouseholdersForm", householderViewModel);

@@ -1,20 +1,20 @@
 ﻿@model List<JWMaps.ViewModel.HouseholderViewModel>
 
 @{
-    ViewBag.Title = "ListHouseholders";
+    ViewBag.Title = "Lista de estrangeiros";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>List of householders</h2>
+<h2>Lista de estrangeiros </h2>
 
-<p>@Html.ActionLink("New Householder", "New", "Householders", null, new { @class = "btn btn-primary" })</p>
+<p>@Html.ActionLink("Adicionar estrangeiro", "New", "Householders", null, new { @class = "btn btn-primary" })</p>
 <table id="householders" class="table table-bordered table-hover">
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Address</th>
-            <th>Neighbourhood</th>          
-            <th>Delete</th>  
+            <th>Nome</th>
+            <th>Endereço</th>
+            <th>Bairro</th>          
+            <th>Apagar</th>  
         </tr>
     </thead>
     <tbody>
@@ -24,7 +24,7 @@
                 <td>@Html.ActionLink(item.Householder.Name, "Edit", "Householders", new { id = item.Householder.Id }, null)</td>
                 <td>@item.Householder.Address</td>
                 <td>@item.Householder.Neighbourhood</td>
-                <td><button class="btn-link js-delete">deletar</button></td>
+                <td><button class="btn-link js-delete">apagar</button></td>
             </tr>
         }
     </tbody>
@@ -40,7 +40,7 @@
             $("#householders .js-delete").on("click", ".js-delete", function () {
                 var button = $(this);
 
-                bootbox.confirm("Você tem certeza que deseja deletar esse registro?", function (result) {
+                bootbox.confirm("Você tem certeza que deseja apagar esse registro?", function (result) {
                     if (result) {
                     }
                 });

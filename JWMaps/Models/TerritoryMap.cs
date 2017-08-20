@@ -10,6 +10,7 @@ namespace JWMaps.Models
         public int Id { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime? SharedDate { get; set; }
+        public IEnumerable<Householder> Householders { get; set; }
 
         public TerritoryMap()
         {

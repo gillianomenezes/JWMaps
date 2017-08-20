@@ -86,9 +86,10 @@ namespace JWMaps.Controllers
 
             //return View("TerritoryMapView", territoryMap);
 
-            var householders = _context.Householders.Where(h => h.TerritoryMapId == id).ToList();
+            //var householders = _context.Householders.Where(h => h.TerritoryMapId == id).ToList();
 
-            return View("TerritoryMapView", householders);
+            //return View("TerritoryMapView", householders);
+            return View();
         }
 
         public ActionResult New(TerritoryMapViewModel territoryMapViewModel)
@@ -98,7 +99,7 @@ namespace JWMaps.Controllers
             var peopleNotInMap = _context.Householders
                                             .ToList()
                                             .Where(h => h.Neighbourhood.Equals(territoryMapViewModel.selectedNeighbourhood))
-                                            .Where(h => h.TerritoryMapId == 0 || h.TerritoryMapId == null)
+                                            //.Where(h => h.TerritoryMapId == 0 || h.TerritoryMapId == null)
                                             .ToList();
 
             if (peopleNotInMap.Count == 0)
@@ -111,7 +112,7 @@ namespace JWMaps.Controllers
                 _context.TerritoryMaps.Add(newMap);
                 _context.SaveChanges();
 
-                peopleNotInMap.First().TerritoryMapId = newMap.Id;
+                //peopleNotInMap.First().TerritoryMapId = newMap.Id;
                 int peopleAdded = 1;
 
                 AddressData addrA = new AddressData();
@@ -137,7 +138,7 @@ namespace JWMaps.Controllers
 
                     if (Double.Parse(distance) <= territoryMapViewModel.MaxDistanceAmongHouseholders)
                     {
-                        peopleNotInMap[i].TerritoryMapId = newMap.Id;
+                        //peopleNotInMap[i].TerritoryMapId = newMap.Id;
                         peopleAdded++;
                         peopleNotInMap.Remove(peopleNotInMap[i]);
                     }
