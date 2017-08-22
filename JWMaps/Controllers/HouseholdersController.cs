@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using JWMaps.Models;
 using JWMaps.ViewModel;
 using GoogleMaps.LocationServices;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
 
 namespace JWMaps.Controllers
 {
@@ -27,14 +29,17 @@ namespace JWMaps.Controllers
         public ActionResult Index()
         {
             List <HouseholderViewModel> householderViewModels = new List<HouseholderViewModel>();
-            var householders = _context.Householders;
+            var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
+            var userManager = new UserManager<ApplicationUser>(store);
+            ApplicationUser user = userManager.FindByNameAsync(User.Identity.Name).Result;
+
+            var householders = _context.Householders.Where(h => h.CongregationId == user.CongregationId);
 
             foreach (var householder in householders)
             {
                 var householderViewModel = new HouseholderViewModel
                 {
-                    Householder = householder,
-                    //Publishers = _context.Publishers
+                    Householder = householder
                 };
 
                 householderViewModels.Add(householderViewModel);
@@ -51,12 +56,15 @@ namespace JWMaps.Controllers
             {
                 var householderViewModel = new HouseholderViewModel
                 {
-                    Householder = householder,
-                    //Publishers = _context.Publishers
+                    Householder = householder
                 };
 
                 return View("HouseholdersForm", householderViewModel);
             }
+
+            var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
+            var userManager = new UserManager<ApplicationUser>(store);
+            ApplicationUser user = userManager.FindByNameAsync(User.Identity.Name).Result;
 
             var locationService = new GoogleLocationService();
             var point = locationService.GetLatLongFromAddress(householder.Address + ", " + householder.Neighbourhood + "-" + householder.City);
@@ -76,7 +84,7 @@ namespace JWMaps.Controllers
                 householderdb.Name = householder.Name;
                 householderdb.Neighbourhood = householder.Neighbourhood;
                 householderdb.Phone = householder.Phone;
-                //householderdb.PublisherId = householder.PublisherId;
+                householder.CongregationId = user.CongregationId;
                 householderdb.Address = householder.Address;
                 householderdb.City = householder.City;
                 householderdb.Latitude = householder.Latitude;
@@ -93,7 +101,6 @@ namespace JWMaps.Controllers
             var householderViewModel = new HouseholderViewModel
             {
                 Householder = new Householder()
-                //Publishers = _context.Publishers
             };
 
             return View("HouseholdersForm", householderViewModel);
@@ -104,7 +111,6 @@ namespace JWMaps.Controllers
             var householderViewModel = new HouseholderViewModel
             {
                 Householder = _context.Householders.Single(h => h.Id == id)
-                //Publishers = _context.Publishers
             };
 
             return View("HouseholdersForm", householderViewModel);

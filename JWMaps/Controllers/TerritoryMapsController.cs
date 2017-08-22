@@ -8,6 +8,8 @@ using JWMaps.ViewModel;
 using System;
 using GoogleMaps.LocationServices;
 using System.Net.Http;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
 
 namespace JWMaps.Controllers
 {
@@ -45,8 +47,12 @@ namespace JWMaps.Controllers
         public ActionResult Create()
         {
             List<string> neighbourhoods = new List<string>();
+            var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
+            var userManager = new UserManager<ApplicationUser>(store);
+            ApplicationUser user = userManager.FindByNameAsync(User.Identity.Name).Result;
+            
 
-            foreach(Householder householder in _context.Householders.ToList())
+            foreach (Householder householder in _context.Householders.Where(h => h.CongregationId == user.CongregationId).ToList())
                 neighbourhoods.Add(householder.Neighbourhood);
 
             var territoryMapViewModel = new TerritoryMapViewModel
@@ -105,9 +111,16 @@ namespace JWMaps.Controllers
             if (peopleNotInMap.Count == 0)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
+            var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
+            var userManager = new UserManager<ApplicationUser>(store);
+            ApplicationUser user = userManager.FindByNameAsync(User.Identity.Name).Result;
+
             while (peopleNotInMap.Count > 0)
             {
-                TerritoryMap newMap = new TerritoryMap();
+                TerritoryMap newMap = new TerritoryMap()
+                {
+                    CongregationId = user.CongregationId
+                };
 
                 _context.TerritoryMaps.Add(newMap);
                 _context.SaveChanges();
@@ -154,7 +167,14 @@ namespace JWMaps.Controllers
 
         public ActionResult List()
         {
-            var territoryMapsInDB = _context.TerritoryMaps.ToList().Where(t => t.CreationDate.Date == DateTime.Today).ToList();
+            var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
+            var userManager = new UserManager<ApplicationUser>(store);
+            ApplicationUser user = userManager.FindByNameAsync(User.Identity.Name).Result;
+
+            var territoryMapsInDB = _context.TerritoryMaps.Where(h => h.CongregationId == user.CongregationId)
+                                                          .ToList()
+                                                          .Where(t => t.CreationDate.Date == DateTime.Today)
+                                                          .ToList();
             
             return View("ListTerritoryMapView", territoryMapsInDB);
         }

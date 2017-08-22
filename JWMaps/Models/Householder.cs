@@ -40,6 +40,9 @@ namespace JWMaps.Models
         public double Longitude { get; set; }
 
         public DateTime DateAdded { get; set; }
+
+        [Required]
+        public int CongregationId { get; set; }
     }
 
     public enum Category { House, Business };

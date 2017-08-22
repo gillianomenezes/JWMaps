@@ -11,6 +11,7 @@ namespace JWMaps.Models
         public DateTime CreationDate { get; set; }
         public DateTime? SharedDate { get; set; }
         public IEnumerable<Householder> Householders { get; set; }
+        public int CongregationId { get; set; }
 
         public TerritoryMap()
         {

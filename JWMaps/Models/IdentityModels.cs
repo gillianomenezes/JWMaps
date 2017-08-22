@@ -17,6 +17,8 @@ namespace JWMaps.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        public int CongregationId { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
