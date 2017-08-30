@@ -11,9 +11,12 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                <li>@Html.ActionLink("Householders", "Index", "Householders")</li>
-                <li>@Html.ActionLink("Territories", "List", "TerritoryMaps")</li>
-                <li>@Html.ActionLink("Publishers", "Index", "Publishers")</li>
+                <li>@Html.ActionLink("Estrangeiros", "Index", "Householders")</li>
+                <li>@Html.ActionLink("Territórios", "List", "TerritoryMaps")</li>
+                @if (User.IsInRole(JWMaps.Models.RoleName.CanAdministrate))
+                {
+                    <li>@Html.ActionLink("Administração", "Index", "Admin")</li>
+                }
             </ul>
             @Html.Partial("_LoginPartial")
         </div>

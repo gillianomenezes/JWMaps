@@ -81,6 +81,14 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -200,87 +208,29 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HouseholdersController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\PublishersController.cs" />
     <Compile Include="Controllers\TerritoryMapsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201701212138457_InitialModel.cs" />
-    <Compile Include="Migrations\201701212138457_InitialModel.Designer.cs">
-      <DependentUpon>201701212138457_InitialModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201701212158496_InitialModel1.cs" />
-    <Compile Include="Migrations\201701212158496_InitialModel1.Designer.cs">
-      <DependentUpon>201701212158496_InitialModel1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201701271312545_AddTerritoryMap.cs" />
-    <Compile Include="Migrations\201701271312545_AddTerritoryMap.Designer.cs">
-      <DependentUpon>201701271312545_AddTerritoryMap.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201701280158221_AddTerritoryMap1.cs" />
-    <Compile Include="Migrations\201701280158221_AddTerritoryMap1.Designer.cs">
-      <DependentUpon>201701280158221_AddTerritoryMap1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201702021101227_UpdateHouseholderModel.cs" />
-    <Compile Include="Migrations\201702021101227_UpdateHouseholderModel.Designer.cs">
-      <DependentUpon>201702021101227_UpdateHouseholderModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201702021708582_AddLasTimeIncludedInTerritoryMap.cs" />
-    <Compile Include="Migrations\201702021708582_AddLasTimeIncludedInTerritoryMap.Designer.cs">
-      <DependentUpon>201702021708582_AddLasTimeIncludedInTerritoryMap.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201702031713045_AddLatitudeAndLongitudeToHouseholder.cs" />
-    <Compile Include="Migrations\201702031713045_AddLatitudeAndLongitudeToHouseholder.Designer.cs">
-      <DependentUpon>201702031713045_AddLatitudeAndLongitudeToHouseholder.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201702031957437_SetDateTimeToNullable.cs" />
-    <Compile Include="Migrations\201702031957437_SetDateTimeToNullable.Designer.cs">
-      <DependentUpon>201702031957437_SetDateTimeToNullable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201702161349004_AddDateAddedForHouseholder.cs" />
-    <Compile Include="Migrations\201702161349004_AddDateAddedForHouseholder.Designer.cs">
-      <DependentUpon>201702161349004_AddDateAddedForHouseholder.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704282329010_FixHouseholderAttributeName.cs" />
-    <Compile Include="Migrations\201704282329010_FixHouseholderAttributeName.Designer.cs">
-      <DependentUpon>201704282329010_FixHouseholderAttributeName.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704290135481_AdjustTerritoryMapModel.cs" />
-    <Compile Include="Migrations\201704290135481_AdjustTerritoryMapModel.Designer.cs">
-      <DependentUpon>201704290135481_AdjustTerritoryMapModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704291827319_AddTerritoryMapIdToHouseholderModel.cs" />
-    <Compile Include="Migrations\201704291827319_AddTerritoryMapIdToHouseholderModel.Designer.cs">
-      <DependentUpon>201704291827319_AddTerritoryMapIdToHouseholderModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705021438258_ChangeSharedDateInTerritoryMapToNullable.cs" />
-    <Compile Include="Migrations\201705021438258_ChangeSharedDateInTerritoryMapToNullable.Designer.cs">
-      <DependentUpon>201705021438258_ChangeSharedDateInTerritoryMapToNullable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705030248546_test.cs" />
-    <Compile Include="Migrations\201705030248546_test.Designer.cs">
-      <DependentUpon>201705030248546_test.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705030255201_adjust.cs" />
-    <Compile Include="Migrations\201705030255201_adjust.Designer.cs">
-      <DependentUpon>201705030255201_adjust.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Congregation.cs" />
     <Compile Include="Models\Householder.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Publisher.cs" />
+    <Compile Include="Models\RoleName.cs" />
     <Compile Include="Models\TerritoryMap.cs" />
+    <Compile Include="Models\UserRolesDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModel\DashboardViewModel.cs" />
     <Compile Include="ViewModel\HouseholderViewModel.cs" />
     <Compile Include="ViewModel\PublisherViewModel.cs" />
     <Compile Include="ViewModel\TerritoryMapViewModel.cs" />
+    <Compile Include="ViewModel\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-cerulean.css" />
@@ -394,6 +344,7 @@
     <Content Include="Content\DataTables\images\sort_desc.png" />
     <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -529,8 +480,6 @@
     <Content Include="Views\Householders\ListHouseholders.cshtml" />
     <Content Include="Views\Householders\HouseholdersForm.cshtml" />
     <Content Include="Views\Shared\_NavBar.cshtml" />
-    <Content Include="Views\Publishers\PublishersForm.cshtml" />
-    <Content Include="Views\Publishers\ListPublishers.cshtml" />
     <Content Include="Views\TerritoryMaps\Create.cshtml" />
     <Content Include="Views\TerritoryMaps\Delete.cshtml" />
     <Content Include="Views\TerritoryMaps\Details.cshtml" />
@@ -538,6 +487,13 @@
     <Content Include="Views\TerritoryMaps\Index.cshtml" />
     <Content Include="Views\TerritoryMaps\TerritoryMapView.cshtml" />
     <Content Include="Views\TerritoryMaps\ListTerritoryMapView.cshtml" />
+    <Content Include="Views\Admin\AddRole.cshtml" />
+    <Content Include="Views\Admin\AdminRoles.cshtml" />
+    <Content Include="Views\Admin\Create.cshtml" />
+    <Content Include="Views\Admin\EditRoles.cshtml" />
+    <Content Include="Views\Admin\EditUser.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\ViewAllRoles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -549,53 +505,6 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201701212138457_InitialModel.resx">
-      <DependentUpon>201701212138457_InitialModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201701212158496_InitialModel1.resx">
-      <DependentUpon>201701212158496_InitialModel1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201701271312545_AddTerritoryMap.resx">
-      <DependentUpon>201701271312545_AddTerritoryMap.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201701280158221_AddTerritoryMap1.resx">
-      <DependentUpon>201701280158221_AddTerritoryMap1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201702021101227_UpdateHouseholderModel.resx">
-      <DependentUpon>201702021101227_UpdateHouseholderModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201702021708582_AddLasTimeIncludedInTerritoryMap.resx">
-      <DependentUpon>201702021708582_AddLasTimeIncludedInTerritoryMap.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201702031713045_AddLatitudeAndLongitudeToHouseholder.resx">
-      <DependentUpon>201702031713045_AddLatitudeAndLongitudeToHouseholder.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201702031957437_SetDateTimeToNullable.resx">
-      <DependentUpon>201702031957437_SetDateTimeToNullable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201702161349004_AddDateAddedForHouseholder.resx">
-      <DependentUpon>201702161349004_AddDateAddedForHouseholder.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704282329010_FixHouseholderAttributeName.resx">
-      <DependentUpon>201704282329010_FixHouseholderAttributeName.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704290135481_AdjustTerritoryMapModel.resx">
-      <DependentUpon>201704290135481_AdjustTerritoryMapModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704291827319_AddTerritoryMapIdToHouseholderModel.resx">
-      <DependentUpon>201704291827319_AddTerritoryMapIdToHouseholderModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705021438258_ChangeSharedDateInTerritoryMapToNullable.resx">
-      <DependentUpon>201705021438258_ChangeSharedDateInTerritoryMapToNullable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705030248546_test.resx">
-      <DependentUpon>201705030248546_test.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705030255201_adjust.resx">
-      <DependentUpon>201705030255201_adjust.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

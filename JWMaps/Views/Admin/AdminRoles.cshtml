@@ -1,0 +1,59 @@
+﻿@model PagedList.IPagedList<JWMaps.Models.ExpandedUserDTO>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<p>
+    @Html.ActionLink("Create New User", "Create", null, new { @class = "btn btn-default" })
+    @Html.ActionLink("Edit Roles", "ViewAllRoles", null, new { @class = "btn btn-default" })
+    @Html.ActionLink("Back to Home", "../", "Home", null, new { @class = "btn btn-default" })
+</p>
+<br />
+
+<table id="users" class="table table-hover">
+    <tr>
+        <th>
+            Email
+        </th>
+        <th>
+            Locked Out
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LockoutEndDateUtc)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditUser", new { UserName = item.UserName }) |
+                @if ((item.UserName.ToLower() != this.User.Identity.Name.ToLower()))
+                {
+                    @Html.ActionLink("Delete", "DeleteUser", new { UserName = item.UserName },
+                    new { onclick = "return confirm('Are you sure you wish to delete this user?');" })
+                }
+            </td>
+        </tr>
+    }
+
+
+</table>
+<br />
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#users").DataTable();
+        });
+    </script>
+}

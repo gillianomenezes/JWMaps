@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using JWMaps.Models;
 
 namespace JWMaps.ViewModel
 {
     public class HouseholderViewModel
     {
-        public IEnumerable<Publisher> Publishers { get; set; }
         public Householder Householder { get; set; }
     }
 }
