@@ -25,6 +25,7 @@ namespace JWMaps.Models
     {
         public DbSet<Householder> Householders { get; set; }
         public DbSet<TerritoryMap> TerritoryMaps { get; set; }
+        public DbSet<Congregation> Congregations { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
