@@ -100,7 +100,8 @@ namespace JWMaps.Controllers
         {
             var householderViewModel = new HouseholderViewModel
             {
-                Householder = new Householder()
+                Householder = new Householder(),
+                Publishers = _context.Publishers
             };
 
             return View("HouseholdersForm", householderViewModel);

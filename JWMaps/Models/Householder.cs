@@ -28,9 +28,9 @@ namespace JWMaps.Models
         [Display(Name = "Telefone")]
         [StringLength(13)]
         public string Phone { get; set; }
-                
-        public bool IsStudying { get; set; }
-        
+
+        public int PublisherId { get; set; }
+
         [Display(Name = "Que tipo de endereço?")]
         public Category Category { get; set; }
         

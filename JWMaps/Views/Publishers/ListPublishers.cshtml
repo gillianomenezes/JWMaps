@@ -1,0 +1,51 @@
+﻿@model List<JWMaps.Models.Publisher>
+
+@{
+    ViewBag.Title = "Lista de publicadores";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista de publicadores</h2>
+
+<p>@Html.ActionLink("Adicionar", "New", "Publishers", null, new { @class = "btn btn-primary" })</p>
+
+<table id="publishers" class="table table-bordered table-hover">
+    <thead>
+    <th>Publicadores</th>
+    <th></th>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Deletar", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#publishers").DataTable();
+
+
+            $("#publishers .js-delete").on("click", ".js-delete", function () {
+                var button = $(this);
+
+                bootbox.confirm("Você tem certeza que deseja apagar esse registro?", function (result) {
+                    if (result) {
+                    }
+                });
+            });
+        });
+    </script>
+}

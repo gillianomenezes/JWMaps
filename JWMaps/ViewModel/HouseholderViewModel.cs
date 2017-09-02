@@ -9,5 +9,7 @@ namespace JWMaps.ViewModel
     public class HouseholderViewModel
     {
         public Householder Householder { get; set; }
+
+        public IEnumerable<Publisher> Publishers { get; set; }
     }
 }

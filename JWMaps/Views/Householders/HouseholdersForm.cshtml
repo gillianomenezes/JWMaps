@@ -34,10 +34,11 @@
         @Html.TextBoxFor(h => h.Householder.Phone, new { @class = "form-control" })
         @Html.ValidationMessageFor(h => h.Householder.Phone)
     </div>
-    <div class="checkbox">
-        <label>
-            @Html.CheckBoxFor(h => h.Householder.IsStudying)<strong>É revisita de alguém?</strong>
-        </label>
+    <div class="form-group">
+        @*@Html.LabelFor(m => m.Publishers)*@
+        <label>Quem o está revisitando?</label>
+        @Html.DropDownListFor(m => m.Householder.Id, new SelectList(Model.Publishers, "Id", "Name"), "Ninguém", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Householder.Id)
     </div>
     @Html.HiddenFor(h => h.Householder.Id)
     <button type="submit" class="btn btn-primary">Salvar</button>

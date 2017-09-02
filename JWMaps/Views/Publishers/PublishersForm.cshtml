@@ -1,0 +1,21 @@
+﻿@model JWMaps.Models.Publisher
+@{
+    ViewBag.Title = "Dados do publicador";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Dados do publicador</h2>
+
+@using (Html.BeginForm("Save", "Publishers"))
+{
+    @Html.ValidationSummary();
+    <div class="form-group">
+        @Html.LabelFor(p => p.Name)
+        @Html.TextBoxFor(p => p.Name, new { @class = "form-control"})
+        @Html.ValidationMessageFor(p => p.Name)
+    </div>
+    
+    @Html.HiddenFor(p => p.Id)
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    @Html.AntiForgeryToken()
+}

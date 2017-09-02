@@ -213,6 +213,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HouseholdersController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PublishersController.cs" />
     <Compile Include="Controllers\TerritoryMapsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -221,12 +222,21 @@
     <Compile Include="Migrations\201709020238007_Init.Designer.cs">
       <DependentUpon>201709020238007_Init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709021243296_AddPublisherModel.cs" />
+    <Compile Include="Migrations\201709021243296_AddPublisherModel.Designer.cs">
+      <DependentUpon>201709021243296_AddPublisherModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709021256084_UpdateHouseholderModel.cs" />
+    <Compile Include="Migrations\201709021256084_UpdateHouseholderModel.Designer.cs">
+      <DependentUpon>201709021256084_UpdateHouseholderModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Congregation.cs" />
     <Compile Include="Models\Householder.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Publisher.cs" />
     <Compile Include="Models\RoleName.cs" />
     <Compile Include="Models\TerritoryMap.cs" />
     <Compile Include="Models\UserRolesDTO.cs" />
@@ -502,6 +512,8 @@
     <Content Include="Views\Admin\ViewAllRoles.cshtml" />
     <Content Include="Views\Congregations\ListCongregations.cshtml" />
     <Content Include="Views\Congregations\CongregationsForm.cshtml" />
+    <Content Include="Views\Publishers\PublishersForm.cshtml" />
+    <Content Include="Views\Publishers\ListPublishers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -517,6 +529,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201709020238007_Init.resx">
       <DependentUpon>201709020238007_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709021243296_AddPublisherModel.resx">
+      <DependentUpon>201709021243296_AddPublisherModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709021256084_UpdateHouseholderModel.resx">
+      <DependentUpon>201709021256084_UpdateHouseholderModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
