@@ -1,0 +1,20 @@
+﻿@model JWMaps.Models.Congregation
+@{
+    ViewBag.Title = "Dados da congregação";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Dados da congregação</h2>
+
+@using (Html.BeginForm("Save", "Congregations"))
+{
+    @Html.ValidationSummary();
+    <div class="form-group">
+        @Html.LabelFor(c => c.Name)
+        @Html.TextBoxFor(c => c.Name, new { @class = "form-control"})
+        @Html.ValidationMessageFor(c => c.Name)
+    </div>
+    @Html.HiddenFor(c => c.Id)
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    @Html.AntiForgeryToken()
+}

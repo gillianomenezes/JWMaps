@@ -1,10 +1,10 @@
 ﻿@model JWMaps.ViewModel.HouseholderViewModel
 @{
-    ViewBag.Title = "HouseholderForm";
+    ViewBag.Title = "Dados do morador";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Householder form</h2>
+<h2>Dados do morador</h2>
 
 @using (Html.BeginForm("Save", "Householders"))
 {
@@ -40,7 +40,7 @@
         </label>
     </div>
     @Html.HiddenFor(h => h.Householder.Id)
-    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="submit" class="btn btn-primary">Salvar</button>
     @Html.AntiForgeryToken()
 }
 

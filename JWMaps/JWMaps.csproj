@@ -217,13 +217,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201708301713305_init.cs" />
-    <Compile Include="Migrations\201708301713305_init.Designer.cs">
-      <DependentUpon>201708301713305_init.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708311456445_UpdateModel.cs" />
-    <Compile Include="Migrations\201708311456445_UpdateModel.Designer.cs">
-      <DependentUpon>201708311456445_UpdateModel.cs</DependentUpon>
+    <Compile Include="Migrations\201709020238007_Init.cs" />
+    <Compile Include="Migrations\201709020238007_Init.Designer.cs">
+      <DependentUpon>201709020238007_Init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -505,6 +501,7 @@
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\ViewAllRoles.cshtml" />
     <Content Include="Views\Congregations\ListCongregations.cshtml" />
+    <Content Include="Views\Congregations\CongregationsForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -518,11 +515,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201708301713305_init.resx">
-      <DependentUpon>201708301713305_init.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708311456445_UpdateModel.resx">
-      <DependentUpon>201708311456445_UpdateModel.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201709020238007_Init.resx">
+      <DependentUpon>201709020238007_Init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

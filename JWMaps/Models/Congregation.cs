@@ -8,7 +8,6 @@ namespace JWMaps.Models
 {
     public class Congregation
     {
-        [Required]
         public int Id { get; set; }
 
         [Required]

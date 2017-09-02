@@ -5,7 +5,6 @@ namespace JWMaps.Models
 {
     public class Householder
     {
-        [Required]
         public int Id { get; set; }
 
         [Display(Name = "Nome")]

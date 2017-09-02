@@ -18,19 +18,60 @@ namespace JWMaps.Controllers
 
         public ActionResult Index()
         {
-            return View("ListCongregations",_context.Congregations.ToList());
+            return View("ListCongregations", _context.Congregations.ToList());
         }
 
-        public ActionResult Create()
+        public ActionResult New()
         {
-            return View("CongregationsForm");
+            Congregation congregation = new Congregation();
+            return View("CongregationsForm", congregation);
         }
 
-        //public ActionResult New()
-        //{
-        //    Congregation congregation = new Congregation();
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Save(Congregation congregation)
+        {   
+            if(!ModelState.IsValid)            
+                return View("CongregationsForm", congregation);
+            
+            if(congregation.Id == 0)
+            {
+                _context.Congregations.Add(congregation);
+            }
+            else
+            {
+                var congregationdb = _context.Congregations.Single(c => c.Id == congregation.Id);
 
-        //    return("")
-        //}
+                congregationdb.Name = congregation.Name;
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Congregations");
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var congregation = _context.Congregations.SingleOrDefault(c => c.Id == id);
+
+            if (congregation == null)
+                return HttpNotFound();
+
+            return View("CongregationsForm", congregation);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var congregationdb = _context.Congregations.SingleOrDefault(c => c.Id == id);
+
+            if (congregationdb == null)
+                return HttpNotFound();
+
+            _context.Congregations.Remove(congregationdb);
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Congregations");
+        }
     }
 }
