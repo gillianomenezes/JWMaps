@@ -23,14 +23,26 @@ namespace JWMaps.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         Name = c.String(maxLength: 255),
                         Address = c.String(nullable: false, maxLength: 500),
-                        Neighbourhood = c.String(maxLength: 255),
+                        Neighbourhood = c.String(nullable: false, maxLength: 255),
                         City = c.String(nullable: false, maxLength: 255),
                         Phone = c.String(maxLength: 13),
-                        IsStudying = c.Boolean(nullable: false),
+                        PublisherId = c.Int(),
                         Category = c.Int(nullable: false),
                         Latitude = c.Double(nullable: false),
                         Longitude = c.Double(nullable: false),
-                        DateAdded = c.DateTime(nullable: false),
+                        LastTimeVisited = c.DateTime(),
+                        Observations = c.String(maxLength: 500),
+                        CongregationId = c.Int(nullable: false),
+                        CreationDate = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.Publishers",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(nullable: false, maxLength: 100),
                         CongregationId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
@@ -64,8 +76,8 @@ namespace JWMaps.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         CreationDate = c.DateTime(nullable: false),
-                        SharedDate = c.DateTime(),
                         CongregationId = c.Int(nullable: false),
+                        UserId = c.String(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -135,6 +147,7 @@ namespace JWMaps.Migrations
             DropTable("dbo.TerritoryMaps");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
+            DropTable("dbo.Publishers");
             DropTable("dbo.Householders");
             DropTable("dbo.Congregations");
         }

@@ -1,34 +1,58 @@
-﻿@model IEnumerable<JWMaps.Models.TerritoryMap>
+﻿@model List<JWMaps.Models.TerritoryMap>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Meus territórios";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Minha lista de territórios</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th></th>
-    </tr>
+<p>@Html.ActionLink("Novo território", "Create", "TerritoryMaps", null, new { @class = "btn btn-primary" })</p>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+<br />
 
+<table id="territoryMaps" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>nth</th>
+            <th>Bairro</th>
+            <th>Apagar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <tr>
+                <td>@(i+1)</td>
+                <td>@Html.ActionLink(Model[i].CreationDate.ToString(), "Show", "TerritoryMaps", new { id = Model[i].Id }, null)</td>                
+                <td><button class="btn-link js-delete" data-id=@Model[i].Id>deletar</button></td>
+            </tr>
+        }
+    </tbody>
 </table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#territoryMaps").DataTable();
+
+            $(".js-delete").on("click", function () {
+                var tr = $(this).closest('tr');
+
+                bootbox.confirm("Você tem certeza que deseja deletar esse registro?", function (result) {
+                    if (result) {
+                        var id = $(this).attr("data-id");
+
+                        $.ajax({
+                            url: "/territorymap/delete/",
+                            type: "DELETE",
+                            data: { id: id },
+                            success: tr.remove()
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

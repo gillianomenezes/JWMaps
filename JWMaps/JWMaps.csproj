@@ -218,17 +218,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201709020238007_Init.cs" />
-    <Compile Include="Migrations\201709020238007_Init.Designer.cs">
-      <DependentUpon>201709020238007_Init.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709021243296_AddPublisherModel.cs" />
-    <Compile Include="Migrations\201709021243296_AddPublisherModel.Designer.cs">
-      <DependentUpon>201709021243296_AddPublisherModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709021256084_UpdateHouseholderModel.cs" />
-    <Compile Include="Migrations\201709021256084_UpdateHouseholderModel.Designer.cs">
-      <DependentUpon>201709021256084_UpdateHouseholderModel.cs</DependentUpon>
+    <Compile Include="Migrations\201709050245281_Init.cs" />
+    <Compile Include="Migrations\201709050245281_Init.Designer.cs">
+      <DependentUpon>201709050245281_Init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -500,9 +492,8 @@
     <Content Include="Views\TerritoryMaps\Delete.cshtml" />
     <Content Include="Views\TerritoryMaps\Details.cshtml" />
     <Content Include="Views\TerritoryMaps\Edit.cshtml" />
-    <Content Include="Views\TerritoryMaps\Index.cshtml" />
     <Content Include="Views\TerritoryMaps\TerritoryMapView.cshtml" />
-    <Content Include="Views\TerritoryMaps\ListTerritoryMapView.cshtml" />
+    <Content Include="Views\TerritoryMaps\Index.cshtml" />
     <Content Include="Views\Admin\AddRole.cshtml" />
     <Content Include="Views\Admin\AdminRoles.cshtml" />
     <Content Include="Views\Admin\Create.cshtml" />
@@ -527,14 +518,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201709020238007_Init.resx">
-      <DependentUpon>201709020238007_Init.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709021243296_AddPublisherModel.resx">
-      <DependentUpon>201709021243296_AddPublisherModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709021256084_UpdateHouseholderModel.resx">
-      <DependentUpon>201709021256084_UpdateHouseholderModel.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201709050245281_Init.resx">
+      <DependentUpon>201709050245281_Init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

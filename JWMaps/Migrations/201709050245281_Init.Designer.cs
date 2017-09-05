@@ -7,13 +7,13 @@ namespace JWMaps.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class UpdateHouseholderModel : IMigrationMetadata
+    public sealed partial class Init : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(UpdateHouseholderModel));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Init));
         
         string IMigrationMetadata.Id
         {
-            get { return "201709021256084_UpdateHouseholderModel"; }
+            get { return "201709050245281_Init"; }
         }
         
         string IMigrationMetadata.Source

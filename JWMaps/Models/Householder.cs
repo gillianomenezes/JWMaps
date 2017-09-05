@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JWMaps.Models
 {
@@ -16,6 +17,7 @@ namespace JWMaps.Models
         [StringLength(500)]
         public string Address { get; set; }
         
+        [Required]
         [Display(Name = "Bairro")]
         [StringLength(255)]
         public string Neighbourhood { get; set; }
@@ -29,20 +31,31 @@ namespace JWMaps.Models
         [StringLength(13)]
         public string Phone { get; set; }
 
-        public int PublisherId { get; set; }
-
-        [Display(Name = "Que tipo de endereço?")]
+        public int? PublisherId { get; set; }
+        
         public Category Category { get; set; }
         
         public double Latitude { get; set; }
 
         public double Longitude { get; set; }
 
-        public DateTime DateAdded { get; set; }
+        public DateTime? LastTimeVisited { get; set; }
+
+        [MaxLength(500)]
+        [Display(Name = "Observações")]
+        public string Observations { get; set; }
 
         [Required]
         public int CongregationId { get; set; }
+        
+        public DateTime CreationDate { get; set; }
     }
 
-    public enum Category { House, Business };
+    public enum Category
+    {
+        [Display(Name = "Residência")]
+        House,
+        [Display(Name = "Comercial")]
+        Business
+    };
 }

@@ -12,7 +12,7 @@
             <ul class="nav navbar-nav">
                 <li>@Html.ActionLink("Home", "Index", "Home")</li>
                 <li>@Html.ActionLink("Estrangeiros", "Index", "Householders")</li>
-                <li>@Html.ActionLink("Territórios", "List", "TerritoryMaps")</li>
+                <li>@Html.ActionLink("Territórios", "Index", "TerritoryMaps")</li>
                 <li>@Html.ActionLink("Publicadores", "Index", "Publishers")</li>
                 @if (User.IsInRole(JWMaps.Models.RoleName.CanAdministrate))
                 {

@@ -70,11 +70,11 @@ namespace JWMaps.Controllers
             var point = locationService.GetLatLongFromAddress(householder.Address + ", " + householder.Neighbourhood + "-" + householder.City);
             
             householder.Latitude = point.Latitude;
-            householder.Longitude = point.Longitude;
+            householder.Longitude = point.Longitude;            
 
             if (householder.Id == 0)
             {
-                householder.DateAdded = DateTime.Now;
+                householder.CreationDate = DateTime.Now;
                 _context.Householders.Add(householder);
             }
             else
@@ -111,7 +111,8 @@ namespace JWMaps.Controllers
         {
             var householderViewModel = new HouseholderViewModel
             {
-                Householder = _context.Householders.Single(h => h.Id == id)
+                Householder = _context.Householders.Single(h => h.Id == id),
+                Publishers = _context.Publishers.ToList()
             };
 
             return View("HouseholdersForm", householderViewModel);

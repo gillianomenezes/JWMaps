@@ -20,9 +20,11 @@ namespace JWMaps.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext _context;
 
         public AccountController()
         {
+            _context = new ApplicationDbContext();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
@@ -143,7 +145,12 @@ namespace JWMaps.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            UserViewModel userViewModel = new UserViewModel
+            {
+                Congregations = _context.Congregations
+            };
+
+            return View(userViewModel);
         }
 
         //

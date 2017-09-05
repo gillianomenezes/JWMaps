@@ -7,8 +7,7 @@
 
 @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
-    @Html.AntiForgeryToken()
-    <h4>Criar uma nova conta.</h4>
+    @Html.AntiForgeryToken()    
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
@@ -30,15 +29,16 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.RegisterViewModel.CongregationId, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+        @*@Html.LabelFor(m => m.RegisterViewModel.CongregationId, htmlAttributes: new { @class = "control-label col-md-2" })*@        
+        @Html.Label("Congregação", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">            
             @Html.DropDownListFor(m => m.RegisterViewModel.CongregationId, new SelectList(Model.Congregations, "Id", "Name"), "", new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.RegisterViewModel.CongregationId, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Register" />
+            <input type="submit" class="btn btn-default" value="Adicionar" />
         </div>
     </div>
 }
