@@ -20,11 +20,11 @@
     <tbody>
         @foreach(var item in Model)
         {
-            <tr>
+            <tr id=@item.Householder.Id>
                 <td>@Html.ActionLink(item.Householder.Name, "Edit", "Householders", new { id = item.Householder.Id }, null)</td>
                 <td>@item.Householder.Address</td>
                 <td>@item.Householder.Neighbourhood</td>
-                <td><button class="btn-link js-delete">apagar</button></td>
+                <td><button class="btn-link js-delete" householder-id=@item.Householder.Id>apagar</button></td>
             </tr>
         }
     </tbody>
@@ -34,14 +34,22 @@
 {
     <script>
         $(document).ready(function () {
-            $("#householders").DataTable();
-
-
-            $("#householders .js-delete").on("click", ".js-delete", function () {
+            var table = $("#householders").DataTable();            
+            
+            $("#householders").on("click", ".js-delete", function () {
                 var button = $(this);
 
                 bootbox.confirm("Você tem certeza que deseja apagar esse registro?", function (result) {
                     if (result) {
+                        $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("Delete","Householders")",
+                            ajaxasync: true,
+                            data: { id: button.attr("householder-id") },
+                            success: function () {
+                                table.row(button.parents("tr")).remove().draw();
+                            }
+                        });
                     }
                 });
             });

@@ -34,8 +34,11 @@ namespace JWMaps.Migrations
                         Observations = c.String(maxLength: 500),
                         CongregationId = c.Int(nullable: false),
                         CreationDate = c.DateTime(nullable: false),
+                        TerritoryMap_Id = c.Int(),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.TerritoryMaps", t => t.TerritoryMap_Id)
+                .Index(t => t.TerritoryMap_Id);
             
             CreateTable(
                 "dbo.Publishers",
@@ -134,6 +137,7 @@ namespace JWMaps.Migrations
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Householders", "TerritoryMap_Id", "dbo.TerritoryMaps");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
@@ -141,6 +145,7 @@ namespace JWMaps.Migrations
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
+            DropIndex("dbo.Householders", new[] { "TerritoryMap_Id" });
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");

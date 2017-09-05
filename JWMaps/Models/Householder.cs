@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GoogleMaps.LocationServices;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -49,6 +50,15 @@ namespace JWMaps.Models
         public int CongregationId { get; set; }
         
         public DateTime CreationDate { get; set; }
+
+        public AddressData GetAddress()
+        {
+            AddressData householderAddres = new AddressData();
+            householderAddres.Address = this.Address + ", " + this.Neighbourhood;
+            householderAddres.City = this.City;
+
+            return householderAddres;
+        }
     }
 
     public enum Category

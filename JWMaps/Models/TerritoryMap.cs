@@ -12,7 +12,7 @@ namespace JWMaps.Models
 
         public DateTime CreationDate { get; set; }
 
-        public IEnumerable<Householder> Householders { get; set; }
+        public List<Householder> Householders { get; set; }
 
         [Required]
         public int CongregationId { get; set; }

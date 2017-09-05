@@ -28,13 +28,20 @@ namespace JWMaps.Controllers
             //if (User.IsInRole(RoleName.CanAdministrate))
             //    return View("ListAllTerritoryMaps", _context.TerritoryMaps.ToList());
 
-            var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
-            var userManager = new UserManager<ApplicationUser>(store);
-            ApplicationUser user = userManager.FindByNameAsync(User.Identity.Name).Result;
+            ApplicationUser user = GetUser();
 
             var territoryMaps = _context.TerritoryMaps.Where(t => t.UserId.Equals(user.Id));
 
             return View(territoryMaps.ToList());
+        }
+
+        private ApplicationUser GetUser()
+        {
+            var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
+            var userManager = new UserManager<ApplicationUser>(store);
+            ApplicationUser user = userManager.FindByNameAsync(User.Identity.Name).Result;
+
+            return user;
         }
 
         // GET: TerritoryMaps/Details/5
@@ -54,10 +61,7 @@ namespace JWMaps.Controllers
         public ActionResult Create()
         {
             List<string> neighbourhoods = new List<string>();
-            var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
-            var userManager = new UserManager<ApplicationUser>(store);
-            ApplicationUser user = userManager.FindByNameAsync(User.Identity.Name).Result;
-
+            ApplicationUser user = GetUser();
 
             foreach (Householder householder in _context.Householders.Where(h => h.CongregationId == user.CongregationId).ToList())
                 neighbourhoods.Add(householder.Neighbourhood);
@@ -107,93 +111,59 @@ namespace JWMaps.Controllers
 
         public ActionResult New(TerritoryMapViewModel territoryMapViewModel)
         {
-            ////var householdersNotInMap = new List<Householder>();
             var locationService = new GoogleLocationService();
 
-            var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
-            var userManager = new UserManager<ApplicationUser>(store);
-            ApplicationUser user = userManager.FindByNameAsync(User.Identity.Name).Result;
-
-            var congregationTerritoriesMap = _context.TerritoryMaps.Where(t => t.CongregationId == user.CongregationId);
-            List<Householder> houseHoldersInMap = new List<Householder>();
-
-            foreach (var congregationTerrytoryMap in congregationTerritoriesMap)
-            {
-                houseHoldersInMap.AddRange(congregationTerrytoryMap.Householders);
-            }
-
-            var householdersToVisit = _context.Householders.Where(h => h.Neighbourhood.Equals(territoryMapViewModel.selectedNeighbourhood) && h.CongregationId == user.CongregationId)
-                                                           .Except(houseHoldersInMap)
-                                                           .OrderBy(h => h.LastTimeVisited)
-                                                           .ToList();
+            ApplicationUser user = GetUser();
+            var householdersToVisit = GetHouseholdersToVisit(territoryMapViewModel.selectedNeighbourhood, user);
 
             var newTerritoryMap = new TerritoryMap()
             {
                 CongregationId = user.CongregationId,
+                Householders = new List<Householder>(),
                 UserId = user.Id
             };
-
-            while(householdersToVisit.Count > 0 || newTerritoryMap.Householders.Count() < territoryMapViewModel.MaxNumberOfHouseholders)
+            
+            if(householdersToVisit.Count > 0)
             {
+                var firstHouseholderToVisit = householdersToVisit.First();
+                newTerritoryMap.Householders.Add(firstHouseholderToVisit);
+                householdersToVisit.Remove(firstHouseholderToVisit);                
+                
+                for (int i = 0; i < territoryMapViewModel.MaxNumberOfHouseholders && i < householdersToVisit.Count(); i++)
+                {
+                    var distance = locationService.GetDirections(firstHouseholderToVisit.GetAddress(), householdersToVisit[i].GetAddress()).Distance.Split(' ')[0].Replace('.', ',');
 
+                    if (Double.Parse(distance) <= territoryMapViewModel.MaxDistanceAmongHouseholders)
+                    {
+                        newTerritoryMap.Householders.Add(householdersToVisit[i]);
+                        householdersToVisit.Remove(householdersToVisit[i]);
+                    }
+                }
+
+                _context.TerritoryMaps.Add(newTerritoryMap);
+                _context.SaveChanges();
             }
 
-            //if (peopleNotInMap.Count == 0)
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-
-            
-
-            //while (peopleNotInMap.Count > 0)
-            //{
-            //    TerritoryMap newMap = new TerritoryMap()
-            //    {
-            //        CongregationId = user.CongregationId
-            //    };
-
-            //    _context.TerritoryMaps.Add(newMap);
-            //    _context.SaveChanges();
-
-            //    //peopleNotInMap.First().TerritoryMapId = newMap.Id;
-            //    int peopleAdded = 1;
-
-            //    AddressData addrA = new AddressData();
-            //    addrA.Address = peopleNotInMap.First().Address + ", " + peopleNotInMap.First().Neighbourhood;
-            //    addrA.City = peopleNotInMap.First().City;
-
-            //    for (int i = 0; i < peopleNotInMap.Count; i++)
-            //    {
-            //        if (peopleAdded >= territoryMapViewModel.MaxNumberOfHouseholders || (i == peopleNotInMap.Count - 1))
-            //        {
-            //            peopleAdded = 0;
-            //            break;
-            //        }
-
-            //        if (peopleNotInMap[i] == peopleNotInMap.First())
-            //            continue;
-
-            //        AddressData addrB = new AddressData();
-            //        addrB.Address = peopleNotInMap[i].Address + ", " + peopleNotInMap[i].Neighbourhood;
-            //        addrB.City = peopleNotInMap[i].City;
-
-            //        var distance = locationService.GetDirections(addrA, addrB).Distance.Split(' ')[0].Replace('.', ',');
-
-            //        if (Double.Parse(distance) <= territoryMapViewModel.MaxDistanceAmongHouseholders)
-            //        {
-            //            //peopleNotInMap[i].TerritoryMapId = newMap.Id;
-            //            peopleAdded++;
-            //            peopleNotInMap.Remove(peopleNotInMap[i]);
-            //        }
-            //    }
-
-            //    peopleNotInMap.Remove(peopleNotInMap.First());
-            //}
-
-            //_context.SaveChanges();
-
-            return View();
+            return RedirectToAction("Index");
         }
 
+        private List<Householder> GetHouseholdersToVisit(string neighbourhood, ApplicationUser user)
+        {
+            var myCongregationTerritoriesMap = _context.TerritoryMaps.Where(t => t.CongregationId == user.CongregationId);
+            List<Householder> houseHoldersInMap = new List<Householder>();
 
+            foreach (var terrytoryMap in myCongregationTerritoriesMap)
+                            houseHoldersInMap.AddRange(terrytoryMap.Householders);
+            
+
+            var householdersToVisit = _context.Householders.Where(h => h.Neighbourhood.Equals(neighbourhood) && h.CongregationId == user.CongregationId)
+                                                           .Except(houseHoldersInMap)
+                                                           .OrderBy(h => h.LastTimeVisited)
+                                                           .ToList();
+
+            return householdersToVisit;
+        }
+        
         public ActionResult List()
         {
             var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
