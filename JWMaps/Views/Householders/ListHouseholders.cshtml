@@ -34,21 +34,20 @@
 {
     <script>
         $(document).ready(function () {
-            var table = $("#householders").DataTable();            
-            
-            $("#householders").on("click", ".js-delete", function () {
+            var table = $("#householders").DataTable();
+
+            $(".js-delete").on("click", function () {
+                var tr = $(this).closest('tr');
                 var button = $(this);
 
-                bootbox.confirm("Você tem certeza que deseja apagar esse registro?", function (result) {
+                bootbox.confirm("Você tem certeza que deseja deletar esse registro de morador?", function (result) {
                     if (result) {
                         $.ajax({
                             type: "POST",
                             url: "@Url.Action("Delete","Householders")",
                             ajaxasync: true,
                             data: { id: button.attr("householder-id") },
-                            success: function () {
-                                table.row(button.parents("tr")).remove().draw();
-                            }
+                            success: tr.remove()
                         });
                     }
                 });

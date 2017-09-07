@@ -218,9 +218,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201709051947397_Init.cs" />
-    <Compile Include="Migrations\201709051947397_Init.Designer.cs">
-      <DependentUpon>201709051947397_Init.cs</DependentUpon>
+    <Compile Include="Migrations\201709060243268_Init.cs" />
+    <Compile Include="Migrations\201709060243268_Init.Designer.cs">
+      <DependentUpon>201709060243268_Init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709062258038_AddNeighbourhoodToTerritoryMapModel.cs" />
+    <Compile Include="Migrations\201709062258038_AddNeighbourhoodToTerritoryMapModel.Designer.cs">
+      <DependentUpon>201709062258038_AddNeighbourhoodToTerritoryMapModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -492,7 +496,7 @@
     <Content Include="Views\TerritoryMaps\Delete.cshtml" />
     <Content Include="Views\TerritoryMaps\Details.cshtml" />
     <Content Include="Views\TerritoryMaps\Edit.cshtml" />
-    <Content Include="Views\TerritoryMaps\TerritoryMapView.cshtml" />
+    <Content Include="Views\TerritoryMaps\Show.cshtml" />
     <Content Include="Views\TerritoryMaps\Index.cshtml" />
     <Content Include="Views\Admin\AddRole.cshtml" />
     <Content Include="Views\Admin\AdminRoles.cshtml" />
@@ -505,6 +509,7 @@
     <Content Include="Views\Congregations\CongregationsForm.cshtml" />
     <Content Include="Views\Publishers\PublishersForm.cshtml" />
     <Content Include="Views\Publishers\ListPublishers.cshtml" />
+    <Content Include="Views\TerritoryMaps\NotAvailableHouseholders.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -518,8 +523,11 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201709051947397_Init.resx">
-      <DependentUpon>201709051947397_Init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201709060243268_Init.resx">
+      <DependentUpon>201709060243268_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709062258038_AddNeighbourhoodToTerritoryMapModel.resx">
+      <DependentUpon>201709062258038_AddNeighbourhoodToTerritoryMapModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

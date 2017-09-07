@@ -15,7 +15,12 @@
         @Html.DropDownListFor(t => t.selectedNeighbourhood, new SelectList(Model.Neighbourhoods.Distinct()), "", new { @class = "form-control" })
     </div>
     <div class="form-group">
-        <label>Distância máxima entre moradores em Km</label>
+        <label>Tipo de endereço</label>
+        @Html.EnumDropDownListFor(m => m.Category, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Category)
+    </div>
+    <div class="form-group">
+        <label>Distância máxima entre endereços em Km</label>
         @Html.TextBoxFor(t => t.MaxDistanceAmongHouseholders, new { @class = "form-control" })
         @Html.ValidationMessageFor(t => t.MaxDistanceAmongHouseholders)
     </div>

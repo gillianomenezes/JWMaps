@@ -91,22 +91,11 @@ namespace JWMaps.Controllers
             return View(territoryMap);
         }
 
-        public ActionResult Show(int? id)
+        public ActionResult Show(int id)
         {
-            if (id == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            var householders = _context.TerritoryMaps.Include(t => t.Householders).SingleOrDefault(t => t.Id == id).Householders.ToList();
 
-            //var territoryMap = _context.TerritoryMaps.Single(t => t.Id == id);
-
-            //if(territoryMap == null)
-            //    return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-
-            //return View("TerritoryMapView", territoryMap);
-
-            //var householders = _context.Householders.Where(h => h.TerritoryMapId == id).ToList();
-
-            //return View("TerritoryMapView", householders);
-            return View();
+            return View(householders);
         }
 
         public ActionResult New(TerritoryMapViewModel territoryMapViewModel)
@@ -114,21 +103,25 @@ namespace JWMaps.Controllers
             var locationService = new GoogleLocationService();
 
             ApplicationUser user = GetUser();
-            var householdersToVisit = GetHouseholdersToVisit(territoryMapViewModel.selectedNeighbourhood, user);
+            var householdersToVisit = GetHouseholdersToVisit(territoryMapViewModel, user);
+
+            if (householdersToVisit == null)
+                return View("NotAvailableHouseholders");
 
             var newTerritoryMap = new TerritoryMap()
             {
                 CongregationId = user.CongregationId,
+                Neighbourhood = territoryMapViewModel.selectedNeighbourhood,
                 Householders = new List<Householder>(),
                 UserId = user.Id
             };
-            
-            if(householdersToVisit.Count > 0)
+
+            if (householdersToVisit.Count > 0)
             {
                 var firstHouseholderToVisit = householdersToVisit.First();
                 newTerritoryMap.Householders.Add(firstHouseholderToVisit);
-                householdersToVisit.Remove(firstHouseholderToVisit);                
-                
+                householdersToVisit.Remove(firstHouseholderToVisit);
+
                 for (int i = 0; i < territoryMapViewModel.MaxNumberOfHouseholders && i < householdersToVisit.Count(); i++)
                 {
                     var distance = locationService.GetDirections(firstHouseholderToVisit.GetAddress(), householdersToVisit[i].GetAddress()).Distance.Split(' ')[0].Replace('.', ',');
@@ -147,23 +140,25 @@ namespace JWMaps.Controllers
             return RedirectToAction("Index");
         }
 
-        private List<Householder> GetHouseholdersToVisit(string neighbourhood, ApplicationUser user)
+        private List<Householder> GetHouseholdersToVisit(TerritoryMapViewModel territory, ApplicationUser user)
         {
-            var myCongregationTerritoriesMap = _context.TerritoryMaps.Where(t => t.CongregationId == user.CongregationId);
+            var myCongregationTerritoriesMap = _context.TerritoryMaps.Include(testc => testc.Householders).Where(t => t.CongregationId == user.CongregationId);
             List<Householder> houseHoldersInMap = new List<Householder>();
 
             foreach (var terrytoryMap in myCongregationTerritoriesMap)
-                            houseHoldersInMap.AddRange(terrytoryMap.Householders);
-            
+                houseHoldersInMap.AddRange(terrytoryMap.Householders);
 
-            var householdersToVisit = _context.Householders.Where(h => h.Neighbourhood.Equals(neighbourhood) && h.CongregationId == user.CongregationId)
-                                                           .Except(houseHoldersInMap)
+
+            var householdersToVisit = _context.Householders.Where(h => h.Neighbourhood.Equals(territory.selectedNeighbourhood) && h.CongregationId == user.CongregationId && h.Category == territory.Category && h.PublisherId == null)
+                                                           //.Except(houseHoldersInMap)
                                                            .OrderBy(h => h.LastTimeVisited)
                                                            .ToList();
 
+            householdersToVisit = householdersToVisit.Except(houseHoldersInMap).ToList(); ;
+
             return householdersToVisit;
         }
-        
+
         public ActionResult List()
         {
             var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
@@ -208,36 +203,17 @@ namespace JWMaps.Controllers
             return View(territoryMap);
         }
 
-        //GET: TerritoryMaps/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            TerritoryMap territoryMap = _context.TerritoryMaps.Find(id);
-            if (territoryMap == null)
-            {
-                return HttpNotFound();
-            }
-            return View(territoryMap);
-        }
+            var territoryMapInDb = _context.TerritoryMaps.Include(t => t.Householders).SingleOrDefault(t => t.Id == id);
 
-        // POST: TerritoryMaps/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            TerritoryMap territoryMap = _context.TerritoryMaps.Find(id);
-            _context.TerritoryMaps.Remove(territoryMap);
+            for(int i = 0; i < territoryMapInDb.Householders.Count; i++)            
+                territoryMapInDb.Householders.RemoveAt(i);            
+            
+            _context.TerritoryMaps.Remove(territoryMapInDb);
             _context.SaveChanges();
-            return RedirectToAction("Index");
-        }
 
-        public HttpResponseMessage Delete(int id)
-        {
-            TerritoryMap territoryMap = _context.TerritoryMaps.Find(id);
-            return new HttpResponseMessage(HttpStatusCode.NoContent);
+            return View();
         }
 
         protected override void Dispose(bool disposing)

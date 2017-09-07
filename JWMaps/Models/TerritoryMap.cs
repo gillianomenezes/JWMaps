@@ -20,6 +20,8 @@ namespace JWMaps.Models
         [Required]
         public string UserId { get; set; }
 
+        public string Neighbourhood { get; set; }
+
         public TerritoryMap()
         {
             this.CreationDate = DateTime.Now;

@@ -9,8 +9,9 @@
 
 <div id="statistics">
     <ul>
-        <li>Total de endereços: @Model.Householders.Count</li>
+        <li>Total de não-estudantes: @Model.Householders.Count(h => h.PublisherId == null)</li>
         <li>Total de estudantes: @Model.Householders.Count(h => h.PublisherId != null)</li>
+        <li>Total geral: @Model.Householders.Count</li>
     </ul>
 </div>
 

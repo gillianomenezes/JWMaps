@@ -89,6 +89,7 @@ namespace JWMaps.Controllers
                 householderdb.City = householder.City;
                 householderdb.Latitude = householder.Latitude;
                 householderdb.Longitude = householder.Longitude;
+                householderdb.PublisherId = householder.PublisherId;
             }
             
             _context.SaveChanges();

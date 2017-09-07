@@ -24,7 +24,7 @@
         {
             <tr>
                 <td>@(i+1)</td>
-                <td>@Html.ActionLink(Model[i].CreationDate.ToString(), "Show", "TerritoryMaps", new { id = Model[i].Id }, null)</td>                
+                <td>@Html.ActionLink(Model[i].Neighbourhood, "Show", "TerritoryMaps", new { id = Model[i].Id }, null)</td>                
                 <td><button class="btn-link js-delete" data-id=@Model[i].Id>deletar</button></td>
             </tr>
         }
@@ -39,15 +39,15 @@
 
             $(".js-delete").on("click", function () {
                 var tr = $(this).closest('tr');
+                var button = $(this);
 
-                bootbox.confirm("Você tem certeza que deseja deletar esse registro?", function (result) {
+                bootbox.confirm("Você tem certeza que deseja devolver esse mapa?", function (result) {
                     if (result) {
-                        var id = $(this).attr("data-id");
-
                         $.ajax({
-                            url: "/territorymap/delete/",
-                            type: "DELETE",
-                            data: { id: id },
+                            type: "POST",
+                            url: "@Url.Action("Delete","TerritoryMaps")",
+                            ajaxasync: true,
+                            data: { id: button.attr("data-id") },
                             success: tr.remove()
                         });
                     }
