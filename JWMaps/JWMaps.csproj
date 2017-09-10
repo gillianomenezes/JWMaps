@@ -226,6 +226,14 @@
     <Compile Include="Migrations\201709062258038_AddNeighbourhoodToTerritoryMapModel.Designer.cs">
       <DependentUpon>201709062258038_AddNeighbourhoodToTerritoryMapModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709071231540_AddVisitModel.cs" />
+    <Compile Include="Migrations\201709071231540_AddVisitModel.Designer.cs">
+      <DependentUpon>201709071231540_AddVisitModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709092207471_UpdateHouseholderLasTimeVisitedControl.cs" />
+    <Compile Include="Migrations\201709092207471_UpdateHouseholderLasTimeVisitedControl.Designer.cs">
+      <DependentUpon>201709092207471_UpdateHouseholderLasTimeVisitedControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Congregation.cs" />
@@ -236,6 +244,7 @@
     <Compile Include="Models\RoleName.cs" />
     <Compile Include="Models\TerritoryMap.cs" />
     <Compile Include="Models\UserRolesDTO.cs" />
+    <Compile Include="Models\Visit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModel\DashboardViewModel.cs" />
@@ -243,6 +252,7 @@
     <Compile Include="ViewModel\PublisherViewModel.cs" />
     <Compile Include="ViewModel\TerritoryMapViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
+    <Compile Include="ViewModel\VisitViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-cerulean.css" />
@@ -510,6 +520,7 @@
     <Content Include="Views\Publishers\PublishersForm.cshtml" />
     <Content Include="Views\Publishers\ListPublishers.cshtml" />
     <Content Include="Views\TerritoryMaps\NotAvailableHouseholders.cshtml" />
+    <Content Include="Views\TerritoryMaps\SetVisit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -528,6 +539,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709062258038_AddNeighbourhoodToTerritoryMapModel.resx">
       <DependentUpon>201709062258038_AddNeighbourhoodToTerritoryMapModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709071231540_AddVisitModel.resx">
+      <DependentUpon>201709071231540_AddVisitModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709092207471_UpdateHouseholderLasTimeVisitedControl.resx">
+      <DependentUpon>201709092207471_UpdateHouseholderLasTimeVisitedControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

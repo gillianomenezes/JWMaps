@@ -27,6 +27,7 @@ namespace JWMaps.Models
         public DbSet<TerritoryMap> TerritoryMaps { get; set; }
         public DbSet<Congregation> Congregations { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
+        public DbSet<Visit> Visits { get; set; }        
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)

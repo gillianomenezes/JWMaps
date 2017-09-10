@@ -1,5 +1,6 @@
 ﻿using GoogleMaps.LocationServices;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -17,7 +18,7 @@ namespace JWMaps.Models
         [Display(Name = "Endereço")]
         [StringLength(500)]
         public string Address { get; set; }
-        
+
         [Required]
         [Display(Name = "Bairro")]
         [StringLength(255)]
@@ -33,14 +34,12 @@ namespace JWMaps.Models
         public string Phone { get; set; }
 
         public int? PublisherId { get; set; }
-        
+
         public Category Category { get; set; }
-        
+
         public double Latitude { get; set; }
 
         public double Longitude { get; set; }
-
-        public DateTime? LastTimeVisited { get; set; }
 
         [MaxLength(500)]
         [Display(Name = "Observações")]
@@ -48,8 +47,10 @@ namespace JWMaps.Models
 
         [Required]
         public int CongregationId { get; set; }
-        
+
         public DateTime CreationDate { get; set; }
+
+        public List<Visit> Visits { get; set; }
 
         public AddressData GetAddress()
         {
@@ -59,6 +60,21 @@ namespace JWMaps.Models
 
             return householderAddres;
         }
+
+        public DateTime LastTimeVisited()
+        {
+            if (Visits != null)
+            {
+                if (Visits.Count > 0)
+                {
+                    Visits.Sort((x, y) => DateTime.Compare(x.DateOfVisit, y.DateOfVisit));
+                    return Visits[0].DateOfVisit;
+                }
+            }
+
+            return new DateTime();
+        }
+
     }
 
     public enum Category

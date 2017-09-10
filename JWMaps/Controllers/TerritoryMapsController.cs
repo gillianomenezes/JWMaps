@@ -142,19 +142,22 @@ namespace JWMaps.Controllers
 
         private List<Householder> GetHouseholdersToVisit(TerritoryMapViewModel territory, ApplicationUser user)
         {
-            var myCongregationTerritoriesMap = _context.TerritoryMaps.Include(testc => testc.Householders).Where(t => t.CongregationId == user.CongregationId);
+            var myCongregationTerritoriesMap = _context.TerritoryMaps.Include(t => t.Householders).Where(t => t.CongregationId == user.CongregationId);
             List<Householder> houseHoldersInMap = new List<Householder>();
 
             foreach (var terrytoryMap in myCongregationTerritoriesMap)
                 houseHoldersInMap.AddRange(terrytoryMap.Householders);
 
 
-            var householdersToVisit = _context.Householders.Where(h => h.Neighbourhood.Equals(territory.selectedNeighbourhood) && h.CongregationId == user.CongregationId && h.Category == territory.Category && h.PublisherId == null)
-                                                           //.Except(houseHoldersInMap)
-                                                           .OrderBy(h => h.LastTimeVisited)
-                                                           .ToList();
+            var householdersToVisit = _context.Householders.Include(h => h.Visits).Where(h => h.Neighbourhood.Equals(territory.selectedNeighbourhood) &&
+                                                                                          h.CongregationId == user.CongregationId && 
+                                                                                          h.Category == territory.Category && 
+                                                                                          h.PublisherId == null)
+                                                                                          .ToList();
 
-            householdersToVisit = householdersToVisit.Except(houseHoldersInMap).ToList(); ;
+
+            householdersToVisit = householdersToVisit.Except(houseHoldersInMap).ToList();
+            householdersToVisit.Sort((x, y) => DateTime.Compare(x.LastTimeVisited(), y.LastTimeVisited()));
 
             return householdersToVisit;
         }
@@ -214,6 +217,65 @@ namespace JWMaps.Controllers
             _context.SaveChanges();
 
             return View();
+        }
+
+        public ActionResult SaveVisit(VisitViewModel visit)
+        {
+            var user = GetUser();
+
+            var territoryMaps = _context.TerritoryMaps.Include(t => t.Householders).Where(t => t.UserId.Equals(user.Id)).ToList();
+            Householder householderVisited = new Householder();
+            TerritoryMap territoryMapUsed = new TerritoryMap();
+
+            foreach (var territoryMap in territoryMaps)
+            {
+                var householderFound = territoryMap.Householders.Find(h => h.Id == visit.VisitedHouseHolder.Id);
+                if (householderFound != null)
+                {
+                    territoryMapUsed = territoryMap;
+                    householderVisited = householderFound;
+                    break;
+                }
+            }
+
+            visit.TerritoryMapUsed = territoryMapUsed;
+            visit.VisitedHouseHolder = householderVisited;
+
+            var householderInDb = _context.Householders.Include(h => h.Visits).SingleOrDefault(h => h.Id == visit.VisitedHouseHolder.Id);
+            var territoyMapInDb = _context.TerritoryMaps.Include(t => t.Householders).SingleOrDefault(t => t.Id == visit.TerritoryMapUsed.Id);
+
+            territoyMapInDb.Householders.Remove(householderInDb);
+            var Visit = new Visit()
+            {
+                PublisherName = visit.PublisherName,
+                DateOfVisit = DateTime.Now,
+                Description = visit.VisitDescription
+            };
+
+            householderInDb.Visits.Add(Visit);
+            
+            if (territoyMapInDb.Householders.Count > 0)
+            {                
+                _context.SaveChanges();
+                return RedirectToAction("Show", visit.TerritoryMapUsed);
+            }
+            else
+            {
+                _context.TerritoryMaps.Remove(_context.TerritoryMaps.Single(t => t.Id == territoyMapInDb.Id));
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+        }
+
+        public ActionResult SetVisit(int id)
+        {
+            var Visit = new VisitViewModel()
+            {
+                VisitedHouseHolder = _context.Householders.Single(h => h.Id == id),
+                Publishers = _context.Publishers.ToList()
+            };
+
+            return View(Visit);
         }
 
         protected override void Dispose(bool disposing)

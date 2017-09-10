@@ -1,0 +1,25 @@
+﻿@model JWMaps.ViewModel.VisitViewModel
+@{
+    ViewBag.Title = "SetVisit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Como foi a visita?</h2>
+
+@using (Html.BeginForm("SaveVisit", "TerritoryMaps", FormMethod.Post))
+{    
+    <div class="form-group">
+        <label>Quem visitou?</label>
+        @Html.ValidationMessageFor(t => t.PublisherName)
+        @Html.DropDownListFor(t => t.PublisherName, new SelectList(Model.Publishers, "Name", "Name"), new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Como foi a visita?</label>
+        @Html.TextAreaFor(t => t.VisitDescription, new { @class = "form-control" })
+        @Html.ValidationMessageFor(t => t.VisitDescription)
+    </div>
+    @Html.HiddenFor(t => t.VisitedHouseHolder.Id)
+    <button type="submit" class="btn btn-primary">Salvar</button>
+}
+<br />
+

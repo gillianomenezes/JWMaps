@@ -8,6 +8,7 @@ using JWMaps.ViewModel;
 using GoogleMaps.LocationServices;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
+using System.Data.Entity;
 
 namespace JWMaps.Controllers
 {
@@ -90,13 +91,49 @@ namespace JWMaps.Controllers
                 householderdb.Latitude = householder.Latitude;
                 householderdb.Longitude = householder.Longitude;
                 householderdb.PublisherId = householder.PublisherId;
+                householderdb.Observations = householder.Observations;
+
+                RemoveHouseholderFromExistingTerritoryMap(householder.Id);
             }
             
             _context.SaveChanges();
             
             return RedirectToAction("Index","Householders");
         }
-        
+
+        private void RemoveHouseholderFromExistingTerritoryMap(int househoulderId)
+        {
+            var user = GetUser();
+
+            var territoryMaps = _context.TerritoryMaps.Include(t => t.Householders).Where(t => t.UserId.Equals(user.Id)).ToList();
+            Householder householderVisited = new Householder();
+            TerritoryMap territoryMapUsed = new TerritoryMap();
+
+            foreach (var territoryMap in territoryMaps)
+            {
+                var householderFound = territoryMap.Householders.Find(h => h.Id == househoulderId);
+                if (householderFound != null)
+                {
+                    territoryMap.Householders.Remove(householderFound);
+
+                    if (territoryMap.Householders.Count == 0)
+                        _context.TerritoryMaps.Remove(_context.TerritoryMaps.Single(t => t.Id == territoryMap.Id));
+
+                    _context.SaveChanges();
+                    break;
+                }
+            }
+        }
+
+        private ApplicationUser GetUser()
+        {
+            var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
+            var userManager = new UserManager<ApplicationUser>(store);
+            ApplicationUser user = userManager.FindByNameAsync(User.Identity.Name).Result;
+
+            return user;
+        }
+
         public ActionResult New()
         {
             var householderViewModel = new HouseholderViewModel
