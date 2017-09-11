@@ -149,7 +149,7 @@ namespace JWMaps.Controllers
         {
             var householderViewModel = new HouseholderViewModel
             {
-                Householder = _context.Householders.Single(h => h.Id == id),
+                Householder = _context.Householders.Include(h => h.Visits).Single(h => h.Id == id),
                 Publishers = _context.Publishers.ToList()
             };
 
@@ -164,6 +164,13 @@ namespace JWMaps.Controllers
             _context.SaveChanges();
 
             return View();
+        }
+
+        public ActionResult ListVisits(int id)
+        {
+            var visits = _context.Householders.Include(h => h.Visits).Single(h => h.Id == id).Visits.ToList();
+
+            return View(visits);
         }
     }
 }

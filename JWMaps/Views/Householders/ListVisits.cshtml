@@ -1,0 +1,44 @@
+﻿@model List<JWMaps.Models.Visit>
+@{
+    ViewBag.Title = "Histórico de visitas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Histórico de visitas realizadas</h2>
+
+<table id="visits" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                Data da visita
+            </th>
+            <th>
+                Quem Visitou
+            </th>
+            <th>
+                Como foi
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.DateOfVisit</td>
+                <td>@item.PublisherName</td>
+                <td>@item.Description</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href='javascript:history.go(-1)'>Voltar</a>
+
+@section scripts
+{
+    <script>
+    $(document).ready(function () {
+        var table = $("#visits").DataTable();
+    });
+    </script>
+}
