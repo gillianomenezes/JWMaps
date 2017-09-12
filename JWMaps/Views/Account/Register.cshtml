@@ -11,6 +11,12 @@
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
+        @Html.LabelFor(m => m.RegisterViewModel.Name, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.RegisterViewModel.Name, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
         @Html.LabelFor(m => m.RegisterViewModel.Email, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.RegisterViewModel.Email, new { @class = "form-control" })
@@ -28,8 +34,7 @@
             @Html.PasswordFor(m => m.RegisterViewModel.ConfirmPassword, new { @class = "form-control" })
         </div>
     </div>
-    <div class="form-group">
-        @*@Html.LabelFor(m => m.RegisterViewModel.CongregationId, htmlAttributes: new { @class = "control-label col-md-2" })*@        
+    <div class="form-group">        
         @Html.Label("Congregação", new { @class = "control-label col-md-2" })
         <div class="col-md-10">            
             @Html.DropDownListFor(m => m.RegisterViewModel.CongregationId, new SelectList(Model.Congregations, "Id", "Name"), "", new { @class = "form-control" })
