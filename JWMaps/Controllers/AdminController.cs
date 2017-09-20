@@ -117,7 +117,22 @@ namespace JWMaps.Controllers
         [Authorize(Roles = RoleName.CanAdministrate)]
         public ActionResult Index()
         {
-            return View();
+            List<ExpandedUserDTO> usersInDb = new List<ExpandedUserDTO>();
+            var list = UserManager.Users.ToList();
+
+            foreach(var item in list)
+            {
+                var userDTO = new ExpandedUserDTO
+                {
+                    UserName = item.UserName,
+                    Email = item.Email,
+                    LockoutEndDateUtc = item.LockoutEndDateUtc,               
+                };
+
+                usersInDb.Add(userDTO);
+            }
+            
+            return View(usersInDb);
         }
 
         // PUT: /Admin/Create
@@ -135,7 +150,7 @@ namespace JWMaps.Controllers
                 }
 
                 var Email = paramExpandedUserDTO.Email.Trim();
-                var UserName = paramExpandedUserDTO.Email.Trim();
+                var UserName = paramExpandedUserDTO.UserName.Trim();
                 var Password = paramExpandedUserDTO.Password.Trim();
 
                 if (Email == "")
@@ -147,34 +162,32 @@ namespace JWMaps.Controllers
                 {
                     throw new Exception("No Password");
                 }
-
-                // UserName is LowerCase of the Email
-                UserName = Email.ToLower();
-
+                
                 // Create user
-
                 var objNewAdminUser = new ApplicationUser { UserName = UserName, Email = Email };
                 var AdminUserCreateResult = UserManager.Create(objNewAdminUser, Password);
 
-                if (AdminUserCreateResult.Succeeded == true)
-                {
-                    string strNewRole = Convert.ToString(Request.Form["Roles"]);
+                return RedirectToAction("Index");
 
-                    if (strNewRole != "0")
-                    {
-                        // Put user in role
-                        UserManager.AddToRole(objNewAdminUser.Id, strNewRole);
-                    }
+                //if (AdminUserCreateResult.Succeeded == true)
+                //{
+                //    string strNewRole = Convert.ToString(Request.Form["Roles"]);
 
-                    return Redirect("~/Admin");
-                }
-                else
-                {
-                    ViewBag.Roles = GetAllRolesAsSelectList();
-                    ModelState.AddModelError(string.Empty,
-                        "Error: Failed to create the user. Check password requirements.");
-                    return View(paramExpandedUserDTO);
-                }
+                //    if (strNewRole != "0")
+                //    {
+                //        // Put user in role
+                //        UserManager.AddToRole(objNewAdminUser.Id, strNewRole);
+                //    }
+
+                //    return Redirect("~/Admin");
+                //}
+                //else
+                //{
+                //    ViewBag.Roles = GetAllRolesAsSelectList();
+                //    ModelState.AddModelError(string.Empty,
+                //        "Error: Failed to create the user. Check password requirements.");
+                //    return View(paramExpandedUserDTO);
+                //}
             }
             catch (Exception ex)
             {
@@ -265,7 +278,7 @@ namespace JWMaps.Controllers
                     DeleteUser(objExpandedUserDTO);
                 }
 
-                return Redirect("~/Admin/AdminRoles");
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {

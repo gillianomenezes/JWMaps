@@ -18,7 +18,7 @@ namespace JWMaps.Controllers
 
         public HouseholdersController()
         {
-            _context = new ApplicationDbContext();           
+            _context = new ApplicationDbContext();
         }
 
         protected override void Dispose(bool disposing)
@@ -29,7 +29,7 @@ namespace JWMaps.Controllers
         // GET: Householder
         public ActionResult Index()
         {
-            List <HouseholderViewModel> householderViewModels = new List<HouseholderViewModel>();
+            List<HouseholderViewModel> householderViewModels = new List<HouseholderViewModel>();
             var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
             var userManager = new UserManager<ApplicationUser>(store);
             ApplicationUser user = userManager.FindByNameAsync(User.Identity.Name).Result;
@@ -53,7 +53,7 @@ namespace JWMaps.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Save(Householder householder)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 var householderViewModel = new HouseholderViewModel
                 {
@@ -69,9 +69,9 @@ namespace JWMaps.Controllers
 
             var locationService = new GoogleLocationService();
             var point = locationService.GetLatLongFromAddress(householder.Address + ", " + householder.Neighbourhood + "-" + householder.City);
-            
+
             householder.Latitude = point.Latitude;
-            householder.Longitude = point.Longitude;            
+            householder.Longitude = point.Longitude;
 
             if (householder.Id == 0)
             {
@@ -95,10 +95,10 @@ namespace JWMaps.Controllers
 
                 RemoveHouseholderFromExistingTerritoryMap(householder.Id);
             }
-            
+
             _context.SaveChanges();
-            
-            return RedirectToAction("Index","Householders");
+
+            return RedirectToAction("Index", "Householders");
         }
 
         private void RemoveHouseholderFromExistingTerritoryMap(int househoulderId)
@@ -145,6 +145,32 @@ namespace JWMaps.Controllers
             return View("HouseholdersForm", householderViewModel);
         }
 
+
+        public ActionResult ViewHouseholderData(int id)
+        {
+            if (User.IsInRole(RoleName.CanManageHouseholders) || User.IsInRole(RoleName.CanAdministrate))
+                RedirectToAction("Edit", id);
+            else
+                RedirectToAction("Details", id);
+
+            return View("Index");
+        }
+
+        public ActionResult Details(int id)
+        {
+            var householderInDb = _context.Householders.Include(h => h.Visits).Single(h => h.Id == id);
+            var publisherInDb = _context.Publishers.Single(p => p.Id == householderInDb.PublisherId);
+
+            var detailHouseholderViewModel = new DetailsHouseholderViewModel
+            {
+                Householder = householderInDb,
+                Publisher = publisherInDb
+            };
+
+            return View("Details", detailHouseholderViewModel);
+        }
+
+        [Authorize(Roles = RoleName.CanManageHouseholders + ", " + RoleName.CanAdministrate)]
         public ActionResult Edit(int id)
         {
             var householderViewModel = new HouseholderViewModel

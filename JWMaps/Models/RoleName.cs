@@ -8,5 +8,6 @@ namespace JWMaps.Models
     public static class RoleName
     {
         public const string CanAdministrate = "CanAdministrate";
+        public const string CanManageHouseholders = "CanManageHouseholders";
     }
 }

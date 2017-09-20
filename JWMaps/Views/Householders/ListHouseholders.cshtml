@@ -13,18 +13,24 @@
         <tr>
             <th>Nome</th>
             <th>Endereço</th>
-            <th>Bairro</th>          
-            <th>Apagar</th>  
+            <th>Bairro</th>
+            @if (User.IsInRole(JWMaps.Models.RoleName.CanManageHouseholders) || User.IsInRole(JWMaps.Models.RoleName.CanAdministrate))
+            {
+                <th>Apagar</th>
+            }
         </tr>
     </thead>
     <tbody>
-        @foreach(var item in Model)
+        @foreach (var item in Model)
         {
             <tr id=@item.Householder.Id>
-                <td>@Html.ActionLink(item.Householder.Name, "Edit", "Householders", new { id = item.Householder.Id }, null)</td>
+                <td>@Html.ActionLink(item.Householder.Name, "ViewHouseholderData", "Householders", new { id = item.Householder.Id }, null)</td>
                 <td>@item.Householder.Address</td>
                 <td>@item.Householder.Neighbourhood</td>
-                <td><button class="btn-link js-delete" householder-id=@item.Householder.Id>apagar</button></td>
+                @if (User.IsInRole(JWMaps.Models.RoleName.CanManageHouseholders) || User.IsInRole(JWMaps.Models.RoleName.CanAdministrate))
+                {
+                    <td><button class="btn-link js-delete" householder-id=@item.Householder.Id>apagar</button></td>
+                }
             </tr>
         }
     </tbody>
@@ -53,7 +59,7 @@
                 });
             });
         });
-    </script>    
+    </script>
 }
 
 
