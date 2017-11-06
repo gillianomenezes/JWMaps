@@ -25,8 +25,8 @@ namespace JWMaps.Controllers
         // GET: TerritoryMaps
         public ActionResult Index()
         {
-            //if (User.IsInRole(RoleName.CanAdministrate))
-            //    return View("ListAllTerritoryMaps", _context.TerritoryMaps.ToList());
+            if (User.IsInRole(RoleName.CanAdministrate))
+                return View("ListAllTerritoryMaps", _context.TerritoryMaps.ToList());
 
             ApplicationUser user = GetUser();
 
@@ -122,14 +122,14 @@ namespace JWMaps.Controllers
                 newTerritoryMap.Householders.Add(firstHouseholderToVisit);
                 householdersToVisit.Remove(firstHouseholderToVisit);
 
-                for (int i = 0; i < territoryMapViewModel.MaxNumberOfHouseholders && i < householdersToVisit.Count(); i++)
+                for (int i = 0; i < (territoryMapViewModel.MaxNumberOfHouseholders - 1) && i < householdersToVisit.Count(); i++)
                 {
                     var distance = locationService.GetDirections(firstHouseholderToVisit.GetAddress(), householdersToVisit[i].GetAddress()).Distance.Split(' ')[0].Replace('.', ',');
 
                     if (Double.Parse(distance) <= territoryMapViewModel.MaxDistanceAmongHouseholders)
                     {
                         newTerritoryMap.Householders.Add(householdersToVisit[i]);
-                        householdersToVisit.Remove(householdersToVisit[i]);
+                        //householdersToVisit.Remove(householdersToVisit[i]);
                     }
                 }
 

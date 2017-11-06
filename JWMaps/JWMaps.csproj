@@ -520,6 +520,7 @@
     <Content Include="Views\TerritoryMaps\NotAvailableHouseholders.cshtml" />
     <Content Include="Views\TerritoryMaps\SetVisit.cshtml" />
     <Content Include="Views\Householders\ListVisits.cshtml" />
+    <Content Include="Views\TerritoryMaps\ListAllTerritoryMaps.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
