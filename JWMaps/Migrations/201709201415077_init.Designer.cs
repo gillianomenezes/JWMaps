@@ -7,13 +7,13 @@ namespace JWMaps.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class AddNeighbourhoodToTerritoryMapModel : IMigrationMetadata
+    public sealed partial class init : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddNeighbourhoodToTerritoryMapModel));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(init));
         
         string IMigrationMetadata.Id
         {
-            get { return "201709062258038_AddNeighbourhoodToTerritoryMapModel"; }
+            get { return "201709201415077_init"; }
         }
         
         string IMigrationMetadata.Source

@@ -1,0 +1,117 @@
+﻿@model JWMaps.ViewModel.DetailsHouseholderViewModel
+@{
+    ViewBag.Title = "Dados do morador";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Dados do morador</h2>
+
+@if (Model.Householder.Visits != null)
+{
+    @Html.ActionLink("Ver histórico de visitas", "ListVisits", new { id = Model.Householder.Id });
+}
+
+<div class="form-group">
+    @Html.LabelFor(h => h.Householder.Name)
+    @Html.LabelFor(h => h.Householder.Name, new { @class = "form-control" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(h => h.Householder.Address)
+    @Html.LabelFor(h => h.Householder.Address, new { @class = "form-control", id = "address" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(h => h.Householder.Neighbourhood)
+    @Html.LabelFor(h => h.Householder.Neighbourhood, new { @class = "form-control", id = "neighbourhood" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(h => h.Householder.City)
+    @Html.LabelFor(h => h.Householder.City, new { @class = "form-control", id = "city" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(h => h.Householder.Phone)
+    @Html.LabelFor(h => h.Householder.Phone, new { @class = "form-control" })
+</div>
+<div class="form-group">
+    <label>Quem o está revisitando?</label>
+    @Html.LabelFor(m => m.Publisher.Name, new { @class = "form-control" })
+</div>
+<div class="form-group">
+    <label>Tipo de endereço:</label>
+    @Html.LabelFor(m => m.Householder.Category, new { @class = "form-control" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Householder.Observations)
+    @Html.TextAreaFor(m => m.Householder.Observations, new { @class = "form-control" })
+</div>
+
+
+<div id="map_canvas" class="jumbotron" style="width: 95%; height: 432px" />
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval");
+
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCDXPe6iLZmeOYItmk84ZuV7wVJ_vSQQQs&sensor=false"></script>
+    <script type="text/javascript" language="javascript">
+
+        var geocoder;
+        var map;
+        var address = $('#address').val() + ", " + $('#neighbourhood').val() + " - " + $('#city').val();
+
+        function initialize() {
+
+            if(@Model.Householder.Id == 0)
+            {
+                $("#map_canvas").remove();
+                return;
+            }
+
+            geocoder = new google.maps.Geocoder();
+
+            var latlng = new google.maps.LatLng(-34.397, 150.644);
+
+            var myOptions = {
+                zoom: 17,
+                center: latlng,
+                mapTypeControl: true,
+                mapTypeControlOptions: { style: google.maps.MapTypeControlStyle.DROPDOWN_MENU },
+                navigationControl: true,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+            if (geocoder) {
+                geocoder.geocode({ 'address': address }, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
+                            map.setCenter(results[0].geometry.location);
+
+                            var infowindow = new google.maps.InfoWindow(
+                                {
+                                    content: '<b>' + address + '</b>',
+                                    size: new google.maps.Size(150, 50)
+                                });
+
+                            var marker = new google.maps.Marker({
+                                position: results[0].geometry.location,
+                                map: map,
+                                title: address
+                            });
+                            google.maps.event.addListener(marker, 'click', function () {
+                                infowindow.open(map, marker);
+                            });
+
+                        } else {
+                            alert("No results found");
+                        }
+                    } else {
+                        alert("Geocode was not successful for the following reason: " + status);
+                    }
+                });
+            }
+        }
+
+        $(document).ready(initialize);
+    </script>
+}

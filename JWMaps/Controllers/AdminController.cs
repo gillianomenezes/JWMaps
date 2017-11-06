@@ -10,7 +10,6 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity.EntityFramework;
 using JWMaps.Models;
 using PagedList;
-
 #endregion Includes
 
 namespace JWMaps.Controllers
@@ -104,20 +103,33 @@ namespace JWMaps.Controllers
         #region public ActionResult Create()
         public ActionResult Create()
         {
-            //ExpandedUserDTO objExpandedUserDTO = new ExpandedUserDTO();
+            ExpandedUserDTO objExpandedUserDTO = new ExpandedUserDTO();
 
-            //ViewBag.Roles = GetAllRolesAsSelectList();            
+            ViewBag.Roles = GetAllRolesAsSelectList();
 
-            //return View(objExpandedUserDTO);
-
-            return RedirectToAction("Register", "Account");
+            return View(objExpandedUserDTO);            
         }
         #endregion
-
+        
         [Authorize(Roles = RoleName.CanAdministrate)]
         public ActionResult Index()
         {
-            return View();
+            List<ExpandedUserDTO> usersInDb = new List<ExpandedUserDTO>();
+            var list = UserManager.Users.ToList();
+
+            foreach(var item in list)
+            {
+                var userDTO = new ExpandedUserDTO
+                {
+                    UserName = item.UserName,
+                    Email = item.Email,
+                    LockoutEndDateUtc = item.LockoutEndDateUtc,               
+                };
+
+                usersInDb.Add(userDTO);
+            }
+            
+            return View(usersInDb);
         }
 
         // PUT: /Admin/Create
@@ -133,39 +145,30 @@ namespace JWMaps.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-
                 var Email = paramExpandedUserDTO.Email.Trim();
                 var UserName = paramExpandedUserDTO.Email.Trim();
                 var Password = paramExpandedUserDTO.Password.Trim();
-
                 if (Email == "")
                 {
                     throw new Exception("No Email");
                 }
-
                 if (Password == "")
                 {
                     throw new Exception("No Password");
                 }
-
                 // UserName is LowerCase of the Email
                 UserName = Email.ToLower();
-
                 // Create user
-
                 var objNewAdminUser = new ApplicationUser { UserName = UserName, Email = Email };
                 var AdminUserCreateResult = UserManager.Create(objNewAdminUser, Password);
-
                 if (AdminUserCreateResult.Succeeded == true)
                 {
                     string strNewRole = Convert.ToString(Request.Form["Roles"]);
-
                     if (strNewRole != "0")
                     {
                         // Put user in role
                         UserManager.AddToRole(objNewAdminUser.Id, strNewRole);
                     }
-
                     return Redirect("~/Admin");
                 }
                 else
@@ -174,7 +177,7 @@ namespace JWMaps.Controllers
                     ModelState.AddModelError(string.Empty,
                         "Error: Failed to create the user. Check password requirements.");
                     return View(paramExpandedUserDTO);
-                }
+                }            
             }
             catch (Exception ex)
             {
@@ -265,7 +268,7 @@ namespace JWMaps.Controllers
                     DeleteUser(objExpandedUserDTO);
                 }
 
-                return Redirect("~/Admin/AdminRoles");
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {

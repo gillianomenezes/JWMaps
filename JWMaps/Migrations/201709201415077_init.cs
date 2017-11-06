@@ -3,7 +3,7 @@ namespace JWMaps.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Init : DbMigration
+    public partial class init : DbMigration
     {
         public override void Up()
         {
@@ -30,7 +30,6 @@ namespace JWMaps.Migrations
                         Category = c.Int(nullable: false),
                         Latitude = c.Double(nullable: false),
                         Longitude = c.Double(nullable: false),
-                        LastTimeVisited = c.DateTime(),
                         Observations = c.String(maxLength: 500),
                         CongregationId = c.Int(nullable: false),
                         CreationDate = c.DateTime(nullable: false),
@@ -39,6 +38,20 @@ namespace JWMaps.Migrations
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.TerritoryMaps", t => t.TerritoryMap_Id)
                 .Index(t => t.TerritoryMap_Id);
+            
+            CreateTable(
+                "dbo.Visits",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        PublisherName = c.String(),
+                        DateOfVisit = c.DateTime(nullable: false),
+                        Description = c.String(),
+                        Householder_Id = c.Int(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Householders", t => t.Householder_Id)
+                .Index(t => t.Householder_Id);
             
             CreateTable(
                 "dbo.Publishers",
@@ -81,6 +94,7 @@ namespace JWMaps.Migrations
                         CreationDate = c.DateTime(nullable: false),
                         CongregationId = c.Int(nullable: false),
                         UserId = c.String(nullable: false),
+                        Neighbourhood = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -139,12 +153,14 @@ namespace JWMaps.Migrations
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.Householders", "TerritoryMap_Id", "dbo.TerritoryMaps");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
+            DropForeignKey("dbo.Visits", "Householder_Id", "dbo.Householders");
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
+            DropIndex("dbo.Visits", new[] { "Householder_Id" });
             DropIndex("dbo.Householders", new[] { "TerritoryMap_Id" });
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
@@ -153,6 +169,7 @@ namespace JWMaps.Migrations
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.Publishers");
+            DropTable("dbo.Visits");
             DropTable("dbo.Householders");
             DropTable("dbo.Congregations");
         }
