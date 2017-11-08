@@ -129,7 +129,6 @@ namespace JWMaps.Controllers
                     if (Double.Parse(distance) <= territoryMapViewModel.MaxDistanceAmongHouseholders)
                     {
                         newTerritoryMap.Householders.Add(householdersToVisit[i]);
-                        //householdersToVisit.Remove(householdersToVisit[i]);
                     }
                 }
 

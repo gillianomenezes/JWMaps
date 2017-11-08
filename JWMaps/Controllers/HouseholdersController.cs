@@ -149,11 +149,13 @@ namespace JWMaps.Controllers
         public ActionResult ViewHouseholderData(int id)
         {
             if (User.IsInRole(RoleName.CanManageHouseholders) || User.IsInRole(RoleName.CanAdministrate))
-                RedirectToAction("Edit", id);
+            {
+                return RedirectToAction("Edit", new { id = id });
+            }
             else
-                RedirectToAction("Details", id);
-
-            return View("Index");
+            {
+                return RedirectToAction("Details", new { id = id });
+            }
         }
 
         public ActionResult Details(int id)
@@ -170,7 +172,7 @@ namespace JWMaps.Controllers
             return View("Details", detailHouseholderViewModel);
         }
 
-        [Authorize(Roles = RoleName.CanManageHouseholders + ", " + RoleName.CanAdministrate)]
+        //[Authorize(Roles = RoleName.CanManageHouseholders + ", " + RoleName.CanAdministrate)]
         public ActionResult Edit(int id)
         {
             var householderViewModel = new HouseholderViewModel
