@@ -12,6 +12,7 @@ using System.Data.Entity;
 
 namespace JWMaps.Controllers
 {
+    [Authorize(Roles = RoleName.CanManageHouseholders + ", " + RoleName.CanAdministrate)]
     public class HouseholdersController : Controller
     {
         private ApplicationDbContext _context;
@@ -172,7 +173,7 @@ namespace JWMaps.Controllers
             return View("Details", detailHouseholderViewModel);
         }
 
-        //[Authorize(Roles = RoleName.CanManageHouseholders + ", " + RoleName.CanAdministrate)]
+        [Authorize(Roles = RoleName.CanManageHouseholders + ", " + RoleName.CanAdministrate)]
         public ActionResult Edit(int id)
         {
             var householderViewModel = new HouseholderViewModel

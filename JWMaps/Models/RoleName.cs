@@ -9,5 +9,6 @@ namespace JWMaps.Models
     {
         public const string CanAdministrate = "CanAdministrate";
         public const string CanManageHouseholders = "CanManageHouseholders";
+        public const string CanCreateTerritoryMap = "CanCreateTerritoryMap";
     }
 }

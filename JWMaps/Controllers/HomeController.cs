@@ -19,6 +19,11 @@ namespace JWMaps.Controllers
 
         public ActionResult Index()
         {
+            if(User.IsInRole(RoleName.CanCreateTerritoryMap))
+            {
+                return RedirectToAction("TerritoryMaps", "Index");
+            }
+
             DashboardViewModel dashboardViewModel = new DashboardViewModel
             {
                 Householders = _context.Householders.ToList()
