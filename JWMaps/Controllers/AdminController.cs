@@ -207,6 +207,7 @@ namespace JWMaps.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             ExpandedUserDTO objExpandedUserDTO = GetUser(UserName);
+            ViewBag.Congregations = _context.Congregations.ToList();
             if (objExpandedUserDTO == null)
             {
                 return HttpNotFound();
@@ -662,6 +663,7 @@ namespace JWMaps.Controllers
             }
 
             result.Email = paramExpandedUserDTO.Email;
+            result.CongregationId = paramExpandedUserDTO.CongregationId;
 
             // Lets check if the account needs to be unlocked
             if (UserManager.IsLockedOut(result.Id))
