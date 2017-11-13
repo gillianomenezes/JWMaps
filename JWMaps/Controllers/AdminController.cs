@@ -18,8 +18,14 @@ namespace JWMaps.Controllers
     {
         private ApplicationUserManager _userManager;
         private ApplicationRoleManager _roleManager;
+        private ApplicationDbContext _context;
 
         // Controllers
+
+        public AdminController()
+        {
+            _context = new ApplicationDbContext();
+        }
 
         // GET: /Admin/
         [Authorize(Roles = RoleName.CanAdministrate)]
@@ -106,6 +112,7 @@ namespace JWMaps.Controllers
             ExpandedUserDTO objExpandedUserDTO = new ExpandedUserDTO();
 
             ViewBag.Roles = GetAllRolesAsSelectList();
+            ViewBag.Congregations = _context.Congregations.ToList(); 
 
             return View(objExpandedUserDTO);            
         }
@@ -148,6 +155,8 @@ namespace JWMaps.Controllers
                 var Email = paramExpandedUserDTO.Email.Trim();
                 var UserName = paramExpandedUserDTO.Email.Trim();
                 var Password = paramExpandedUserDTO.Password.Trim();
+                var CongregationId = paramExpandedUserDTO.CongregationId;
+                
                 if (Email == "")
                 {
                     throw new Exception("No Email");
@@ -159,7 +168,7 @@ namespace JWMaps.Controllers
                 // UserName is LowerCase of the Email
                 UserName = Email.ToLower();
                 // Create user
-                var objNewAdminUser = new ApplicationUser { UserName = UserName, Email = Email };
+                var objNewAdminUser = new ApplicationUser { UserName = UserName, Email = Email, CongregationId = CongregationId };
                 var AdminUserCreateResult = UserManager.Create(objNewAdminUser, Password);
                 if (AdminUserCreateResult.Succeeded == true)
                 {
