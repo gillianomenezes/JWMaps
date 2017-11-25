@@ -159,6 +159,8 @@ namespace JWMaps.Controllers
             }
         }
 
+
+        [Authorize(Roles = RoleName.CanViewHouseholderData)]
         public ActionResult Details(int id)
         {
             var householderInDb = _context.Householders.Include(h => h.Visits).Single(h => h.Id == id);

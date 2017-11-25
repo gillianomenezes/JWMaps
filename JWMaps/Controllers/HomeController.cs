@@ -21,7 +21,7 @@ namespace JWMaps.Controllers
         {
             if(User.IsInRole(RoleName.CanCreateTerritoryMap))
             {
-                return RedirectToAction("TerritoryMaps", "Index");
+                return RedirectToAction("Index", "TerritoryMaps");
             }
 
             DashboardViewModel dashboardViewModel = new DashboardViewModel

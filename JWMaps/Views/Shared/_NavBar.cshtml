@@ -12,7 +12,8 @@
             <ul class="nav navbar-nav">
                 <li>@Html.ActionLink("Home", "Index", "Home")</li>
                 
-                @if (User.IsInRole(JWMaps.Models.RoleName.CanManageHouseholders + ", " + JWMaps.Models.RoleName.CanAdministrate))
+                @if (User.IsInRole(JWMaps.Models.RoleName.CanManageHouseholders) || 
+                        User.IsInRole(JWMaps.Models.RoleName.CanAdministrate))
                 {
                     <li>@Html.ActionLink("Estrangeiros", "Index", "Householders")</li>
                 }                
