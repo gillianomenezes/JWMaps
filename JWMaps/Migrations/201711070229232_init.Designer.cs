@@ -13,7 +13,7 @@ namespace JWMaps.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201709201415077_init"; }
+            get { return "201711070229232_init"; }
         }
         
         string IMigrationMetadata.Source

@@ -26,7 +26,15 @@ namespace JWMaps.Controllers
         public ActionResult Index()
         {
             if (User.IsInRole(RoleName.CanAdministrate))
-                return View("ListAllTerritoryMaps", _context.TerritoryMaps.ToList());
+            {
+                ListAllTerritoryMapsViewModel viewModel = new ListAllTerritoryMapsViewModel
+                {
+                    TerritoryMaps = _context.TerritoryMaps.ToList(),
+                    User = GetUser()
+                };
+
+                return View("ListAllTerritoryMaps",viewModel);
+            }
 
             ApplicationUser user = GetUser();
 
@@ -129,7 +137,6 @@ namespace JWMaps.Controllers
                     if (Double.Parse(distance) <= territoryMapViewModel.MaxDistanceAmongHouseholders)
                     {
                         newTerritoryMap.Householders.Add(householdersToVisit[i]);
-                        //householdersToVisit.Remove(householdersToVisit[i]);
                     }
                 }
 
