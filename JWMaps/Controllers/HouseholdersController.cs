@@ -12,6 +12,7 @@ using System.Data.Entity;
 
 namespace JWMaps.Controllers
 {
+    [Authorize(Roles = RoleName.CanManageHouseholders + ", " + RoleName.CanAdministrate)]
     public class HouseholdersController : Controller
     {
         private ApplicationDbContext _context;
@@ -149,13 +150,17 @@ namespace JWMaps.Controllers
         public ActionResult ViewHouseholderData(int id)
         {
             if (User.IsInRole(RoleName.CanManageHouseholders) || User.IsInRole(RoleName.CanAdministrate))
-                RedirectToAction("Edit", id);
+            {
+                return RedirectToAction("Edit", new { id = id });
+            }
             else
-                RedirectToAction("Details", id);
-
-            return View("Index");
+            {
+                return RedirectToAction("Details", new { id = id });
+            }
         }
 
+
+        [Authorize(Roles = RoleName.CanViewHouseholderData)]
         public ActionResult Details(int id)
         {
             var householderInDb = _context.Householders.Include(h => h.Visits).Single(h => h.Id == id);

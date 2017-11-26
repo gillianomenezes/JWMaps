@@ -18,6 +18,8 @@ namespace JWMaps.Models
         public int AccessFailedCount { get; set; }
         public string PhoneNumber { get; set; }
         public IEnumerable<UserRolesDTO> Roles { get; set; }
+        [Display(Name = "Congregação")]
+        public int CongregationId { get; set; }
     }
 
     public class UserRolesDTO

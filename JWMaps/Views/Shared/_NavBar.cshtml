@@ -11,11 +11,18 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                <li>@Html.ActionLink("Estrangeiros", "Index", "Householders")</li>
+                
+                @if (User.IsInRole(JWMaps.Models.RoleName.CanManageHouseholders) || 
+                        User.IsInRole(JWMaps.Models.RoleName.CanAdministrate))
+                {
+                    <li>@Html.ActionLink("Estrangeiros", "Index", "Householders")</li>
+                }                
+
                 <li>@Html.ActionLink("Territórios", "Index", "TerritoryMaps")</li>
-                <li>@Html.ActionLink("Publicadores", "Index", "Publishers")</li>
+
                 @if (User.IsInRole(JWMaps.Models.RoleName.CanAdministrate))
                 {
+                    <li>@Html.ActionLink("Publicadores", "Index", "Publishers")</li>
                     <li>@Html.ActionLink("Administração", "Index", "Admin")</li>
                 }
             </ul>

@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace JWMaps.Controllers
 {
+    [Authorize(Roles =  RoleName.CanAdministrate)]
     public class PublishersController : Controller
     {
         private ApplicationDbContext _context;
