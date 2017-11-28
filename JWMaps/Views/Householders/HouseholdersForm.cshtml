@@ -22,7 +22,7 @@
     </div>
     <div class="form-group">
         @Html.LabelFor(h => h.Householder.Address)
-        @Html.TextBoxFor(h => h.Householder.Address, new { @class = "form-control", id="address" } )
+        @Html.TextBoxFor(h => h.Householder.Address, new { @class = "form-control", id="address", placeholder="Ex.: Nome da rua, número" } )
         @Html.ValidationMessageFor(h => h.Householder.Address)
     </div>
     <div class="form-group">
@@ -66,21 +66,72 @@
 {
     @Scripts.Render("~/bundles/jqueryval");
 
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCDXPe6iLZmeOYItmk84ZuV7wVJ_vSQQQs&sensor=false"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCDXPe6iLZmeOYItmk84ZuV7wVJ_vSQQQs&sensor=false&libraries=places"></script>
     <script type="text/javascript" language="javascript">
-
+                
         var geocoder;
         var map;
         var address = $('#address').val() + ", " + $('#neighbourhood').val() + " - " + $('#city').val();
 
         function initialize() {
 
+            var input = document.getElementById("address");
+            var autocomplete = new google.maps.places.Autocomplete(input, { types: ["geocode"] });
+                        
+            if (navigator.geolocation) {
+               navigator.geolocation.getCurrentPosition(function (position) {
+                  var geolocation = {
+                      lat: position.coords.latitude,
+                      lng: position.coords.longitude
+                  };
+                  var circle = new google.maps.Circle({
+                      center: geolocation,
+                      radius: position.coords.accuracy
+                  });
+                  autocomplete.setBounds(circle.getBounds());
+               });
+            }
+            
+            autocomplete.addListener("place_changed", function () {
+                var placeResult = autocomplete.getPlace();
+                var addressComponents = placeResult.address_components;
+                var street = "";
+                var number = "";
+                var city = "";
+                var neighbourhood = "";
+
+                // loop through addressComponents and find the route and street_number types
+                for (var i = 0, i_len = addressComponents.length; i < i_len; i++) {
+                    var addressType = addressComponents[i].types[0];
+
+                    switch (addressType) {
+                        case "route":
+                            street = addressComponents[i]["long_name"];
+                            break;
+
+                        case "street_number":
+                            number = addressComponents[i]["long_name"];
+                            break;
+                        case 'locality':
+                            city = addressComponents[i]["long_name"];
+                            break;
+                        case 'sublocality_level_1':
+                            neighbourhood = addressComponents[i]["long_name"];
+                            break;
+                    }
+                }
+
+                input.value = street + ", " + number;
+                document.getElementById("city").value = city;
+                document.getElementById("neighbourhood").value = neighbourhood;
+            });
+
             if(@Model.Householder.Id == 0)
             {
                 $("#map_canvas").remove();
                 return;
             }
-
+            
             geocoder = new google.maps.Geocoder();
 
             var latlng = new google.maps.LatLng(-34.397, 150.644);
@@ -128,5 +179,5 @@
         }
 
         $(document).ready(initialize);
-    </script>
+</script>
 }
