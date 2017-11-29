@@ -50,3 +50,23 @@ textarea {
 #statistics{
     height:100%;
 }
+
+#legend {
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    background: #fff;
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid #000;
+}
+
+#legend h3 {
+    margin-top: 0;
+    text-align: center;
+    font-size: 12px;
+}
+
+#legend img {
+    vertical-align: middle;
+    height: 20px;
+}
