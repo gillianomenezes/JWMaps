@@ -93,6 +93,7 @@ namespace JWMaps.Controllers
                 householderdb.Longitude = householder.Longitude;
                 householderdb.PublisherId = householder.PublisherId;
                 householderdb.Observations = householder.Observations;
+                householderdb.Category = householder.Category;
 
                 RemoveHouseholderFromExistingTerritoryMap(householder.Id);
             }

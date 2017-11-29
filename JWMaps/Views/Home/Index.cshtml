@@ -32,8 +32,11 @@
                 @foreach(var householder in Model.Householders)
                 {
                     <text>
-
-                @if(householder.PublisherId != null)
+                @if(householder.Category == JWMaps.Models.Category.Business)
+                {
+                    <text> var icon = "http://maps.google.com/mapfiles/ms/icons/yellow.png"; </text>
+                }
+                else if(householder.PublisherId != null)
                 {
                     <text> var icon = "http://maps.google.com/mapfiles/ms/icons/blue.png"; </text>
                 }
@@ -44,14 +47,14 @@
 
                 var marker = new google.maps.Marker({
                     position: new google.maps.LatLng(@householder.Latitude.ToString().Replace(',', '.') , @householder.Longitude.ToString().Replace(',', '.')),
-                    map: map, 
+                    map: map,
                     title: "name",
                     icon: icon,
                     animation: google.maps.Animation.DROP
                 });
 
                 bounds.extend(marker.getPosition());
-                
+
                 </text>
                 }
 

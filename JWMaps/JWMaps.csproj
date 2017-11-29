@@ -371,8 +371,8 @@
     </Content>
     <Content Include="Content\DataTables\css\mixins.scss" />
     <Content Include="Content\DataTables\css\common.scss" />
-    <None Include="Properties\PublishProfiles\JWMapsFieldService %282%29.pubxml" />
-    <None Include="Properties\PublishProfiles\JWMapsFieldService.pubxml" />
+    <None Include="Properties\PublishProfiles\jwmaps - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\jwmaps - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
