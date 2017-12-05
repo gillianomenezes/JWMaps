@@ -30,7 +30,7 @@
                 }
                 else
                 {
-                    <td>Não informado</td>
+                    <td>@Html.ActionLink("Não informado", "ViewHouseholderData", "Householders", new { id = item.Householder.Id }, null)</td>
                 }
                 <td>@item.Householder.Address</td>
                 <td>@item.Householder.Neighbourhood</td>

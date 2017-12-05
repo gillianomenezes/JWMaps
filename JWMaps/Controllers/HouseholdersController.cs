@@ -26,7 +26,7 @@ namespace JWMaps.Controllers
         {
             _context.Dispose();
         }
-
+                
         // GET: Householder
         public ActionResult Index()
         {
@@ -36,7 +36,7 @@ namespace JWMaps.Controllers
             ApplicationUser user = userManager.FindByNameAsync(User.Identity.Name).Result;
 
             var householders = _context.Householders.Where(h => h.CongregationId == user.CongregationId);
-
+            
             foreach (var householder in householders)
             {
                 var householderViewModel = new HouseholderViewModel
