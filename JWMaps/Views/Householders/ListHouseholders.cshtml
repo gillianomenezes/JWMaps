@@ -24,7 +24,14 @@
         @foreach (var item in Model)
         {
             <tr id=@item.Householder.Id>
-                <td>@Html.ActionLink(item.Householder.Name, "ViewHouseholderData", "Householders", new { id = item.Householder.Id }, null)</td>
+                @if (item.Householder.Name != null)
+                {
+                    <td>@Html.ActionLink(item.Householder.Name, "ViewHouseholderData", "Householders", new { id = item.Householder.Id }, null)</td>
+                }
+                else
+                {
+                    <td>Não informado</td>
+                }
                 <td>@item.Householder.Address</td>
                 <td>@item.Householder.Neighbourhood</td>
                 @if (User.IsInRole(JWMaps.Models.RoleName.CanManageHouseholders) || User.IsInRole(JWMaps.Models.RoleName.CanAdministrate))

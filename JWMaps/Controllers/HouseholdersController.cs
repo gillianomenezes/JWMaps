@@ -77,6 +77,7 @@ namespace JWMaps.Controllers
             if (householder.Id == 0)
             {
                 householder.CreationDate = DateTime.Now;
+                householder.CongregationId = user.CongregationId;
                 _context.Householders.Add(householder);
             }
             else
@@ -94,7 +95,7 @@ namespace JWMaps.Controllers
                 householderdb.PublisherId = householder.PublisherId;
                 householderdb.Observations = householder.Observations;
                 householderdb.Category = householder.Category;
-
+                
                 RemoveHouseholderFromExistingTerritoryMap(householder.Id);
             }
 

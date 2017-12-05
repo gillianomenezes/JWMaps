@@ -11,7 +11,7 @@ namespace JWMaps.Models
         public int Id { get; set; }
 
         [Display(Name = "Nome")]
-        [StringLength(255)]
+        [StringLength(255)]        
         public string Name { get; set; }
 
         [Required]

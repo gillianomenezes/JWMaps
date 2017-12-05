@@ -108,43 +108,51 @@ namespace JWMaps.Controllers
 
         public ActionResult New(TerritoryMapViewModel territoryMapViewModel)
         {
-            var locationService = new GoogleLocationService();
-
-            ApplicationUser user = GetUser();
-            var householdersToVisit = GetHouseholdersToVisit(territoryMapViewModel, user);
-
-            if (householdersToVisit == null)
-                return View("NotAvailableHouseholders");
-
-            var newTerritoryMap = new TerritoryMap()
+            try
             {
-                CongregationId = user.CongregationId,
-                Neighbourhood = territoryMapViewModel.selectedNeighbourhood,
-                Householders = new List<Householder>(),
-                UserId = user.Id
-            };
+                var locationService = new GoogleLocationService();
 
-            if (householdersToVisit.Count > 0)
-            {
-                var firstHouseholderToVisit = householdersToVisit.First();
-                newTerritoryMap.Householders.Add(firstHouseholderToVisit);
-                householdersToVisit.Remove(firstHouseholderToVisit);
+                ApplicationUser user = GetUser();
+                var householdersToVisit = GetHouseholdersToVisit(territoryMapViewModel, user);
 
-                for (int i = 0; i < (territoryMapViewModel.MaxNumberOfHouseholders - 1) && i < householdersToVisit.Count(); i++)
+                if (householdersToVisit == null)
+                    return View("NotAvailableHouseholders");
+
+                var newTerritoryMap = new TerritoryMap()
                 {
-                    var distance = locationService.GetDirections(firstHouseholderToVisit.GetAddress(), householdersToVisit[i].GetAddress()).Distance.Split(' ')[0].Replace('.', ',');
+                    CongregationId = user.CongregationId,
+                    Neighbourhood = territoryMapViewModel.selectedNeighbourhood,
+                    Householders = new List<Householder>(),
+                    UserId = user.Id
+                };
 
-                    if (Double.Parse(distance) <= territoryMapViewModel.MaxDistanceAmongHouseholders)
+                if (householdersToVisit.Count > 0)
+                {
+                    var firstHouseholderToVisit = householdersToVisit.First();
+                    newTerritoryMap.Householders.Add(firstHouseholderToVisit);
+                    householdersToVisit.Remove(firstHouseholderToVisit);
+
+                    for (int i = 0; i < (territoryMapViewModel.MaxNumberOfHouseholders - 1) && i < householdersToVisit.Count(); i++)
                     {
-                        newTerritoryMap.Householders.Add(householdersToVisit[i]);
+                        System.Threading.Thread.Sleep(1000);
+                        var distance = locationService.GetDirections(firstHouseholderToVisit.GetAddress(), householdersToVisit[i].GetAddress()).Distance.Split(' ')[0].Replace('.', ',');
+
+                        if (Double.Parse(distance) <= territoryMapViewModel.MaxDistanceAmongHouseholders)
+                        {
+                            newTerritoryMap.Householders.Add(householdersToVisit[i]);
+                        }
                     }
+
+                    _context.TerritoryMaps.Add(newTerritoryMap);
+                    _context.SaveChanges();
                 }
 
-                _context.TerritoryMaps.Add(newTerritoryMap);
-                _context.SaveChanges();
+                return RedirectToAction("Index");
             }
-
-            return RedirectToAction("Index");
+            catch(Exception)
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         private List<Householder> GetHouseholdersToVisit(TerritoryMapViewModel territory, ApplicationUser user)
