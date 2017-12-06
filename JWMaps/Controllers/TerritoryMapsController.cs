@@ -10,6 +10,7 @@ using GoogleMaps.LocationServices;
 using System.Net.Http;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
+using System.Web;
 
 namespace JWMaps.Controllers
 {
@@ -133,9 +134,9 @@ namespace JWMaps.Controllers
                     householdersToVisit.Remove(firstHouseholderToVisit);
 
                     for (int i = 0; i < (territoryMapViewModel.MaxNumberOfHouseholders - 1) && i < householdersToVisit.Count(); i++)
-                    {
-                        System.Threading.Thread.Sleep(1000);
-                        var distance = locationService.GetDirections(firstHouseholderToVisit.GetAddress(), householdersToVisit[i].GetAddress()).Distance.Split(' ')[0].Replace('.', ',');
+                    {                        
+                        //var distance = locationService.GetDirections(firstHouseholderToVisit.GetAddress(), householdersToVisit[i].GetAddress()).Distance.Split(' ')[0].Replace('.', ',');
+                        var distance = locationService.GetDirections(firstHouseholderToVisit.GetAddress(), householdersToVisit[i].GetAddress()).Distance.Split(' ')[0];
 
                         if (Double.Parse(distance) <= territoryMapViewModel.MaxDistanceAmongHouseholders)
                         {
@@ -146,12 +147,17 @@ namespace JWMaps.Controllers
                     _context.TerritoryMaps.Add(newTerritoryMap);
                     _context.SaveChanges();
                 }
+                else
+                {
+                    return View("NoMap");
+                }
 
                 return RedirectToAction("Index");
             }
             catch(Exception)
             {
-                return RedirectToAction("Index");
+                System.Threading.Thread.Sleep(1000);
+                return New(territoryMapViewModel);
             }
         }
 

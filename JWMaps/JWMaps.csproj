@@ -511,6 +511,7 @@
     <Content Include="Views\TerritoryMaps\SetVisit.cshtml" />
     <Content Include="Views\Householders\ListVisits.cshtml" />
     <Content Include="Views\TerritoryMaps\ListAllTerritoryMaps.cshtml" />
+    <Content Include="Views\TerritoryMaps\NoMap.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
