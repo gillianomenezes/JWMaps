@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using JWMaps.ViewModel;
 using JWMaps.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
 
 namespace JWMaps.Controllers
 {
@@ -24,9 +26,11 @@ namespace JWMaps.Controllers
                 return RedirectToAction("Index", "TerritoryMaps");
             }
 
+            var user = GetUser();
+
             DashboardViewModel dashboardViewModel = new DashboardViewModel
             {
-                Householders = _context.Householders.ToList()
+                Householders = _context.Householders.Where(h => h.CongregationId == user.CongregationId).ToList()
             };
 
             return View(dashboardViewModel);
@@ -44,6 +48,15 @@ namespace JWMaps.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        private ApplicationUser GetUser()
+        {
+            var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
+            var userManager = new UserManager<ApplicationUser>(store);
+            ApplicationUser user = userManager.FindByNameAsync(User.Identity.Name).Result;
+
+            return user;
         }
     }
 }

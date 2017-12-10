@@ -28,18 +28,31 @@ namespace JWMaps.Controllers
         {
             if (User.IsInRole(RoleName.CanAdministrate))
             {
-                ListAllTerritoryMapsViewModel viewModel = new ListAllTerritoryMapsViewModel
-                {
-                    TerritoryMaps = _context.TerritoryMaps.ToList(),
-                    User = GetUser()
-                };
+                List<ListAllTerritoryMapsViewModel> usersMaps = new List<ListAllTerritoryMapsViewModel>();
 
-                return View("ListAllTerritoryMaps",viewModel);
+                foreach (var user in _context.Users.ToList())
+                {
+                    var maps = _context.TerritoryMaps.Where(t => t.UserId == user.Id).ToList();
+
+                    if (maps.Count > 0)
+                    {
+                        ListAllTerritoryMapsViewModel viewModel = new ListAllTerritoryMapsViewModel
+                        {
+                            TerritoryMaps = maps,
+                            User = user
+                        };
+
+                        usersMaps.Add(viewModel);
+                    }
+                }
+                
+
+                return View("ListAllTerritoryMaps", usersMaps);
             }
 
-            ApplicationUser user = GetUser();
+            ApplicationUser myUser = GetUser();
 
-            var territoryMaps = _context.TerritoryMaps.Where(t => t.UserId.Equals(user.Id));
+            var territoryMaps = _context.TerritoryMaps.Where(t => t.UserId.Equals(myUser.Id));
 
             return View(territoryMaps.ToList());
         }

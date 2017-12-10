@@ -1,4 +1,4 @@
-﻿@model JWMaps.ViewModel.ListAllTerritoryMapsViewModel
+﻿@model List<JWMaps.ViewModel.ListAllTerritoryMapsViewModel>
 
 @{
     ViewBag.Title = "Meus territórios";
@@ -17,18 +17,23 @@
             <th>nth</th>            
             <th>Dono</th>
             <th>Bairro</th>
+            <th>Data de criação</th>
             <th>Apagar</th>
         </tr>
     </thead>
     <tbody>
-        @for (int i = 0; i < Model.TerritoryMaps.Count; i++)
+        @foreach (var item in Model)
         {
-            <tr>
-                <td>@Html.ActionLink("Mapa " + (i+1) , "Show", "TerritoryMaps", new { id = Model.TerritoryMaps[i].Id }, null)</td>
-                <td>@Model.User.UserName</td>
-                <td>@Model.TerritoryMaps[i].Neighbourhood</td>                
-                <td><button class="btn btn-link js-delete" data-id=@Model.TerritoryMaps[i].Id>deletar</button></td>
-            </tr>
+            for (int i = 0; i < item.TerritoryMaps.Count; i++)
+            {
+                <tr>
+                    <td>@Html.ActionLink("Mapa " + (i + 1), "Show", "TerritoryMaps", new { id = item.TerritoryMaps[i].Id }, null)</td>
+                    <td>@item.User.UserName</td>
+                    <td>@item.TerritoryMaps[i].Neighbourhood</td>
+                    <td>@item.TerritoryMaps[i].CreationDate</td>
+                    <td><button class="btn btn-link js-delete" data-id=@item.TerritoryMaps[i].Id>deletar</button></td>
+                </tr>
+            }
         }
     </tbody>
 </table>
