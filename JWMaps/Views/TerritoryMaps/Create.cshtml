@@ -29,9 +29,22 @@
         @Html.TextBoxFor(t => t.MaxNumberOfHouseholders, new { @class = "form-control" })
         @Html.ValidationMessageFor(t => t.MaxNumberOfHouseholders)
     </div>
-    <button type="submit" class="btn btn-primary">Criar!</button>
+
+    <div id="divLoading">
+    </div>
+
+    <button type="submit" class="btn btn-primary" onclick='showLoading();'>Criar!</button>
 }
 <br />
 <div>
     @Html.ActionLink("Voltar", "Index")
 </div>
+
+@section scripts
+{
+    <script type="text/javascript" language="javascript">
+        function showLoading() {
+            $("div#divLoading").addClass('show');
+        }
+    </script>
+}

@@ -22,11 +22,27 @@
                 <td>@(i + 1)</td>
                 @if (Model[i].Name != null)
                 {
-                    <td>@Html.ActionLink(Model[i].Name, "Edit", "Householders", new { id = Model[i].Id }, null)</td>
+                    if (User.IsInRole(JWMaps.Models.RoleName.CanManageHouseholders) ||
+                    User.IsInRole(JWMaps.Models.RoleName.CanAdministrate))
+                    {
+                        <td>@Html.ActionLink(@Model[i].Name, "Edit", "Householders", new { id = Model[i].Id }, null)</td>
+                    }
+                    else
+                    {
+                        <td>@Model[i].Name</td>
+                    }
                 }
                 else
                 {
-                    <td>@Html.ActionLink("Não informado", "Edit", "Householders", new { id = Model[i].Id }, null)</td>
+                    if (User.IsInRole(JWMaps.Models.RoleName.CanManageHouseholders) ||
+                    User.IsInRole(JWMaps.Models.RoleName.CanAdministrate))
+                    {
+                        <td>@Html.ActionLink("Não informado", "Edit", "Householders", new { id = Model[i].Id }, null)</td>
+                    }
+                    else
+                    {
+                        <td>Não informado</td>
+                    }
                 }
                 <td>@Model[i].Address</td>
                 <td>@Html.ActionLink("marcar como \"visitado\"", "SetVisit", "TerritoryMaps", new { id = Model[i].Id }, null)</td>

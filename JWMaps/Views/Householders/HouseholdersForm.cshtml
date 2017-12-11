@@ -6,7 +6,7 @@
 
 <h2>Dados do morador</h2>
 
-@if (Model.Householder.Visits != null)
+@if (Model.Householder.Visits != null && User.IsInRole(JWMaps.Models.RoleName.CanAdministrate))
 {
     @Html.ActionLink("Ver histórico de visitas", "ListVisits", new { id = Model.Householder.Id });
 }
