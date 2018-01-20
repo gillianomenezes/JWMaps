@@ -23,32 +23,30 @@ textarea {
     max-width: 280px;
 }
 
-.field-validation-error
-{
+.field-validation-error {
     color: red;
 }
 
-.input-validation-error 
-{
+.input-validation-error {
     border: 2px solid red;
 }
 
-.validation-summary-errors
-{
+.validation-summary-errors {
     color: red;
 }
-#wrapper{    
+
+#wrapper {
     height: 100%;
 }
 
-#map{
+#map {
     height: 100%;
     width: 100%;
     position: fixed;
 }
 
-#statistics{
-    height:100%;
+#statistics {
+    height: 100%;
 }
 
 #legend {
@@ -60,13 +58,48 @@ textarea {
     border: 1px solid #000;
 }
 
-#legend h3 {
-    margin-top: 0;
-    text-align: center;
-    font-size: 12px;
+    #legend h3 {
+        margin-top: 0;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    #legend img {
+        vertical-align: middle;
+        height: 20px;
+    }
+
+#divLoading {
+    display: none;
 }
 
-#legend img {
-    vertical-align: middle;
-    height: 20px;
+    #divLoading.show {
+        display: block;
+        position: fixed;
+        z-index: 100;
+        background-image: url('http://loadinggif.com/images/image-selection/3.gif');
+        background-color: #666;
+        opacity: 0.4;
+        background-repeat: no-repeat;
+        background-position: center;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        top: 0;
+    }
+
+#loadinggif.show {
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    z-index: 101;
+    width: 32px;
+    height: 32px;
+    margin-left: -16px;
+    margin-top: -16px;
+}
+
+div.content {
+    width: 1000px;
+    height: 1000px;
 }
