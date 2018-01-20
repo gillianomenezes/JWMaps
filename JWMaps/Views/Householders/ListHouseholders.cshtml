@@ -1,13 +1,13 @@
 ﻿@model List<JWMaps.ViewModel.HouseholderViewModel>
 
 @{
-    ViewBag.Title = "Lista de estrangeiros";
+    ViewBag.Title = "Lista de moradores";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Lista de estrangeiros </h2>
 
-<p>@Html.ActionLink("Adicionar estrangeiro", "New", "Householders", null, new { @class = "btn btn-primary" })</p>
+<p>@Html.ActionLink("Adicionar morador", "New", "Householders", null, new { @class = "btn btn-primary" })</p>
 <table id="householders" class="table table-bordered table-hover">
     <thead>
         <tr>

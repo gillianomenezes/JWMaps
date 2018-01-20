@@ -15,7 +15,7 @@
                 @if (User.IsInRole(JWMaps.Models.RoleName.CanManageHouseholders) || 
                         User.IsInRole(JWMaps.Models.RoleName.CanAdministrate))
                 {
-                    <li>@Html.ActionLink("Estrangeiros", "Index", "Householders")</li>
+                    <li>@Html.ActionLink("Moradores", "Index", "Householders")</li>
                 }                
 
                 <li>@Html.ActionLink("Territórios", "Index", "TerritoryMaps")</li>
