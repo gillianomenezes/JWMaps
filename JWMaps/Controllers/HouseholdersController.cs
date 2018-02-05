@@ -139,10 +139,12 @@ namespace JWMaps.Controllers
 
         public ActionResult New()
         {
+            var user = GetUser();
+
             var householderViewModel = new HouseholderViewModel
             {
                 Householder = new Householder(),
-                Publishers = _context.Publishers
+                Publishers = _context.Publishers.Where(p => p.CongregationId == user.CongregationId)
             };
 
             return View("HouseholdersForm", householderViewModel);
