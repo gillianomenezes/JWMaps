@@ -302,10 +302,11 @@ namespace JWMaps.Controllers
 
         public ActionResult SetVisit(int id)
         {
+            var user = GetUser();
             var Visit = new VisitViewModel()
             {
                 VisitedHouseHolder = _context.Householders.Single(h => h.Id == id),
-                Publishers = _context.Publishers.ToList()
+                Publishers = _context.Publishers.Where(p => p.CongregationId == user.CongregationId).ToList()
             };
 
             return View(Visit);
