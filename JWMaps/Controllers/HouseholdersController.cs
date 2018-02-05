@@ -182,10 +182,11 @@ namespace JWMaps.Controllers
         [Authorize(Roles = RoleName.CanManageHouseholders + ", " + RoleName.CanAdministrate)]
         public ActionResult Edit(int id)
         {
+            var user = GetUser();
             var householderViewModel = new HouseholderViewModel
             {
                 Householder = _context.Householders.Include(h => h.Visits).Single(h => h.Id == id),
-                Publishers = _context.Publishers.ToList()
+                Publishers = _context.Publishers.Where(p => p.CongregationId == user.CongregationId).ToList()
             };
 
             return View("HouseholdersForm", householderViewModel);
