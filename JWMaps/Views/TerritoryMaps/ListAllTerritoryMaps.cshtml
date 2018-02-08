@@ -42,7 +42,11 @@
 {
     <script>
         $(document).ready(function () {
-            $("#territoryMaps").DataTable();
+            $("#territoryMaps").DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
+                }
+            });
 
             $(".js-delete").on("click", function () {
                 var tr = $(this).closest('tr');
