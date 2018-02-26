@@ -84,13 +84,23 @@ namespace JWMaps.Controllers
         {
             List<string> neighbourhoods = new List<string>();
             ApplicationUser user = GetUser();
-
+            
             foreach (Householder householder in _context.Householders.Where(h => h.CongregationId == user.CongregationId).ToList())
-                neighbourhoods.Add(householder.Neighbourhood);
+            {
+                var territoriesInDb = _context.TerritoryMaps.Where(t => t.CongregationId == user.CongregationId && t.Neighbourhood.Equals(householder.Neighbourhood));
+                var householdersInTerritory = 0;
+                var householdersInNeighbourhood = _context.Householders.Where(h => h.CongregationId == user.CongregationId && h.Neighbourhood.Equals(householder.Neighbourhood)).Count();
+
+                foreach (var territory in territoriesInDb)
+                    householdersInTerritory += territory.Householders.Count;
+
+                if (householdersInTerritory < householdersInNeighbourhood)
+                    neighbourhoods.Add(householder.Neighbourhood);
+            }
 
             var territoryMapViewModel = new TerritoryMapViewModel
             {
-                Neighbourhoods = neighbourhoods
+                Neighbourhoods = neighbourhoods.Distinct().OrderBy(n => n)
             };
 
             return View(territoryMapViewModel);
