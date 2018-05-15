@@ -81,10 +81,22 @@ namespace JWMaps.Controllers
 
         // GET: TerritoryMaps/Create
         public ActionResult Create()
+        //public ActionResult Create(TerritoryTypeViewModel territoryTypeViewModel)
         {
+            return View(new TerritoryMapViewModel { Neighbourhoods = new List<string>() });
+        }
+
+        [HttpPost]
+        public ActionResult GetNeighbourhoodByMapType(string mapType)
+        {
+            string categoryName = GetCategoryName(mapType);
+
+            if (String.IsNullOrEmpty(categoryName))
+                return Json(new { succes = false, JsonRequestBehavior.AllowGet });
+
             List<string> neighbourhoods = new List<string>();
             ApplicationUser user = GetUser();
-            
+
             foreach (Householder householder in _context.Householders.Where(h => h.CongregationId == user.CongregationId).ToList())
             {
                 var territoriesInDb = _context.TerritoryMaps.Where(t => t.CongregationId == user.CongregationId && t.Neighbourhood.Equals(householder.Neighbourhood));
@@ -94,7 +106,7 @@ namespace JWMaps.Controllers
                 foreach (var territory in territoriesInDb)
                     householdersInTerritory += territory.Householders.Count;
 
-                if (householdersInTerritory < householdersInNeighbourhood)
+                if (householdersInTerritory < householdersInNeighbourhood && householder.Category.ToString().Equals(categoryName))
                     neighbourhoods.Add(householder.Neighbourhood);
             }
 
@@ -103,7 +115,17 @@ namespace JWMaps.Controllers
                 Neighbourhoods = neighbourhoods.Distinct().OrderBy(n => n)
             };
 
-            return View(territoryMapViewModel);
+            return Json(new { success = true, Neighbourhoods = neighbourhoods.Distinct().OrderBy(n => n) }, JsonRequestBehavior.AllowGet);
+        }
+
+        private string GetCategoryName(string mapType)
+        {
+            if (mapType.Equals("Comercial"))
+                return "Business";
+            else if ((mapType.Equals("Residência")))
+                return "House";
+            else
+                return null;
         }
 
         // POST: TerritoryMaps/Create
@@ -125,9 +147,16 @@ namespace JWMaps.Controllers
 
         public ActionResult Show(int id)
         {
-            var householders = _context.TerritoryMaps.Include(t => t.Householders).SingleOrDefault(t => t.Id == id).Householders.ToList();
+            var householders = _context.TerritoryMaps.Include(t => t.Householders.Select(h => h.Visits))
+                                                     .SingleOrDefault(t => t.Id == id).Householders.ToList();
 
             return View(householders);
+        }
+
+        public ActionResult SelectTerritoryType(int id)
+        {
+            var territoryTypeViewModel = new TerritoryTypeViewModel();
+            return PartialView("_TerritoryTypeChoice", territoryTypeViewModel);
         }
 
         public ActionResult New(TerritoryMapViewModel territoryMapViewModel)
@@ -138,6 +167,11 @@ namespace JWMaps.Controllers
 
                 ApplicationUser user = GetUser();
                 var householdersToVisit = GetHouseholdersToVisit(territoryMapViewModel, user);
+
+                //Vou mudar isso para refletir as mudanças no algoritmo de montagem dos mapas
+                territoryMapViewModel.MaxNumberOfHouseholders = 5;
+                territoryMapViewModel.MaxDistanceAmongHouseholders = 5;
+
 
                 if (householdersToVisit == null)
                     return View("NotAvailableHouseholders");

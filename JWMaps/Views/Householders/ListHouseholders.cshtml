@@ -14,6 +14,8 @@
             <th>Nome</th>
             <th>Endereço</th>
             <th>Bairro</th>
+            <th>Tipo</th>
+            <th>Data da última visita</th>
             @if (User.IsInRole(JWMaps.Models.RoleName.CanManageHouseholders) || User.IsInRole(JWMaps.Models.RoleName.CanAdministrate))
             {
                 <th>Apagar</th>
@@ -34,6 +36,22 @@
                 }
                 <td>@item.Householder.Address</td>
                 <td>@item.Householder.Neighbourhood</td>
+                @if(@item.Householder.Category == JWMaps.Models.Category.Business)
+                {
+                    <td>Negócios</td>
+                }
+                else
+                {
+                    <td>Residencial</td>
+                }
+                @if (@item.Householder.Visits.Count > 0)
+                {
+                    <td>@item.Householder.Visits.OrderBy(v => v.DateOfVisit).First().DateOfVisit.ToShortDateString()</td>
+                }
+                else
+                {
+                    <td>Ainda não foi visitado</td>
+                }
                 @if (User.IsInRole(JWMaps.Models.RoleName.CanManageHouseholders) || User.IsInRole(JWMaps.Models.RoleName.CanAdministrate))
                 {
                     <td><button class="btn-link js-delete" householder-id=@item.Householder.Id>apagar</button></td>

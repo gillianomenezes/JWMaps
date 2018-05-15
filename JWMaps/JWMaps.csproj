@@ -242,6 +242,7 @@
     <Compile Include="ViewModel\ListAllTerritoryMapsViewModel.cs" />
     <Compile Include="ViewModel\PublisherViewModel.cs" />
     <Compile Include="ViewModel\TerritoryMapViewModel.cs" />
+    <Compile Include="ViewModel\TerritoryTypeViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
     <Compile Include="ViewModel\VisitViewModel.cs" />
   </ItemGroup>
@@ -513,6 +514,7 @@
     <Content Include="Views\Householders\ListVisits.cshtml" />
     <Content Include="Views\TerritoryMaps\ListAllTerritoryMaps.cshtml" />
     <Content Include="Views\TerritoryMaps\NoMap.cshtml" />
+    <Content Include="Views\TerritoryMaps\_TerritoryTypeChoice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

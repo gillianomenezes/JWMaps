@@ -35,7 +35,7 @@ namespace JWMaps.Controllers
             var userManager = new UserManager<ApplicationUser>(store);
             ApplicationUser user = userManager.FindByNameAsync(User.Identity.Name).Result;
 
-            var householders = _context.Householders.Where(h => h.CongregationId == user.CongregationId);
+            var householders = _context.Householders.Include(h => h.Visits).Where(h => h.CongregationId == user.CongregationId);
             
             foreach (var householder in householders)
             {
@@ -54,54 +54,62 @@ namespace JWMaps.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Save(Householder householder)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                var householderViewModel = new HouseholderViewModel
+                if (!ModelState.IsValid)
                 {
-                    Householder = householder
-                };
+                    var householderViewModel = new HouseholderViewModel
+                    {
+                        Householder = householder
+                    };
 
-                return View("HouseholdersForm", householderViewModel);
+                    return View("HouseholdersForm", householderViewModel);
+                }
+
+                var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
+                var userManager = new UserManager<ApplicationUser>(store);
+                ApplicationUser user = userManager.FindByNameAsync(User.Identity.Name).Result;
+
+                var locationService = new GoogleLocationService();
+                var point = locationService.GetLatLongFromAddress(householder.Address + ", " + householder.Neighbourhood + "-" + householder.City);
+
+                householder.Latitude = point.Latitude;
+                householder.Longitude = point.Longitude;
+
+                if (householder.Id == 0)
+                {
+                    householder.CreationDate = DateTime.Now;
+                    householder.CongregationId = user.CongregationId;
+                    _context.Householders.Add(householder);
+                }
+                else
+                {
+                    var householderdb = _context.Householders.Single(h => h.Id == householder.Id);
+
+                    householderdb.Name = householder.Name;
+                    householderdb.Neighbourhood = householder.Neighbourhood;
+                    householderdb.Phone = householder.Phone;
+                    householder.CongregationId = user.CongregationId;
+                    householderdb.Address = householder.Address;
+                    householderdb.City = householder.City;
+                    householderdb.Latitude = householder.Latitude;
+                    householderdb.Longitude = householder.Longitude;
+                    householderdb.PublisherId = householder.PublisherId;
+                    householderdb.Observations = householder.Observations;
+                    householderdb.Category = householder.Category;
+
+                    RemoveHouseholderFromExistingTerritoryMap(householder.Id);
+                }
+
+                _context.SaveChanges();
+
+                return RedirectToAction("Index", "Householders");
             }
-
-            var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
-            var userManager = new UserManager<ApplicationUser>(store);
-            ApplicationUser user = userManager.FindByNameAsync(User.Identity.Name).Result;
-
-            var locationService = new GoogleLocationService();
-            var point = locationService.GetLatLongFromAddress(householder.Address + ", " + householder.Neighbourhood + "-" + householder.City);
-
-            householder.Latitude = point.Latitude;
-            householder.Longitude = point.Longitude;
-
-            if (householder.Id == 0)
+            catch (Exception e)
             {
-                householder.CreationDate = DateTime.Now;
-                householder.CongregationId = user.CongregationId;
-                _context.Householders.Add(householder);
+                System.Threading.Thread.Sleep(1000);
+                return Save(householder);
             }
-            else
-            {
-                var householderdb = _context.Householders.Single(h => h.Id == householder.Id);
-
-                householderdb.Name = householder.Name;
-                householderdb.Neighbourhood = householder.Neighbourhood;
-                householderdb.Phone = householder.Phone;
-                householder.CongregationId = user.CongregationId;
-                householderdb.Address = householder.Address;
-                householderdb.City = householder.City;
-                householderdb.Latitude = householder.Latitude;
-                householderdb.Longitude = householder.Longitude;
-                householderdb.PublisherId = householder.PublisherId;
-                householderdb.Observations = householder.Observations;
-                householderdb.Category = householder.Category;
-                
-                RemoveHouseholderFromExistingTerritoryMap(householder.Id);
-            }
-
-            _context.SaveChanges();
-
-            return RedirectToAction("Index", "Householders");
         }
 
         private void RemoveHouseholderFromExistingTerritoryMap(int househoulderId)

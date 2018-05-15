@@ -12,6 +12,7 @@
             <th>Número do mapa</th>
             <th>Nome</th>
             <th>Endereço</th>
+            <th>Data da última visita</th>
             <th></th>
         </tr>
     </thead>
@@ -45,6 +46,21 @@
                     }
                 }
                 <td>@Model[i].Address</td>
+                @if (@Model[i].Visits != null)
+                {
+                    if (@Model[i].Visits.Count > 0)
+                    {
+                        <td> @Model[i].Visits.OrderBy(v => v.DateOfVisit).Last().DateOfVisit.ToString("dd/MM/yyyy") </td>
+                    }
+                    else
+                    {
+                        <td>Ainda não foi visitado</td>
+                    }
+                }
+                else
+                {
+                    <td>Ainda não foi visitado</td>
+                }
                 <td>@Html.ActionLink("marcar como \"visitado\"", "SetVisit", "TerritoryMaps", new { id = Model[i].Id }, null)</td>
             </tr>
         }

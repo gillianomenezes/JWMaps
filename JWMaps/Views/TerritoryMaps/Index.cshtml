@@ -7,7 +7,8 @@
 
 <h2>Minha lista de territórios</h2>
 
-<p>@Html.ActionLink("Novo território", "Create", "TerritoryMaps", null, new { @class = "btn btn-primary" })</p>
+<p>@Html.ActionLink("Novo território", "Create", "TerritoryMaps", null, new { @class = "btn btn-primary new-territory" })</p>
+@*<button id="new-territory" class="btn btn-primary">Novo território</button>*@
 
 <br />
 
@@ -31,9 +32,11 @@
     </tbody>
 </table>
 
+@*<div class="modal" id="modal"></div>*@
+
 @section scripts
 {
-    <script>
+<script>
         $(document).ready(function () {
             $("#territoryMaps").DataTable();
 
@@ -53,6 +56,14 @@
                     }
                 });
             });
+
+            //$(function () {
+            //    $("#new-territory").click(function () {
+            //        $("#modal").load("SelectTerritoryType?id=" + 1, function () {
+            //            $("#modal").modal();
+            //        });
+            //     });
+            //});
         });
-    </script>
+</script>
 }

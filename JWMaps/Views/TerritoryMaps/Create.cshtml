@@ -10,30 +10,19 @@
 @using (Html.BeginForm("New", "TerritoryMaps", FormMethod.Post))
 {
     <div class="form-group">
-        <label>Bairro</label>
-        @Html.ValidationMessageFor(t => t.selectedNeighbourhood)
-        @Html.DropDownListFor(t => t.selectedNeighbourhood, new SelectList(Model.Neighbourhoods), "", new { @class = "form-control" })
-    </div>
-    <div class="form-group">
         <label>Tipo de endereço</label>
-        @Html.EnumDropDownListFor(m => m.Category, new { @class = "form-control" })
+        @Html.EnumDropDownListFor(m => m.Category, "-- Selecione um tipo de endereço --", new { @class = "form-control", @selected="selected" })
         @Html.ValidationMessageFor(m => m.Category)
     </div>
-    <div class="form-group">
-        <label>Distância máxima entre endereços em Km</label>
-        @Html.TextBoxFor(t => t.MaxDistanceAmongHouseholders, new { @class = "form-control" })
-        @Html.ValidationMessageFor(t => t.MaxDistanceAmongHouseholders)
-    </div>
-    <div class="form-group">
-        <label>Número máximo de moradores</label>
-        @Html.TextBoxFor(t => t.MaxNumberOfHouseholders, new { @class = "form-control" })
-        @Html.ValidationMessageFor(t => t.MaxNumberOfHouseholders)
+    <div class="form-group" id="neighbourhood-div">
+        <label>Bairro</label>
+        <select class="form-control" id="select-neighbourhoods"></select>
     </div>
 
     <div id="divLoading">
     </div>
 
-    <button type="submit" class="btn btn-primary" onclick='showLoading();'>Criar!</button>
+    <button id="create-map-btn" type="submit" class="btn btn-primary" onclick='showLoading();'>Criar!</button>
 }
 <br />
 <div>
@@ -43,6 +32,62 @@
 @section scripts
 {
     <script type="text/javascript" language="javascript">
+        $(document).ready(function () {            
+            main();
+        });
+
+        function main() {
+            $("#neighbourhood-div").hide();
+            $("#create-map-btn").hide();
+            setDefaultSelectedCategory();
+
+            $("#Category").change(function () {
+                var mapType = $("#Category").find(":selected").text();
+                $("#select-neighbourhoods").empty();
+
+                onMapCategoryOptionSelected(mapType);
+            })
+        }
+
+        function setDefaultSelectedCategory() {
+            $("#Category selectz").sele
+        }
+
+        function onMapCategoryOptionSelected(mapType) {
+            $.ajax({
+                    url: "@Url.Action("GetNeighbourhoodByMapType", "TerritoryMaps")",
+                    type: "POST",
+                    data: { 'maptype': mapType },
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response);
+                        if (response.success) {
+                            showSelect(response.Neighbourhoods);
+                        }
+                        else {
+                            hideSelect();
+                        }
+                    },
+                    error: function (xhr, status, exception) {
+                        console.log("Error: " + exception + ", Status: " + status);
+                    }
+            });
+        }
+
+        function showSelect(neighbourhoods) {
+            $("#neighbourhood-div").fadeIn();
+            setTimeout(function () { $("#create-map-btn").fadeIn() }, 500);
+
+            $.each(neighbourhoods, function (index, neighbourhood) {
+                $("#select-neighbourhoods").append($('<option>', { value: index, text: neighbourhood}))
+            })
+        }
+
+        function hideSelct() {
+            $("#neighbourhood-div").fadeOut();
+            setTimeout(function () { $("#create-map-btn").fadeOut() }, 500);
+        }
+
         function showLoading() {
             $("div#divLoading").addClass('show');
         }
