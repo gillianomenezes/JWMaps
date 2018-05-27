@@ -42,8 +42,8 @@
     </div>
     <div class="form-group">        
         <label>Quem o está revisitando?</label>
-        @Html.DropDownListFor(m => m.Householder.PublisherId, new SelectList(Model.Publishers, "Id", "Name"), "Ninguém", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Householder.PublisherId)
+        @Html.DropDownListFor(m => m.Householder.Publisher, new SelectList(Model.Publishers, "Id", "Name"), "Ninguém", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Householder.Publisher)
     </div>
     <div class="form-group">
         <label>Qual o tipo de endereço?</label>

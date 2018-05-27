@@ -32,9 +32,7 @@ namespace JWMaps.Models
         [Display(Name = "Telefone")]
         [StringLength(13)]
         public string Phone { get; set; }
-
-        public int? PublisherId { get; set; }
-
+        
         public Category Category { get; set; }
 
         public double Latitude { get; set; }
@@ -51,6 +49,10 @@ namespace JWMaps.Models
         public DateTime CreationDate { get; set; }
 
         public List<Visit> Visits { get; set; }
+
+        public TerritoryMap TerritoryMap { get; set; }
+
+        public Publisher Publisher { get; set; }
 
         public AddressData GetAddress()
         {

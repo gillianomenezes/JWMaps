@@ -7,8 +7,7 @@
 
 <h2>Como será o mapa?</h2>
 
-@using (Html.BeginForm("New", "TerritoryMaps", FormMethod.Post))
-{
+<div>
     <div class="form-group">
         <label>Tipo de endereço</label>
         @Html.EnumDropDownListFor(m => m.Category, "-- Selecione um tipo de endereço --", new { @class = "form-control", @selected="selected" })
@@ -16,14 +15,14 @@
     </div>
     <div class="form-group" id="neighbourhood-div">
         <label>Bairro</label>
-        <select class="form-control" id="select-neighbourhoods"></select>
+        <select class="form-control" id="TerritoryMap_Neighbourhood" name="TerritoryMap.Neighbourhood"></select>
     </div>
 
     <div id="divLoading">
     </div>
 
-    <button id="create-map-btn" type="submit" class="btn btn-primary" onclick='showLoading();'>Criar!</button>
-}
+    <button id="create-map-btn" type="submit" class="btn btn-primary" onclick='showLoading(); newMap();'>Criar!</button>
+</div>
 <br />
 <div>
     @Html.ActionLink("Voltar", "Index")
@@ -43,7 +42,7 @@
 
             $("#Category").change(function () {
                 var mapType = $("#Category").find(":selected").text();
-                $("#select-neighbourhoods").empty();
+                $("#TerritoryMap_Neighbourhood").empty();
 
                 onMapCategoryOptionSelected(mapType);
             })
@@ -79,7 +78,7 @@
             setTimeout(function () { $("#create-map-btn").fadeIn() }, 500);
 
             $.each(neighbourhoods, function (index, neighbourhood) {
-                $("#select-neighbourhoods").append($('<option>', { value: index, text: neighbourhood}))
+                $("#TerritoryMap_Neighbourhood").append($('<option>', { value: index, text: neighbourhood}))
             })
         }
 
@@ -90,6 +89,31 @@
 
         function showLoading() {
             $("div#divLoading").addClass('show');
+        }
+
+        function newMap() {
+            $.ajax({
+                url: "@Url.Action("New", "TerritoryMaps")",
+                type: "POST",
+                data: {
+                    "TerritoryMapViewModel": {
+                        "selectedNeighbourhood": $("#TerritoryMap_Neighbourhood option:selected").text(),
+                        "Category" : getCategory($("#Category option:selected").text())
+                    }
+                },
+                async: false,
+                dataType: "json",
+                succes: window.location.replace("../territoryMaps")
+            });
+        }
+
+        function getCategory(text) {
+            if (text == "Comercial") {
+                return "Business";
+            }
+            else if (text == "Residência") {
+                return "House";
+            }
         }
     </script>
 }

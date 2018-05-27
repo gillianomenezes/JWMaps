@@ -11,8 +11,8 @@
 
 <div id="statistics">
     <ul>
-        <li>Total de não-estudantes: @Model.Householders.Count(h => h.PublisherId == null)</li>
-        <li>Total de estudantes: @Model.Householders.Count(h => h.PublisherId != null)</li>
+        <li>Total de não-estudantes: @Model.Householders.Count(h => h.Publisher == null)</li>
+        <li>Total de estudantes: @Model.Householders.Count(h => h.Publisher != null)</li>
         <li>Total geral: @Model.Householders.Count</li>
     </ul>
 </div>
@@ -50,7 +50,7 @@
                 {
                     <text>
 
-                    @if (householder.PublisherId != null)
+                    @if (householder.Publisher != null)
                     {
                         <text> var icon = icons.student.icon; </text>
                     }

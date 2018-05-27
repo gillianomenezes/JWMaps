@@ -77,10 +77,10 @@ namespace JWMaps.Controllers
             if (publisherdb == null)
                 return HttpNotFound();
 
-            var publisherStudends = _context.Householders.Where(h => h.PublisherId == id);
+            var publisherStudends = _context.Householders.Where(h => h.Publisher.Id == id);
 
             foreach (var student in publisherStudends)
-                student.PublisherId = null;
+                student.Publisher = null;
 
             _context.Publishers.Remove(publisherdb);
 

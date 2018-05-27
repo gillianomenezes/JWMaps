@@ -94,7 +94,7 @@ namespace JWMaps.Controllers
                     householderdb.City = householder.City;
                     householderdb.Latitude = householder.Latitude;
                     householderdb.Longitude = householder.Longitude;
-                    householderdb.PublisherId = householder.PublisherId;
+                    householderdb.Publisher = householder.Publisher;
                     householderdb.Observations = householder.Observations;
                     householderdb.Category = householder.Category;
 
@@ -176,7 +176,7 @@ namespace JWMaps.Controllers
         public ActionResult Details(int id)
         {
             var householderInDb = _context.Householders.Include(h => h.Visits).Single(h => h.Id == id);
-            var publisherInDb = _context.Publishers.Single(p => p.Id == householderInDb.PublisherId);
+            var publisherInDb = _context.Publishers.Single(p => p.Id == householderInDb.Publisher.Id);
 
             var detailHouseholderViewModel = new DetailsHouseholderViewModel
             {

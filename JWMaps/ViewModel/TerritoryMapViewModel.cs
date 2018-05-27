@@ -14,6 +14,6 @@ namespace JWMaps.ViewModel
         public string selectedNeighbourhood { get; set; }
         public int MaxNumberOfHouseholders { get; set; }
         public int MaxDistanceAmongHouseholders { get; set; }
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
     }
 }

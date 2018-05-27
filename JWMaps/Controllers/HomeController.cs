@@ -7,6 +7,7 @@ using JWMaps.ViewModel;
 using JWMaps.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
+using System.Data.Entity;
 
 namespace JWMaps.Controllers
 {
@@ -30,7 +31,7 @@ namespace JWMaps.Controllers
 
             DashboardViewModel dashboardViewModel = new DashboardViewModel
             {
-                Householders = _context.Householders.Where(h => h.CongregationId == user.CongregationId).ToList()
+                Householders = _context.Householders.Include(h => h.Publisher).Where(h => h.CongregationId == user.CongregationId).ToList()
             };
 
             return View(dashboardViewModel);

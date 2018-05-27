@@ -97,16 +97,25 @@ namespace JWMaps.Controllers
             List<string> neighbourhoods = new List<string>();
             ApplicationUser user = GetUser();
 
-            foreach (Householder householder in _context.Householders.Where(h => h.CongregationId == user.CongregationId).ToList())
+            var householders = _context.Householders.Include(h => h.Publisher)
+                                                    .Where(h => h.CongregationId == user.CongregationId
+                                                            && h.TerritoryMap == null
+                                                            && h.Publisher == null
+                                                            && h.Category.ToString().Equals(categoryName)).ToList();
+            var territoryMaps = _context.TerritoryMaps.Where(t => t.CongregationId == user.CongregationId);
+
+            foreach (Householder householder in householders)
             {
-                var territoriesInDb = _context.TerritoryMaps.Where(t => t.CongregationId == user.CongregationId && t.Neighbourhood.Equals(householder.Neighbourhood));
-                var householdersInTerritory = 0;
-                var householdersInNeighbourhood = _context.Householders.Where(h => h.CongregationId == user.CongregationId && h.Neighbourhood.Equals(householder.Neighbourhood)).Count();
+                var territoriesInDb = territoryMaps.Where(t => t.Neighbourhood.Equals(householder.Neighbourhood));
+                //var householdersInTerritory = 0;
+                //var householdersInNeighbourhood = householders.Where(h => h.Neighbourhood.Equals(householder.Neighbourhood)).Count();
 
-                foreach (var territory in territoriesInDb)
-                    householdersInTerritory += territory.Householders.Count;
 
-                if (householdersInTerritory < householdersInNeighbourhood && householder.Category.ToString().Equals(categoryName))
+
+                //foreach (var territory in territoriesInDb)
+                //    householdersInTerritory += territory.Householders.Count;
+
+                //if (householdersInTerritory < householdersInNeighbourhood && householder.Category.ToString().Equals(categoryName))
                     neighbourhoods.Add(householder.Neighbourhood);
             }
 
@@ -117,6 +126,17 @@ namespace JWMaps.Controllers
 
             return Json(new { success = true, Neighbourhoods = neighbourhoods.Distinct().OrderBy(n => n) }, JsonRequestBehavior.AllowGet);
         }
+
+        //public ActionResult linkPublisherToHouseholder()
+        //{
+        //    var publishers = _context.Publishers.Where(p => p.CongregationId == GetUser().CongregationId);
+        //    var householders = _context.Householders.Where(h => h.CongregationId == GetUser().CongregationId);
+
+        //    foreach(var publisher in publishers)
+        //    {
+
+        //    }
+        //}
 
         private string GetCategoryName(string mapType)
         {
@@ -229,7 +249,7 @@ namespace JWMaps.Controllers
             var householdersToVisit = _context.Householders.Include(h => h.Visits).Where(h => h.Neighbourhood.Equals(territory.selectedNeighbourhood) &&
                                                                                           h.CongregationId == user.CongregationId && 
                                                                                           h.Category == territory.Category && 
-                                                                                          h.PublisherId == null)
+                                                                                          h.Publisher == null)
                                                                                           .ToList();
 
 
