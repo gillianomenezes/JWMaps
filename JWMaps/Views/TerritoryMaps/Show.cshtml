@@ -45,7 +45,8 @@
                         <td>Não informado</td>
                     }
                 }
-                <td>@Model[i].Address</td>
+                <td><a href="http://maps.google.com/maps?q=loc:@Model[i].Latitude,@Model[i].Longitude&navigate=yes">@Model[i].Address</a></td>
+                @*<td>@Model[i].Address</td>*@
                 @if (@Model[i].Visits != null)
                 {
                     if (@Model[i].Visits.Count > 0)

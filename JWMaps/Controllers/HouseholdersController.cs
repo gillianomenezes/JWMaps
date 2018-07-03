@@ -202,7 +202,13 @@ namespace JWMaps.Controllers
 
         public ActionResult Delete(int id)
         {
-            var householderInDb = _context.Householders.Single(h => h.Id == id);
+            var householderInDb = _context.Householders.Include(h => h.Visits).Single(h => h.Id == id);
+
+            while(householderInDb.Visits.Count > 0)
+            {
+                householderInDb.Visits.RemoveAt(0);
+            }
+
             _context.Householders.Remove(householderInDb);
 
             _context.SaveChanges();

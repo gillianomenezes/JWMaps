@@ -81,7 +81,6 @@ namespace JWMaps.Controllers
 
         // GET: TerritoryMaps/Create
         public ActionResult Create()
-        //public ActionResult Create(TerritoryTypeViewModel territoryTypeViewModel)
         {
             return View(new TerritoryMapViewModel { Neighbourhoods = new List<string>() });
         }
@@ -98,46 +97,36 @@ namespace JWMaps.Controllers
             ApplicationUser user = GetUser();
 
             var householders = _context.Householders.Include(h => h.Publisher)
+                                                    .Include(h => h.Visits)
                                                     .Where(h => h.CongregationId == user.CongregationId
                                                             && h.TerritoryMap == null
                                                             && h.Publisher == null
-                                                            && h.Category.ToString().Equals(categoryName)).ToList();
+                                                            && h.Category.ToString().Equals(categoryName))
+                                                    .OrderBy(h => h.Visits.Min(v => v.DateOfVisit)).ToList();
+
             var territoryMaps = _context.TerritoryMaps.Where(t => t.CongregationId == user.CongregationId);
+
 
             foreach (Householder householder in householders)
             {
                 var territoriesInDb = territoryMaps.Where(t => t.Neighbourhood.Equals(householder.Neighbourhood));
-                //var householdersInTerritory = 0;
-                //var householdersInNeighbourhood = householders.Where(h => h.Neighbourhood.Equals(householder.Neighbourhood)).Count();
-
-
-
-                //foreach (var territory in territoriesInDb)
-                //    householdersInTerritory += territory.Householders.Count;
-
-                //if (householdersInTerritory < householdersInNeighbourhood && householder.Category.ToString().Equals(categoryName))
                     neighbourhoods.Add(householder.Neighbourhood);
             }
 
+            var neighbourhoodsSuggestion = new List<string>();
+            neighbourhoods = neighbourhoods.Distinct().ToList();
+            var max = (neighbourhoods.Count < 3) ? neighbourhoods.Count : 3;
+            neighbourhoodsSuggestion.AddRange(neighbourhoods.GetRange(0, max));
+
             var territoryMapViewModel = new TerritoryMapViewModel
             {
-                Neighbourhoods = neighbourhoods.Distinct().OrderBy(n => n)
+                Neighbourhoods = neighbourhoods.OrderBy(n => n),
+                NeighbourhoodsSuggestion = neighbourhoodsSuggestion
             };
 
-            return Json(new { success = true, Neighbourhoods = neighbourhoods.Distinct().OrderBy(n => n) }, JsonRequestBehavior.AllowGet);
+            return Json(new { success = true, territoryMapViewModel, JsonRequestBehavior.AllowGet } );
         }
-
-        //public ActionResult linkPublisherToHouseholder()
-        //{
-        //    var publishers = _context.Publishers.Where(p => p.CongregationId == GetUser().CongregationId);
-        //    var householders = _context.Householders.Where(h => h.CongregationId == GetUser().CongregationId);
-
-        //    foreach(var publisher in publishers)
-        //    {
-
-        //    }
-        //}
-
+        
         private string GetCategoryName(string mapType)
         {
             if (mapType.Equals("Comercial"))
