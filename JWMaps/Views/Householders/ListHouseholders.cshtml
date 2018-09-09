@@ -46,7 +46,7 @@
                 }
                 @if (@item.Householder.Visits.Count > 0)
                 {
-                    <td>@item.Householder.Visits.OrderBy(v => v.DateOfVisit).First().DateOfVisit.ToShortDateString()</td>
+                    <td>@item.Householder.Visits.OrderBy(v => v.DateOfVisit).Last().DateOfVisit.ToString("dd/MM/yyyy")</td>
                 }
                 else
                 {

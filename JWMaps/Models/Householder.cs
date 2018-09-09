@@ -32,7 +32,11 @@ namespace JWMaps.Models
         [Display(Name = "Telefone")]
         [StringLength(13)]
         public string Phone { get; set; }
-        
+
+
+        [Display(Name = "CEP")]
+        public string ZipCode { get; set; }
+
         public Category Category { get; set; }
 
         public double Latitude { get; set; }

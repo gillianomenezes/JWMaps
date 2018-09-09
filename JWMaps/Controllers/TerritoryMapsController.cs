@@ -10,7 +10,7 @@ using GoogleMaps.LocationServices;
 using System.Net.Http;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
-using System.Web;
+using System.Configuration;
 
 namespace JWMaps.Controllers
 {
@@ -172,7 +172,7 @@ namespace JWMaps.Controllers
         {
             try
             {
-                var locationService = new GoogleLocationService();
+                var locationService = new GoogleLocationService(ConfigurationManager.AppSettings["GooglePlaceAPIKey"]);
 
                 ApplicationUser user = GetUser();
                 var householdersToVisit = GetHouseholdersToVisit(territoryMapViewModel, user);

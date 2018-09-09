@@ -22,7 +22,7 @@
     </div>
     <div class="form-group">
         @Html.LabelFor(h => h.Householder.Address)
-        @Html.TextBoxFor(h => h.Householder.Address, new { @class = "form-control", id="address", placeholder="Ex.: Nome da rua, número" } )
+        @Html.TextBoxFor(h => h.Householder.Address, new { @class = "form-control", id = "address", placeholder = "Ex.: Nome da rua, número" })
         @Html.ValidationMessageFor(h => h.Householder.Address)
     </div>
     <div class="form-group">
@@ -34,13 +34,18 @@
         @Html.LabelFor(h => h.Householder.City)
         @Html.TextBoxFor(h => h.Householder.City, new { @class = "form-control", id = "city" })
         @Html.ValidationMessageFor(h => h.Householder.City)
-    </div>    
+    </div>
     <div class="form-group">
         @Html.LabelFor(h => h.Householder.Phone)
         @Html.TextBoxFor(h => h.Householder.Phone, new { @class = "form-control" })
         @Html.ValidationMessageFor(h => h.Householder.Phone)
     </div>
-    <div class="form-group">        
+    <div class="form-group">
+        @Html.LabelFor(h => h.Householder.ZipCode)
+        @Html.TextBoxFor(h => h.Householder.ZipCode, new { @class = "form-control" })
+        @Html.ValidationMessageFor(h => h.Householder.ZipCode)
+    </div>
+    <div class="form-group">
         <label>Quem o está revisitando?</label>
         @Html.DropDownListFor(m => m.Householder.Publisher, new SelectList(Model.Publishers, "Id", "Name"), "Ninguém", new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.Householder.Publisher)
@@ -52,7 +57,7 @@
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Householder.Observations)
-        @Html.TextAreaFor(m => m.Householder.Observations, new { @class = "form-control"})
+        @Html.TextAreaFor(m => m.Householder.Observations, new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.Householder.Observations)
     </div>
     @Html.HiddenFor(h => h.Householder.Id)
@@ -68,7 +73,7 @@
 
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCDXPe6iLZmeOYItmk84ZuV7wVJ_vSQQQs&sensor=false&libraries=places"></script>
     <script type="text/javascript" language="javascript">
-                
+
         var geocoder;
         var map;
         var address = $('#address').val() + ", " + $('#neighbourhood').val() + " - " + $('#city').val();
@@ -77,7 +82,7 @@
 
             var input = document.getElementById("address");
             var autocomplete = new google.maps.places.Autocomplete(input, { types: ["geocode"] });
-                        
+
             if (navigator.geolocation) {
                navigator.geolocation.getCurrentPosition(function (position) {
                   var geolocation = {
@@ -91,7 +96,7 @@
                   autocomplete.setBounds(circle.getBounds());
                });
             }
-            
+
             autocomplete.addListener("place_changed", function () {
                 var placeResult = autocomplete.getPlace();
                 var addressComponents = placeResult.address_components;
@@ -131,7 +136,7 @@
                 $("#map_canvas").remove();
                 return;
             }
-            
+
             geocoder = new google.maps.Geocoder();
 
             var latlng = new google.maps.LatLng(-34.397, 150.644);
@@ -179,5 +184,5 @@
         }
 
         $(document).ready(initialize);
-</script>
+    </script>
 }

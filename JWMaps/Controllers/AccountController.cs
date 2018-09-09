@@ -62,7 +62,7 @@ namespace JWMaps.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            CreateAdminIfNeeded();
+            CreateAdminIfNeededAsync();
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -521,13 +521,13 @@ namespace JWMaps.Controllers
         #endregion
         // Add CreateAdminIfNeeded
         #region private void CreateAdminIfNeeded()
-        private void CreateAdminIfNeeded()
+        private async Task CreateAdminIfNeededAsync()
         {
             // Get Admin Account
             string AdminUserName = ConfigurationManager.AppSettings["AdminUserName"];
             string AdminPassword = ConfigurationManager.AppSettings["AdminPassword"];
             // See if Admin exists
-            var objAdminUser = UserManager.FindByEmail(AdminUserName);
+            var objAdminUser = await UserManager.FindByEmailAsync(AdminUserName);
             if (objAdminUser == null)
             {
                 //See if the Admin role exists

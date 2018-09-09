@@ -7,13 +7,13 @@ namespace JWMaps.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class init : IMigrationMetadata
+    public sealed partial class AddZipCode : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(init));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddZipCode));
         
         string IMigrationMetadata.Id
         {
-            get { return "201711251809406_init"; }
+            get { return "201808211509503_AddZipCode"; }
         }
         
         string IMigrationMetadata.Source

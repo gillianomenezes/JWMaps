@@ -9,6 +9,7 @@ using GoogleMaps.LocationServices;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
 using System.Data.Entity;
+using System.Configuration;
 
 namespace JWMaps.Controllers
 {
@@ -70,7 +71,7 @@ namespace JWMaps.Controllers
                 var userManager = new UserManager<ApplicationUser>(store);
                 ApplicationUser user = userManager.FindByNameAsync(User.Identity.Name).Result;
 
-                var locationService = new GoogleLocationService();
+                var locationService = new GoogleLocationService(ConfigurationManager.AppSettings["GooglePlaceAPIKey"]);
                 var point = locationService.GetLatLongFromAddress(householder.Address + ", " + householder.Neighbourhood + "-" + householder.City);
 
                 householder.Latitude = point.Latitude;
@@ -89,7 +90,8 @@ namespace JWMaps.Controllers
                     householderdb.Name = householder.Name;
                     householderdb.Neighbourhood = householder.Neighbourhood;
                     householderdb.Phone = householder.Phone;
-                    householder.CongregationId = user.CongregationId;
+                    householderdb.ZipCode = householder.ZipCode;
+                    householderdb.CongregationId = user.CongregationId;
                     householderdb.Address = householder.Address;
                     householderdb.City = householder.City;
                     householderdb.Latitude = householder.Latitude;
@@ -97,8 +99,6 @@ namespace JWMaps.Controllers
                     householderdb.Publisher = householder.Publisher;
                     householderdb.Observations = householder.Observations;
                     householderdb.Category = householder.Category;
-
-                    RemoveHouseholderFromExistingTerritoryMap(householder.Id);
                 }
 
                 _context.SaveChanges();
@@ -108,31 +108,7 @@ namespace JWMaps.Controllers
             catch (Exception e)
             {
                 System.Threading.Thread.Sleep(1000);
-                return Save(householder);
-            }
-        }
-
-        private void RemoveHouseholderFromExistingTerritoryMap(int househoulderId)
-        {
-            var user = GetUser();
-
-            var territoryMaps = _context.TerritoryMaps.Include(t => t.Householders).Where(t => t.UserId.Equals(user.Id)).ToList();
-            Householder householderVisited = new Householder();
-            TerritoryMap territoryMapUsed = new TerritoryMap();
-
-            foreach (var territoryMap in territoryMaps)
-            {
-                var householderFound = territoryMap.Householders.Find(h => h.Id == househoulderId);
-                if (householderFound != null)
-                {
-                    territoryMap.Householders.Remove(householderFound);
-
-                    if (territoryMap.Householders.Count == 0)
-                        _context.TerritoryMaps.Remove(_context.TerritoryMaps.Single(t => t.Id == territoryMap.Id));
-
-                    _context.SaveChanges();
-                    break;
-                }
+                return ViewHouseholderData(householder.Id);
             }
         }
 
