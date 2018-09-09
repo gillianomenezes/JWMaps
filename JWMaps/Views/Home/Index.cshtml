@@ -4,7 +4,7 @@
 }
 
 <div id="wrapper">
-    <div id="map" class="jumbotron" style="width: 95%; height: 432px" />        
+    <div id="map" class="jumbotron" style="width: 95%; height: 432px" />
 </div>
 
 <div id="legend"><h3>Legenda</h3></div>
@@ -28,7 +28,7 @@
                 var map = new google.maps.Map(document.getElementById('map'), {
                     zoom: 17
                 });
-
+                                
                 var bounds = new google.maps.LatLngBounds();
                 var iconBase = 'http://maps.google.com/mapfiles/ms/icons/';
                 var icons = {
@@ -58,7 +58,7 @@
                     {
                         <text> var icon = icons.comercial.icon </text>
                     }
-                    else 
+                    else
                     {
                         <text> var icon = icons.nonStudent.icon; </text>
                     }
@@ -66,13 +66,13 @@
                     var marker = new google.maps.Marker({
                         position: new google.maps.LatLng(@householder.Latitude.ToString().Replace(',', '.') , @householder.Longitude.ToString().Replace(',', '.')),
                         map: map,
-                        title: "name",
+                        title: "@householder.Name",
                         icon: icon,
                         animation: google.maps.Animation.DROP
                     });
-                
+
                     bounds.extend(marker.getPosition());
-                
+
                     </text>
                 }
 

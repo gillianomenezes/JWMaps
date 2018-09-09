@@ -237,9 +237,7 @@ namespace JWMaps.Controllers
 
             var householdersToVisit = _context.Householders.Include(h => h.Visits).Where(h => h.Neighbourhood.Equals(territory.selectedNeighbourhood) &&
                                                                                           h.CongregationId == user.CongregationId && 
-                                                                                          h.Category == territory.Category && 
-                                                                                          h.Publisher == null)
-                                                                                          .ToList();
+                                                                                          h.Category == territory.Category).ToList();
 
 
             householdersToVisit = householdersToVisit.Except(houseHoldersInMap).ToList();

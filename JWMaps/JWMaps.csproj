@@ -246,7 +246,6 @@
     <Compile Include="ViewModel\VisitViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include=".gitignore" />
     <Content Include="Content\bootstrap-cerulean.css" />
     <Content Include="Content\bootstrap-lumen.css" />
     <Content Include="Content\bootstrap.css" />
