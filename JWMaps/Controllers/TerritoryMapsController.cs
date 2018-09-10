@@ -11,6 +11,8 @@ using System.Net.Http;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
 using System.Configuration;
+using BogdanM.LocationServices.GoogleMaps;
+using BogdanM.LocationServices.Core;
 
 namespace JWMaps.Controllers
 {
@@ -173,13 +175,14 @@ namespace JWMaps.Controllers
             try
             {
                 var locationService = new GoogleLocationService(ConfigurationManager.AppSettings["GooglePlaceAPIKey"]);
+                var googleMapsService = new GoogleMapsService(ConfigurationManager.AppSettings["GooglePlaceAPIKey"]);
 
                 ApplicationUser user = GetUser();
                 var householdersToVisit = GetHouseholdersToVisit(territoryMapViewModel, user);
 
                 //Vou mudar isso para refletir as mudanças no algoritmo de montagem dos mapas
                 territoryMapViewModel.MaxNumberOfHouseholders = 5;
-                territoryMapViewModel.MaxDistanceAmongHouseholders = 5;
+                territoryMapViewModel.MaxDistanceAmongHouseholders = 5000;
 
 
                 if (householdersToVisit == null)
@@ -200,10 +203,11 @@ namespace JWMaps.Controllers
                     householdersToVisit.Remove(firstHouseholderToVisit);
 
                     for (int i = 0; newTerritoryMap.Householders.Count() < territoryMapViewModel.MaxNumberOfHouseholders && i < householdersToVisit.Count(); i++)
-                    {                        
-                        var distance = locationService.GetDirections(firstHouseholderToVisit.GetAddress(), householdersToVisit[i].GetAddress()).Distance.Split(' ')[0];
-                        
-                        if (Double.Parse(distance) <= territoryMapViewModel.MaxDistanceAmongHouseholders)
+                    {
+                        var distance = googleMapsService.GetDistance(new LatLng((decimal)firstHouseholderToVisit.Latitude, (decimal)firstHouseholderToVisit.Longitude),
+                                                                      new LatLng((decimal)householdersToVisit[i].Latitude, (decimal)householdersToVisit[i].Longitude));
+
+                        if (distance <= territoryMapViewModel.MaxDistanceAmongHouseholders)
                         {                            
                             newTerritoryMap.Householders.Add(householdersToVisit[i]);
                         }
@@ -219,7 +223,7 @@ namespace JWMaps.Controllers
 
                 return RedirectToAction("Index");
             }
-            catch(Exception)
+            catch(Exception e)
             {
                 System.Threading.Thread.Sleep(1000);
                 return New(territoryMapViewModel);
@@ -241,7 +245,7 @@ namespace JWMaps.Controllers
 
 
             householdersToVisit = householdersToVisit.Except(houseHoldersInMap).ToList();
-            householdersToVisit.Sort((x, y) => DateTime.Compare(x.LastTimeVisited(), y.LastTimeVisited()));
+            householdersToVisit = householdersToVisit.OrderBy(h => h.LastTimeVisited() ?? DateTime.MinValue).ToList();
 
             return householdersToVisit;
         }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace JWMaps.Models
 {
@@ -67,18 +68,24 @@ namespace JWMaps.Models
             return householderAddres;
         }
 
-        public DateTime LastTimeVisited()
+        public DateTime? LastTimeVisited()
         {
             if (Visits != null)
             {
                 if (Visits.Count > 0)
                 {
-                    Visits.Sort((x, y) => DateTime.Compare(x.DateOfVisit, y.DateOfVisit));
-                    return Visits[0].DateOfVisit;
+                    var lastVisit = Visits.First();
+                    foreach(var visit in Visits)
+                    {
+                        if (visit.DateOfVisit > lastVisit.DateOfVisit)
+                            lastVisit = visit;
+                    }
+
+                    return lastVisit.DateOfVisit;
                 }
             }
 
-            return new DateTime();
+            return null;
         }
 
     }
