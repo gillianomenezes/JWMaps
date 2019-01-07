@@ -17,6 +17,8 @@ namespace JWMaps.Models
 
         public string Description { get; set; }
 
+        public virtual Householder Householder { get; set; }
+
         public int CompareTo(Visit other)
         {
             if (other == null)

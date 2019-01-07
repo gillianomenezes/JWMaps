@@ -68,24 +68,27 @@ namespace JWMaps.Models
             return householderAddres;
         }
 
-        public DateTime? LastTimeVisited()
+        public DateTime? LastTimeVisited
         {
-            if (Visits != null)
+            get
             {
-                if (Visits.Count > 0)
+                if (Visits != null)
                 {
-                    var lastVisit = Visits.First();
-                    foreach(var visit in Visits)
+                    if (Visits.Count > 0)
                     {
-                        if (visit.DateOfVisit > lastVisit.DateOfVisit)
-                            lastVisit = visit;
+                        var lastVisit = Visits.First();
+                        foreach (var visit in Visits)
+                        {
+                            if (visit.DateOfVisit > lastVisit.DateOfVisit)
+                                lastVisit = visit;
+                        }
+
+                        return lastVisit.DateOfVisit;
                     }
-
-                    return lastVisit.DateOfVisit;
                 }
-            }
 
-            return null;
+                return null;
+            }
         }
 
     }

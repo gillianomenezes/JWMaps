@@ -13,6 +13,7 @@ using Microsoft.AspNet.Identity;
 using System.Configuration;
 using BogdanM.LocationServices.GoogleMaps;
 using BogdanM.LocationServices.Core;
+using System.Data.SqlClient;
 
 namespace JWMaps.Controllers
 {
@@ -47,7 +48,7 @@ namespace JWMaps.Controllers
                         usersMaps.Add(viewModel);
                     }
                 }
-                
+
 
                 return View("ListAllTerritoryMaps", usersMaps);
             }
@@ -91,44 +92,35 @@ namespace JWMaps.Controllers
         public ActionResult GetNeighbourhoodByMapType(string mapType)
         {
             string categoryName = GetCategoryName(mapType);
+            Category category = (Category)System.Enum.Parse(typeof(Category), categoryName);
 
             if (String.IsNullOrEmpty(categoryName))
                 return Json(new { succes = false, JsonRequestBehavior.AllowGet });
 
-            List<string> neighbourhoods = new List<string>();
             ApplicationUser user = GetUser();
 
-            var householders = _context.Householders.Include(h => h.Publisher)
-                                                    .Include(h => h.Visits)
-                                                    .Where(h => h.CongregationId == user.CongregationId
-                                                            && h.TerritoryMap == null
-                                                            && h.Publisher == null
-                                                            && h.Category.ToString().Equals(categoryName))
-                                                    .OrderBy(h => h.Visits.Min(v => v.DateOfVisit)).ToList();
+            var categoryParam = new SqlParameter("@category", (int)category);
+            var congregationIdParam = new SqlParameter("@congregationId",user.CongregationId);
+            var neighbourhoods = _context.Database.SqlQuery<NeighbourhoodsVisits>("GetNeighbourhoodsByLastVisited @category, @congregationId", categoryParam, congregationIdParam).ToList();
 
-            var territoryMaps = _context.TerritoryMaps.Where(t => t.CongregationId == user.CongregationId);
-
-
-            foreach (Householder householder in householders)
-            {
-                var territoriesInDb = territoryMaps.Where(t => t.Neighbourhood.Equals(householder.Neighbourhood));
-                    neighbourhoods.Add(householder.Neighbourhood);
-            }
-
-            var neighbourhoodsSuggestion = new List<string>();
-            neighbourhoods = neighbourhoods.Distinct().ToList();
-            var max = (neighbourhoods.Count < 3) ? neighbourhoods.Count : 3;
-            neighbourhoodsSuggestion.AddRange(neighbourhoods.GetRange(0, max));
+            var max = (neighbourhoods.ToList().Count < 3) ? neighbourhoods.ToList().Count : 3;
 
             var territoryMapViewModel = new TerritoryMapViewModel
             {
-                Neighbourhoods = neighbourhoods.OrderBy(n => n),
-                NeighbourhoodsSuggestion = neighbourhoodsSuggestion
+                Neighbourhoods = neighbourhoods.Select(n => n.Neighbourhood),
+                NeighbourhoodsSuggestion = neighbourhoods.Select(n => n.Neighbourhood).Take(max),
             };
 
-            return Json(new { success = true, territoryMapViewModel, JsonRequestBehavior.AllowGet } );
+            return Json(new { success = true, territoryMapViewModel, JsonRequestBehavior.AllowGet });
         }
-        
+
+        class NeighbourhoodsVisits
+        {
+            public DateTime? LastVisit { get; set; }
+
+            public string Neighbourhood { get; set; }
+        }
+
         private string GetCategoryName(string mapType)
         {
             if (mapType.Equals("Comercial"))
@@ -208,7 +200,7 @@ namespace JWMaps.Controllers
                                                                       new LatLng((decimal)householdersToVisit[i].Latitude, (decimal)householdersToVisit[i].Longitude));
 
                         if (distance <= territoryMapViewModel.MaxDistanceAmongHouseholders)
-                        {                            
+                        {
                             newTerritoryMap.Householders.Add(householdersToVisit[i]);
                         }
                     }
@@ -223,7 +215,7 @@ namespace JWMaps.Controllers
 
                 return RedirectToAction("Index");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 System.Threading.Thread.Sleep(1000);
                 return New(territoryMapViewModel);
@@ -238,14 +230,13 @@ namespace JWMaps.Controllers
             foreach (var terrytoryMap in myCongregationTerritoriesMap)
                 houseHoldersInMap.AddRange(terrytoryMap.Householders);
 
+            var categoryParam = new SqlParameter("@category", (int) territory.Category);
+            var congregationIdParam = new SqlParameter("@congregationId", user.CongregationId);
+            var neighbourhoodParam = new SqlParameter("@neighbourhood", territory.selectedNeighbourhood);
+            var householdersToVisitIds = _context.Database.SqlQuery<int>("GetLastVisitedPeople @category, @congregationId, @neighbourhood", categoryParam, congregationIdParam, neighbourhoodParam).ToList();
 
-            var householdersToVisit = _context.Householders.Include(h => h.Visits).Where(h => h.Neighbourhood.Equals(territory.selectedNeighbourhood) &&
-                                                                                          h.CongregationId == user.CongregationId && 
-                                                                                          h.Category == territory.Category).ToList();
-
-
-            householdersToVisit = householdersToVisit.Except(houseHoldersInMap).ToList();
-            householdersToVisit = householdersToVisit.OrderBy(h => h.LastTimeVisited() ?? DateTime.MinValue).ToList();
+            var householdersToVisit = _context.Householders.Include(h => h.Visits).Where(h => householdersToVisitIds.Any(p => p == h.Id)).ToList();
+            householdersToVisit = householdersToVisit.OrderBy(h => householdersToVisitIds.IndexOf(h.Id)).ToList();
 
             return householdersToVisit;
         }
@@ -298,9 +289,9 @@ namespace JWMaps.Controllers
         {
             var territoryMapInDb = _context.TerritoryMaps.Include(t => t.Householders).SingleOrDefault(t => t.Id == id);
 
-            for(int i = 0; i < territoryMapInDb.Householders.Count; i++)            
-                territoryMapInDb.Householders.RemoveAt(i);            
-            
+            for (int i = 0; i < territoryMapInDb.Householders.Count; i++)
+                territoryMapInDb.Householders.RemoveAt(i);
+
             _context.TerritoryMaps.Remove(territoryMapInDb);
             _context.SaveChanges();
 
@@ -341,9 +332,9 @@ namespace JWMaps.Controllers
             };
 
             householderInDb.Visits.Add(Visit);
-            
+
             if (territoyMapInDb.Householders.Count > 0)
-            {                
+            {
                 _context.SaveChanges();
                 return RedirectToAction("Show", visit.TerritoryMapUsed);
             }
