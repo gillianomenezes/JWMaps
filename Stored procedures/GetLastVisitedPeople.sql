@@ -12,5 +12,5 @@ BEGIN
 	LEFT JOIN Visits ON Visits.Householder_Id = Householders.Id
 	WHERE Householders.Neighbourhood = @neighbourhood AND Householders.CongregationId = @congregationId AND Householders.Category = @category AND Householders.TerritoryMap_Id IS NULL
 	GROUP BY Householders.Id
-	ORDER BY MAX(Visits.DateOfVisit)
+	ORDER BY Max(Visits.DateOfVisit)
 END
